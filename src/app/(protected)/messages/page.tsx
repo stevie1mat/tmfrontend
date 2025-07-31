@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import ProtectedLayout from "@/components/Layout/ProtectedLayout";
+
 import { FiSearch, FiPlus, FiSend, FiVideo, FiPhone, FiX } from "react-icons/fi";
 
 interface Message {
@@ -584,7 +584,6 @@ export default function MessagesPage() {
   };
 
   return (
-    <ProtectedLayout>
       <div className="flex h-[calc(100vh-80px)] bg-gray-50 overflow-hidden">
         {/* Sidebar */}
         <aside className="w-80 bg-white border-r border-gray-200 flex flex-col">
@@ -870,6 +869,5 @@ export default function MessagesPage() {
           </div>
         </div>
       )}
-    </ProtectedLayout>
   );
 } 
