@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { getAuthHeaders } from "@/lib/token-utils";
 import Image from "next/image";
-import ProtectedLayout from "@/components/Layout/ProtectedLayout";
+
 import { 
   FaUser, 
   FaEnvelope, 
@@ -133,6 +135,7 @@ export default function UserProfileSummaryPage() {
   const [userTasks, setUserTasks] = useState<any[]>([]);
   const [userTasksLoading, setUserTasksLoading] = useState(true);
   const router = useRouter();
+  const { token } = useAuth();
 
   // Editing states
   const [editingSection, setEditingSection] = useState<string | null>(null);
@@ -164,10 +167,10 @@ export default function UserProfileSummaryPage() {
     try {
       setUserTasksLoading(true);
       const TASK_API_BASE = process.env.NEXT_PUBLIC_TASK_API_URL || 'http://localhost:8084';
-      const token = localStorage.getItem("token");
+      const headers = getAuthHeaders();
       
       const res = await fetch(`${TASK_API_BASE}/api/tasks/get/user`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: headers,
         signal: AbortSignal.timeout(10000) // 10 second timeout
       });
       
@@ -192,11 +195,11 @@ export default function UserProfileSummaryPage() {
       setProfileStatsLoading(true);
       const TASK_API_BASE = process.env.NEXT_PUBLIC_TASK_API_URL || 'http://localhost:8084';
       const REVIEW_API_BASE = process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086';
-      const token = localStorage.getItem("token");
+      const headers = getAuthHeaders();
       
       // Fetch user's tasks to calculate completed tasks
       const tasksRes = await fetch(`${TASK_API_BASE}/api/tasks/get/user`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: headers
       });
       
       let tasksCompleted = 0;
@@ -213,11 +216,11 @@ export default function UserProfileSummaryPage() {
         ).length;
       }
       
-      // Fetch reviews to calculate average rating - make this completely optional
+      // Fetch reviews to calculate average rating - use batch request instead of individual calls
       try {
         // First, get user's tasks
         const tasksRes = await fetch(`${TASK_API_BASE}/api/tasks/get/user`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: headers,
           signal: AbortSignal.timeout(5000) // 5 second timeout
         });
         
@@ -228,24 +231,46 @@ export default function UserProfileSummaryPage() {
           
           let allReviews: any[] = [];
           
-          // Fetch reviews for each task
-          for (const taskId of myTaskIds) {
-            if (!taskId) continue;
-            
+          // Use batch request if available, otherwise fallback to individual requests
+          if (myTaskIds.length > 0) {
             try {
-              const reviewRes = await fetch(`${REVIEW_API_BASE}/api/reviews?taskId=${taskId}`, {
-                signal: AbortSignal.timeout(3000) // 3 second timeout
+              // Try batch review endpoint first
+              const batchReviewRes = await fetch(`${REVIEW_API_BASE}/api/reviews/batch?taskIds=${myTaskIds.join(',')}`, {
+                signal: AbortSignal.timeout(5000)
               });
-              if (reviewRes.ok) {
-                const reviews = await reviewRes.json();
-                if (Array.isArray(reviews)) {
-                  allReviews = allReviews.concat(reviews);
-                } else if (reviews.data && Array.isArray(reviews.data)) {
-                  allReviews = allReviews.concat(reviews.data);
+              
+              if (batchReviewRes.ok) {
+                const batchReviews = await batchReviewRes.json();
+                if (Array.isArray(batchReviews)) {
+                  allReviews = batchReviews;
+                } else if (batchReviews.data && Array.isArray(batchReviews.data)) {
+                  allReviews = batchReviews.data;
+                }
+              } else {
+                // Fallback to individual requests but limit to first 5 tasks to reduce requests
+                const limitedTaskIds = myTaskIds.slice(0, 5);
+                for (const taskId of limitedTaskIds) {
+                  if (!taskId) continue;
+                  
+                  try {
+                    const reviewRes = await fetch(`${REVIEW_API_BASE}/api/reviews?taskId=${taskId}`, {
+                      signal: AbortSignal.timeout(3000) // 3 second timeout
+                    });
+                    if (reviewRes.ok) {
+                      const reviews = await reviewRes.json();
+                      if (Array.isArray(reviews)) {
+                        allReviews = allReviews.concat(reviews);
+                      } else if (reviews.data && Array.isArray(reviews.data)) {
+                        allReviews = allReviews.concat(reviews.data);
+                      }
+                    }
+                  } catch (taskErr) {
+                    console.log(`Error fetching reviews for task ${taskId}:`, taskErr);
+                  }
                 }
               }
-            } catch (taskErr) {
-              console.log(`Error fetching reviews for task ${taskId}:`, taskErr);
+            } catch (batchErr) {
+              console.log("Batch review fetch failed, using individual requests:", batchErr);
             }
           }
           
@@ -328,11 +353,11 @@ export default function UserProfileSummaryPage() {
       const TASK_API_BASE = process.env.NEXT_PUBLIC_TASK_API_URL || 'http://localhost:8084';
       const REVIEW_API_BASE = process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086';
       const AUTH_API_BASE = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
-      const token = localStorage.getItem("token");
+      const headers = getAuthHeaders();
       
       // Fetch user's tasks to calculate response rate and response time
       const tasksRes = await fetch(`${TASK_API_BASE}/api/tasks/get/user`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: headers,
         signal: AbortSignal.timeout(10000) // 10 second timeout
       });
       
@@ -398,7 +423,7 @@ export default function UserProfileSummaryPage() {
       let memberSince = '';
       try {
         const userRes = await fetch(`${AUTH_API_BASE}/api/auth/user/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: headers,
           signal: AbortSignal.timeout(5000) // 5 second timeout
         });
         if (userRes.ok) {
@@ -441,53 +466,73 @@ export default function UserProfileSummaryPage() {
 
   const fetchReviewsForMyTasks = async (userId: string) => {
     try {
-      console.log("Fetching reviews for user:", userId);
+      setReviewsLoading(true);
       const TASK_API_BASE = process.env.NEXT_PUBLIC_TASK_API_URL || 'http://localhost:8084';
       const REVIEW_API_BASE = process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086';
-      const token = localStorage.getItem("token");
+      const headers = getAuthHeaders();
       
-      // First, get user's tasks
-      const res = await fetch(`${TASK_API_BASE}/api/tasks/get/user`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const tasksRes = await fetch(`${TASK_API_BASE}/api/tasks/get/user`, {
+        headers: headers,
         signal: AbortSignal.timeout(10000) // 10 second timeout
       });
       
-      if (!res.ok) {
-        console.error("Failed to fetch tasks:", res.status, res.statusText);
-        setReviewsLoading(false);
+      if (!tasksRes.ok) {
+        console.log("Failed to fetch tasks:", tasksRes.status);
+        setReviews([]);
         return;
       }
       
-      const tasksData = await res.json();
-      console.log("Tasks data:", tasksData);
-      
+      const tasksData = await tasksRes.json();
       const tasks = tasksData.data || tasksData || [];
       const myTaskIds = tasks.map((task: any) => task.id || task._id || task.ID);
       console.log("Task IDs:", myTaskIds);
       
       let allReviews: any[] = [];
       
-      // Fetch reviews for each task
-      for (const taskId of myTaskIds) {
-        if (!taskId) continue;
-        
+      // Use batch request if available, otherwise limit individual requests
+      if (myTaskIds.length > 0) {
         try {
-          const reviewRes = await fetch(`${REVIEW_API_BASE}/api/reviews?taskId=${taskId}`, {
-            signal: AbortSignal.timeout(5000) // 5 second timeout
+          // Try batch review endpoint first
+          const batchReviewRes = await fetch(`${REVIEW_API_BASE}/api/reviews/batch?taskIds=${myTaskIds.join(',')}`, {
+            signal: AbortSignal.timeout(5000)
           });
-          console.log(`Review response for task ${taskId}:`, reviewRes.status);
           
-          if (reviewRes.ok) {
-            const reviews = await reviewRes.json();
-            console.log(`Reviews for task ${taskId}:`, reviews);
-            if (Array.isArray(reviews)) {
-              allReviews = allReviews.concat(reviews);
-            } else if (reviews.data && Array.isArray(reviews.data)) {
-              allReviews = allReviews.concat(reviews.data);
+          if (batchReviewRes.ok) {
+            const batchReviews = await batchReviewRes.json();
+            console.log("Batch reviews:", batchReviews);
+            if (Array.isArray(batchReviews)) {
+              allReviews = batchReviews;
+            } else if (batchReviews.data && Array.isArray(batchReviews.data)) {
+              allReviews = batchReviews.data;
+            }
+          } else {
+            // Fallback to individual requests but limit to first 5 tasks to reduce requests
+            const limitedTaskIds = myTaskIds.slice(0, 5);
+            for (const taskId of limitedTaskIds) {
+              if (!taskId) continue;
+              
+              try {
+                const reviewRes = await fetch(`${REVIEW_API_BASE}/api/reviews?taskId=${taskId}`, {
+                  signal: AbortSignal.timeout(5000) // 5 second timeout
+                });
+                console.log(`Review response for task ${taskId}:`, reviewRes.status);
+                
+                if (reviewRes.ok) {
+                  const reviews = await reviewRes.json();
+                  console.log(`Reviews for task ${taskId}:`, reviews);
+                  if (Array.isArray(reviews)) {
+                    allReviews = allReviews.concat(reviews);
+                  } else if (reviews.data && Array.isArray(reviews.data)) {
+                    allReviews = allReviews.concat(reviews.data);
+                  }
+                }
+              } catch (taskErr) {
+                console.error(`Error fetching reviews for task ${taskId}:`, taskErr);
+              }
             }
           }
-        } catch (taskErr) {
-          console.error(`Error fetching reviews for task ${taskId}:`, taskErr);
+        } catch (batchErr) {
+          console.log("Batch review fetch failed, using individual requests:", batchErr);
         }
       }
       
@@ -541,7 +586,6 @@ export default function UserProfileSummaryPage() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (!token) {
       router.push("/login");
       return;
@@ -550,7 +594,7 @@ export default function UserProfileSummaryPage() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_PROFILE_API_URL || 'http://localhost:8081'}/api/profile/get`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: getAuthHeaders() }
         );
         const contentType = res.headers.get("content-type") || "";
         if (!contentType.includes("application/json")) throw new Error("Invalid response format");
@@ -582,16 +626,17 @@ export default function UserProfileSummaryPage() {
       }
     };
     fetchProfile();
-  }, [router]);
+  }, [router, token]);
 
   const fetchReviewerProfile = async (reviewerId: string) => {
     if (reviewerProfiles[reviewerId]) return reviewerProfiles[reviewerId];
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
       const PROFILE_API_BASE = process.env.NEXT_PUBLIC_PROFILE_API_URL || 'http://localhost:8083';
+      const headers = getAuthHeaders();
       
       // First try to get user info from auth service
-      const authRes = await fetch(`${API_BASE_URL}/api/auth/user/${reviewerId}`);
+      const authRes = await fetch(`${API_BASE_URL}/api/auth/user/${reviewerId}`, { headers });
       let name = 'Unknown';
       if (authRes.ok) {
         const authData = await authRes.json();
@@ -601,7 +646,7 @@ export default function UserProfileSummaryPage() {
       // Then try to get profile picture from profile service
       let profilePicture = null;
       try {
-        const profileRes = await fetch(`${PROFILE_API_BASE}/api/profile/${reviewerId}`);
+        const profileRes = await fetch(`${PROFILE_API_BASE}/api/profile/${reviewerId}`, { headers });
         if (profileRes.ok) {
           const profileData = await profileRes.json();
           profilePicture = profileData.ProfilePictureURL || profileData.profilePictureURL || null;
@@ -644,14 +689,14 @@ export default function UserProfileSummaryPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const token = localStorage.getItem("token");
       const API_BASE = process.env.NEXT_PUBLIC_PROFILE_API_URL || "http://localhost:8081";
+      const headers = getAuthHeaders();
       
       const res = await fetch(`${API_BASE}/api/profile/update-info`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...headers,
         },
         body: JSON.stringify({
           college: profile?.College,
@@ -778,7 +823,6 @@ export default function UserProfileSummaryPage() {
   if (loading || !profile) return null;
 
   return (
-    <ProtectedLayout>
       <div className="min-h-screen bg-white text-black flex flex-col gap-6 p-6">
         <div className="w-full max-w-[1400px] mx-auto">
           {/* Cover Image Section */}
@@ -1371,6 +1415,5 @@ export default function UserProfileSummaryPage() {
         </div>
         </div>
       </div>
-    </ProtectedLayout>
   );
 }

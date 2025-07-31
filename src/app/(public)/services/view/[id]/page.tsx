@@ -11,6 +11,8 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import BookingModal from '@/components/BookingModal';
 import AuthModal from '@/components/AuthModal';
 import { useAuth } from '@/contexts/AuthContext';
+import { getAuthHeaders } from '@/lib/token-utils';
+import { fetchProfileWithCache } from '@/lib/profile-cache';
 
 type Availability = {
   Date: string;
@@ -440,35 +442,40 @@ export default function ServiceViewPage() {
     try {
       console.log('=== FETCHING CONVERSATION HISTORY ===');
       
-      // Get current user profile
-      const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/profile`, {
-        headers: { Authorization: `Bearer ${token}` },
+      // Get current user profile with caching
+      const profileData = await fetchProfileWithCache('current-user', async () => {
+        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/profile`, {
+          headers: getAuthHeaders(),
+        });
+        
+        if (!profileRes.ok) {
+          throw new Error("Failed to fetch user profile");
+        }
+        
+        return profileRes.json();
       });
       
-      if (!profileRes.ok) {
-        throw new Error("Failed to fetch user profile");
-      }
-      
-      const profileData = await profileRes.json();
       const currentUserEmail = (profileData as any).email || (profileData as any).Email;
       
-      // Get service provider email
+      // Get service provider email with caching
       const serviceProviderId = service.Author?.ID || service.Author?.id || service.author?.id;
       if (!serviceProviderId) {
         console.log('No service provider ID found');
         return;
       }
 
-      const providerProfileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/user/${serviceProviderId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const providerProfileData = await fetchProfileWithCache(serviceProviderId, async () => {
+        const providerProfileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/user/${serviceProviderId}`, {
+          headers: getAuthHeaders(),
+        });
+        
+        if (!providerProfileRes.ok) {
+          throw new Error('Failed to fetch provider profile');
+        }
+        
+        return providerProfileRes.json();
       });
       
-      if (!providerProfileRes.ok) {
-        console.log('Failed to fetch provider profile');
-        return;
-      }
-      
-      const providerProfileData = await providerProfileRes.json();
       const serviceProviderEmail = (providerProfileData as any).email || (providerProfileData as any).Email;
       
       // Find existing conversation

@@ -97,6 +97,93 @@ const useAuthorAvatar = (authorId: string) => {
   return { avatar, loading, error };
 };
 
+// Custom hook for batch image loading
+const useBatchImages = (services: Service[]) => {
+  const [images, setImages] = useState<Record<string, string[]>>({});
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (services.length === 0) return;
+
+    const loadBatchImages = async () => {
+      setLoading(true);
+      try {
+        const taskIds = services
+          .map(s => s.ID || s.id)
+          .filter(id => id)
+          .join(',');
+
+        if (!taskIds) return;
+
+        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
+        // Use compression for better performance: 40% quality, 300px max width
+        const response = await fetch(`${API_BASE_URL}/api/tasks/images/batch?taskIds=${taskIds}&quality=40&width=300`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setImages(data.images || {});
+        }
+      } catch (error) {
+        console.error('Error loading batch images:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBatchImages();
+  }, [services]);
+
+  return { images, loading };
+};
+
+// Custom hook for batch avatar loading
+const useBatchAvatars = (services: Service[]) => {
+  const [avatars, setAvatars] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (services.length === 0) return;
+
+    const loadBatchAvatars = async () => {
+      setLoading(true);
+      try {
+        // Get unique author IDs that don't already have avatars in the service data
+        const authorIds = services
+          .filter(s => {
+            const hasAvatar = s.Author?.Avatar || s.author?.avatar;
+            return !hasAvatar && (s.Author?.ID || s.Author?.id || s.author?.id);
+          })
+          .map(s => s.Author?.ID || s.Author?.id || s.author?.id)
+          .filter((id, index, arr) => arr.indexOf(id) === index) // Remove duplicates
+          .join(',');
+
+        if (!authorIds) {
+          setLoading(false);
+          return;
+        }
+
+        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
+        // Use maximum compression for avatars: 50% quality, 64px max width
+        const response = await fetch(`${API_BASE_URL}/api/tasks/avatar/batch?authorIds=${authorIds}&quality=50&width=64`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setAvatars(data.avatars || {});
+        }
+      } catch (error) {
+        console.error('Error loading batch avatars:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Start loading immediately
+    loadBatchAvatars();
+  }, [services]);
+
+  return { avatars, loading };
+};
+
 // Service card component with image loading
 const ServiceCard = ({ service, idx }: { service: Service; idx: number }) => {
   const router = useRouter();

@@ -359,10 +359,9 @@ export default function Sidebar({ isCollapsed = false, onToggle }: { isCollapsed
   const [appointmentsOpen, setAppointmentsOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-100 via-white to-gray-200">
-      <aside
-        className={`${isCollapsed ? 'w-16' : 'w-64'} min-h-screen p-0 flex flex-col items-stretch bg-white/70 backdrop-blur-lg shadow-xl shadow-gray-200 border-r border-gray-200 transition-all duration-300`}
-      >
+    <aside
+      className={`${isCollapsed ? 'w-16' : 'w-64'} min-h-screen p-0 flex flex-col items-stretch bg-white/70 backdrop-blur-lg shadow-xl shadow-gray-200 border-r border-gray-200 transition-all duration-300`}
+    >
         <div className={`${isCollapsed ? 'px-2' : 'px-6'} py-8 flex flex-col items-center gap-4 border-b border-gray-100 relative`}>
           {!isCollapsed && <h1 className="text-2xl font-extrabold tracking-tight text-gray-800">TradeMinutes.</h1>}
           {isCollapsed && <h1 className="text-xl font-extrabold tracking-tight text-gray-800">TM</h1>}
@@ -504,7 +503,6 @@ export default function Sidebar({ isCollapsed = false, onToggle }: { isCollapsed
           </div>
         </nav>
       </aside>
-    </div>
   );
 }
 

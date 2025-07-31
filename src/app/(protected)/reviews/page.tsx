@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProtectedLayout from "@/components/Layout/ProtectedLayout";
+
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { 
   FaStar, 
@@ -448,16 +448,13 @@ export default function ReviewsPage() {
 
   if (loading) {
     return (
-      <ProtectedLayout>
-        <div className="flex h-screen bg-white items-center justify-center">
-          <LoadingSpinner size="lg" text="Loading reviews..." />
-        </div>
-      </ProtectedLayout>
+      <div className="flex h-screen bg-white items-center justify-center">
+        <LoadingSpinner size="lg" text="Loading reviews..." />
+      </div>
     );
   }
 
   return (
-    <ProtectedLayout>
       <div className="min-h-screen bg-white">
         {/* Header */}
         <div className="bg-white p-6 border-b border-gray-200">
@@ -822,6 +819,5 @@ export default function ReviewsPage() {
           )}
         </div>
       </div>
-    </ProtectedLayout>
   );
 } 

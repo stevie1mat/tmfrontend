@@ -326,8 +326,8 @@ export default function ProtectedLayout({ children, headerName, hideTopBar, hide
     // Fetch activities in the background after a delay (don't block initial render)
     const timer = setTimeout(fetchRealTimeActivities, 500);
     
-    // Refresh activities every 10 minutes instead of 5 minutes to reduce requests
-    const interval = setInterval(fetchRealTimeActivities, 10 * 60 * 1000);
+    // Optional: Refresh activities every 5 minutes (less frequent for better performance)
+    const interval = setInterval(fetchRealTimeActivities, 5 * 60 * 1000);
     return () => {
       clearTimeout(timer);
       clearInterval(interval);

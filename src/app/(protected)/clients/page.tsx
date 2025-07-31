@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProtectedLayout from "@/components/Layout/ProtectedLayout";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { 
   FaUser, 
@@ -445,20 +444,17 @@ export default function ClientDirectoryPage() {
 
   if (loading) {
     return (
-      <ProtectedLayout>
-        <div className="flex h-screen bg-white items-center justify-center">
-          <LoadingSpinner size="lg" text="Loading client directory..." />
-        </div>
-      </ProtectedLayout>
+      <div className="flex h-screen bg-white items-center justify-center">
+        <LoadingSpinner size="lg" text="Loading client directory..." />
+      </div>
     );
   }
 
   return (
-    <ProtectedLayout>
-      <div className="min-h-screen bg-white">
-        {/* Header */}
-        <div className="bg-white p-6 border-b border-gray-200">
-          <div className="flex items-center justify-between">
+    <>
+        {/* Page Header */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Client Directory</h1>
               <p className="text-gray-600 mt-1">Manage and track your client relationships</p>
@@ -476,7 +472,7 @@ export default function ClientDirectoryPage() {
           </div>
         </div>
 
-        <div className="p-6">
+        <div>
           {/* Stats Overview */}
           {stats && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -801,7 +797,6 @@ export default function ClientDirectoryPage() {
             </div>
           )}
         </div>
-      </div>
-    </ProtectedLayout>
+    </>
   );
 } 

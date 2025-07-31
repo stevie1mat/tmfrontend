@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProtectedLayout from "@/components/Layout/ProtectedLayout";
+
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { 
   FaDollarSign, 
@@ -234,16 +234,13 @@ export default function EarningsDashboardPage() {
 
   if (loading) {
     return (
-      <ProtectedLayout>
-        <div className="flex h-screen bg-white items-center justify-center">
-          <LoadingSpinner size="lg" text="Loading earnings dashboard..." />
-        </div>
-      </ProtectedLayout>
+      <div className="flex h-screen bg-white items-center justify-center">
+        <LoadingSpinner size="lg" text="Loading earnings dashboard..." />
+      </div>
     );
   }
 
   return (
-    <ProtectedLayout>
       <div className="bg-white">
         {/* Header */}
         <div className="bg-white p-6 border-b border-gray-200 sticky top-0 z-10">
@@ -440,6 +437,5 @@ export default function EarningsDashboardPage() {
 
         </div>
       </div>
-    </ProtectedLayout>
   );
 } 
