@@ -9,14 +9,21 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import LazyImage from '@/components/common/LazyImage';
 import { useAuth } from '@/contexts/AuthContext';
 
-// Custom hook to load images on-demand
+// Custom hook to load images on-demand with caching
 const useTaskImages = (taskId: string) => {
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageCache, setImageCache] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
     if (!taskId) return;
+
+    // Check cache first
+    if (imageCache[taskId]) {
+      setImages(imageCache[taskId]);
+      return;
+    }
 
     const loadImages = async () => {
       setLoading(true);
@@ -28,7 +35,10 @@ const useTaskImages = (taskId: string) => {
           throw new Error('Failed to load images');
         }
         const data = await response.json();
-        setImages(data.images || []);
+        const imageArray = data.images || [];
+        setImages(imageArray);
+        // Cache the result
+        setImageCache(prev => ({ ...prev, [taskId]: imageArray }));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load images');
         console.error('Error loading images:', err);
@@ -38,19 +48,26 @@ const useTaskImages = (taskId: string) => {
     };
 
     loadImages();
-  }, [taskId]);
+  }, [taskId, imageCache]);
 
   return { images, loading, error };
 };
 
-// Custom hook to load author avatar on-demand
+// Custom hook to load author avatar on-demand with caching
 const useAuthorAvatar = (authorId: string) => {
   const [avatar, setAvatar] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [avatarCache, setAvatarCache] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!authorId) return;
+
+    // Check cache first
+    if (avatarCache[authorId]) {
+      setAvatar(avatarCache[authorId]);
+      return;
+    }
 
     const loadAvatar = async () => {
       setLoading(true);
@@ -62,7 +79,10 @@ const useAuthorAvatar = (authorId: string) => {
           throw new Error('Failed to load avatar');
         }
         const data = await response.json();
-        setAvatar(data.avatar || '');
+        const avatarUrl = data.avatar || '';
+        setAvatar(avatarUrl);
+        // Cache the result
+        setAvatarCache(prev => ({ ...prev, [authorId]: avatarUrl }));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load avatar');
         console.error('Error loading avatar:', err);
@@ -72,7 +92,7 @@ const useAuthorAvatar = (authorId: string) => {
     };
 
     loadAvatar();
-  }, [authorId]);
+  }, [authorId, avatarCache]);
 
   return { avatar, loading, error };
 };

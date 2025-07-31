@@ -10,6 +10,8 @@ import { FaRegCalendarAlt, FaUserAlt } from "react-icons/fa";
 import Link from "next/link";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "@/contexts/AuthContext";
+import { getAuthHeaders } from "@/lib/token-utils";
 
 interface Notification {
   id: string;
@@ -42,9 +44,8 @@ export function NotificationBell({ userId }: { userId?: string }) {
     if (!userId) return;
     const fetchNotifications = async () => {
       try {
-        const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
         const res = await fetch(`${API_BASE_URL}/api/notifications?userId=${userId}`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          headers: getAuthHeaders(),
         });
         if (!res.ok) throw new Error("Failed to fetch notifications");
         const data = await res.json();
@@ -61,8 +62,12 @@ export function NotificationBell({ userId }: { userId?: string }) {
         setLoading(false);
       }
     };
+    
+    // Initial fetch
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
+    
+    // Poll every 2 minutes instead of 30 seconds to reduce requests
+    const interval = setInterval(fetchNotifications, 120000);
     return () => clearInterval(interval);
   }, [userId]);
 
@@ -81,13 +86,12 @@ export function NotificationBell({ userId }: { userId?: string }) {
 
   const markAllAsRead = async () => {
     if (!userId) return;
-    const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
     try {
       const res = await fetch(
         `${API_BASE_URL}/api/notifications/mark-all-read?userId=${userId}`,
         {
           method: "PUT",
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          headers: getAuthHeaders(),
         }
       );
       if (!res.ok) throw new Error("Failed to mark all as read");
@@ -129,17 +133,15 @@ export function NotificationBell({ userId }: { userId?: string }) {
   };
 
   const markAsRead = async (notificationId: string) => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
     try {
       const res = await fetch(`${API_BASE_URL}/api/notifications/${notificationId}/read`, {
         method: "PUT",
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: getAuthHeaders(),
       });
-      if (res.ok) {
-        setNotifications((prev) => 
-          prev.map((n) => n.id === notificationId ? { ...n, read: true } : n)
-        );
-      }
+      if (!res.ok) throw new Error("Failed to mark as read");
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n))
+      );
     } catch (err) {
       console.error("Failed to mark notification as read:", err);
     }
@@ -347,6 +349,7 @@ export function NotificationBell({ userId }: { userId?: string }) {
 export default function Sidebar({ isCollapsed = false, onToggle }: { isCollapsed?: boolean; onToggle?: () => void }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { token } = useAuth();
 
   const handleLogout = () => {
     localStorage.removeItem("token");

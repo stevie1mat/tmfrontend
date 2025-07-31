@@ -9,19 +9,25 @@ import ServiceCard from "./ServiceCard";
 const useTaskImages = (taskIds: string[]) => {
   const [images, setImages] = useState<Record<string, string[]>>({});
   const [loading, setLoading] = useState(false);
+  const [cachedIds, setCachedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!taskIds.length) return;
+
+    // Only fetch uncached task IDs
+    const uncachedIds = taskIds.filter(id => !cachedIds.has(id));
+    if (!uncachedIds.length) return;
 
     const fetchImages = async () => {
       setLoading(true);
       try {
         const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
-        const response = await fetch(`${API_BASE_URL}/api/tasks/images/batch?taskIds=${taskIds.join(',')}&quality=70&width=600`);
+        const response = await fetch(`${API_BASE_URL}/api/tasks/images/batch?taskIds=${uncachedIds.join(',')}&quality=70&width=600`);
         
         if (response.ok) {
           const data = await response.json();
-          setImages(data.images || {});
+          setImages(prev => ({ ...prev, ...data.images }));
+          setCachedIds(prev => new Set([...prev, ...uncachedIds]));
         }
       } catch (error) {
         console.error('Error fetching task images:', error);
@@ -30,8 +36,10 @@ const useTaskImages = (taskIds: string[]) => {
       }
     };
 
-    fetchImages();
-  }, [taskIds.join(',')]);
+    // Debounce the fetch to avoid multiple rapid requests
+    const timeoutId = setTimeout(fetchImages, 300);
+    return () => clearTimeout(timeoutId);
+  }, [taskIds.join(','), cachedIds]);
 
   return { images, loading };
 };

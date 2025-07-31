@@ -52,8 +52,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [lastFetchTime, setLastFetchTime] = useState<number>(0);
 
   const fetchUserProfile = async (authToken: string) => {
+    // Debounce: don't fetch if we've fetched in the last 5 seconds
+    const now = Date.now();
+    if (now - lastFetchTime < 5000) {
+      console.log("⏱️ Skipping profile fetch - too soon since last request");
+      return;
+    }
+    setLastFetchTime(now);
+
     try {
       // Try profile service first (has complete user data)
       const PROFILE_API_URL = process.env.NEXT_PUBLIC_PROFILE_API_URL || 'http://localhost:8081';

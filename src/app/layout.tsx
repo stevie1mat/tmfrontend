@@ -53,6 +53,12 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/favicon.svg" />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#3b82f6" />
+        
+        {/* Preload critical resources to reduce edge requests */}
+        <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/favicon.ico" as="image" type="image/x-icon" />
+        <link rel="dns-prefetch" href="//cdn.pixabay.com" />
+        <link rel="dns-prefetch" href="//images.pexels.com" />
       </head>
       <body
         className={`${urbanist.variable} font-urbanist antialiased`}

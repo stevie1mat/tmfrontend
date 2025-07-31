@@ -1,9 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-06-30.basil',
-});
+// Validate Stripe configuration
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+if (!stripeSecretKey) {
+  console.error('❌ STRIPE_SECRET_KEY is not configured');
+  // Don't throw error during build time, just log it
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('STRIPE_SECRET_KEY environment variable is required');
+  }
+}
+
+// Only initialize Stripe if the secret key is available
+let stripe: Stripe | null = null;
+if (stripeSecretKey) {
+  stripe = new Stripe(stripeSecretKey, {
+    apiVersion: '2025-06-30.basil',
+  });
+}
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 if (!webhookSecret) {
@@ -34,6 +48,9 @@ export async function POST(req: NextRequest) {
     try {
       if (!webhookSecret) {
         throw new Error('Webhook secret not configured');
+      }
+      if (!stripe) {
+        throw new Error('Stripe not initialized');
       }
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
       console.log('✅ Webhook signature verified');

@@ -10,14 +10,21 @@ import {
 } from 'react-icons/fi';
 import { FaMapMarkerAlt, FaClock, FaCoins } from 'react-icons/fa';
 
-// Custom hook to load images on-demand (same as ServiceGrid)
+// Hook to fetch task images with caching
 const useTaskImages = (taskId: string) => {
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [cachedImages, setCachedImages] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
     if (!taskId) return;
+
+    // Check if we already have cached images for this task
+    if (cachedImages[taskId]) {
+      setImages(cachedImages[taskId]);
+      return;
+    }
 
     const loadImages = async () => {
       setLoading(true);
@@ -29,7 +36,10 @@ const useTaskImages = (taskId: string) => {
           throw new Error('Failed to load images');
         }
         const data = await response.json();
-        setImages(data.images || []);
+        const imageArray = data.images || [];
+        setImages(imageArray);
+        // Cache the images
+        setCachedImages(prev => ({ ...prev, [taskId]: imageArray }));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load images');
         console.error('Error loading images:', err);
@@ -39,7 +49,7 @@ const useTaskImages = (taskId: string) => {
     };
 
     loadImages();
-  }, [taskId]);
+  }, [taskId, cachedImages]);
 
   return { images, loading, error };
 };
