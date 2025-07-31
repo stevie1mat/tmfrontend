@@ -4,7 +4,7 @@
 
 ![TradeMinutes Logo](https://img.shields.io/badge/TradeMinutes-Time%20Exchange%20Platform-green?style=for-the-badge&logo=clock)
 
-**Exchange Skills. Earn Time Credits. Build Community.**
+**Exchange Your Skills. Earn Time Credits. Build Community.**
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.3.3-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![Go](https://img.shields.io/badge/Go-1.21+-blue?style=flat-square&logo=go)](https://golang.org/)
