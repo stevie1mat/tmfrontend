@@ -21,7 +21,7 @@ export default function MyWorkflowsPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8002';
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://tmagenticai.onrender.com';
   const WORKFLOW_API_URL = `${API_BASE_URL}/api/workflows`;
 
   useEffect(() => {

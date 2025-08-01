@@ -204,14 +204,15 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
     const isNavigationQuery = checkIfNavigationQuery(textToSend);
     
     if (isNavigationQuery) {
-      // Skip AI response for navigation queries
+      // Skip AI response for navigation querie
       setLoading(false);
       handleNavigation(textToSend);
       return;
     }
 
     try {
-    const res = await fetch("http://localhost:8002/api/agentic-chat", {
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://tmagenticai.onrender.com';
+    const res = await fetch(`${API_BASE_URL}/api/agentic-chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: textToSend, userSkills })
