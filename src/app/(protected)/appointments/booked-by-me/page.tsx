@@ -80,7 +80,7 @@ export default function BookedByMePage() {
         const data = await res.json();
         console.log("Raw bookings response:", data);
         
-        // Handle different response structures
+       
         let bookingsArray = [];
         if (data && typeof data === 'object') {
           if (Array.isArray(data)) {
