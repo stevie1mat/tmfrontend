@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaSearch, FaChevronDown, FaShieldAlt, FaCheckCircle } from "react-icons/fa";
+import { FaSearch, FaChevronDown, FaShieldAlt, FaCheckCircle, FaUsers, FaStar } from "react-icons/fa";
 
 const categories = [
   "Academic Help",
@@ -49,15 +49,30 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
   const heroImages = [
     {
       main: "https://demoapus1.com/freeio/wp-content/uploads/2022/09/h2.png",
-      overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service15.jpg"
+      overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service15.jpg",
+      popupTitle: "Verified Professionals",
+      popupSubtitle: "Background checked & rated",
+      popupIcon: FaShieldAlt,
+      popupIconColor: "text-green-500",
+      popupBgColor: "bg-green-100"
     },
     {
       main: "https://demoapus1.com/freeio/wp-content/uploads/2022/09/bg-video-410x410.png",
-      overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service2.jpg"
+      overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service2.jpg",
+      popupTitle: "Trusted Community",
+      popupSubtitle: "Real people, real skills",
+      popupIcon: FaUsers,
+      popupIconColor: "text-blue-500",
+      popupBgColor: "bg-blue-100"
     },
     {
       main: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/12-300x300.jpg",
-      overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service5.jpg"
+      overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service5.jpg",
+      popupTitle: "Quality Guaranteed",
+      popupSubtitle: "Top-rated professionals only",
+      popupIcon: FaStar,
+      popupIconColor: "text-yellow-500",
+      popupBgColor: "bg-yellow-100"
     }
   ];
   
@@ -457,13 +472,17 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
               style={{zIndex: 1}}
             />
                                {/* Proof of quality popup */}
-                   <div className="absolute left-26 -top-14 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[280px] animate-slide-in-left" style={{zIndex: 3}}>
-                     <span className="bg-green-100 rounded-full p-2">
-                       <FaShieldAlt className="text-green-500 w-6 h-6" />
+                   <div className={`absolute left-26 -top-14 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[280px] animate-slide-in-left transition-all duration-1200 ease-in-out ${
+                     isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                   }`} style={{zIndex: 3}}>
+                     <span className={`${heroImages[currentImageIndex].popupBgColor} rounded-full p-2`}>
+                       {React.createElement(heroImages[currentImageIndex].popupIcon, {
+                         className: `${heroImages[currentImageIndex].popupIconColor} w-6 h-6`
+                       })}
                      </span>
                      <div>
-                       <div className="font-semibold text-gray-900">Verified Professionals</div>
-                       <div className="text-gray-500 text-sm">Background checked & rated</div>
+                       <div className="font-semibold text-gray-900">{heroImages[currentImageIndex].popupTitle}</div>
+                       <div className="text-gray-500 text-sm">{heroImages[currentImageIndex].popupSubtitle}</div>
                      </div>
                    </div>
             {/* Safe and secure popup */}
