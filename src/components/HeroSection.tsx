@@ -42,6 +42,24 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Image slideshow data
+  const heroImages = [
+    {
+      main: "https://demoapus1.com/freeio/wp-content/uploads/2022/09/h2.png",
+      overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service15.jpg"
+    },
+    {
+      main: "https://demoapus1.com/freeio/wp-content/uploads/2022/09/bg-video-410x410.png",
+      overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service2.jpg"
+    },
+    {
+      main: "https://demoapus1.com/freeio/wp-content/uploads/2022/10/12-300x300.jpg",
+      overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service5.jpg"
+    }
+  ];
   
 
 
@@ -57,6 +75,23 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
       setShowSuggestions(false);
     }
   }, [searchQuery]);
+
+  // Slideshow effect with fade transition
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentImageIndex((prevIndex) => 
+          (prevIndex + 1) % heroImages.length
+        );
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 200); // Small delay to ensure new image is loaded
+      }, 1200); // Fade out duration (matches CSS transition)
+    }, 5000); // Change every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
 
 
 
@@ -405,16 +440,20 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
           <div className="relative w-[370px] h-[480px]">
             {/* Main image */}
             <img
-              src="https://demoapus1.com/freeio/wp-content/uploads/2022/09/h2.png"
+              src={heroImages[currentImageIndex].main}
               alt="service"
-              className="absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl animate-fade-in-up"
+              className={`absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl transition-all duration-1200 ease-in-out ${
+                isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+              }`}
               style={{zIndex: 0}}
             />
             {/* Overlapping image */}
             <img
-              src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/service15.jpg"
+              src={heroImages[currentImageIndex].overlapping}
               alt="service"
-              className="absolute left-32 top-40 w-[400px] h-[300px] object-cover rounded-2xl shadow-lg animate-fade-in-down"
+              className={`absolute left-32 top-24 w-[400px] h-[300px] object-cover rounded-2xl shadow-lg transition-all duration-1200 ease-in-out ${
+                isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+              }`}
               style={{zIndex: 1}}
             />
                                {/* Proof of quality popup */}
