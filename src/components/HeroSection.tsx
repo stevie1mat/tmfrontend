@@ -407,18 +407,18 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
             <img
               src="https://demoapus1.com/freeio/wp-content/uploads/2022/09/h2.png"
               alt="service"
-              className="absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl"
+              className="absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl animate-fade-in-up"
               style={{zIndex: 0}}
             />
             {/* Overlapping image */}
             <img
               src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/service15.jpg"
               alt="service"
-              className="absolute left-32 top-24 w-[340px] h-[300px] object-cover rounded-2xl shadow-lg"
+              className="absolute left-32 top-40 w-[400px] h-[300px] object-cover rounded-2xl shadow-lg animate-fade-in-down"
               style={{zIndex: 1}}
             />
                                {/* Proof of quality popup */}
-                   <div className="absolute left-26 -top-14 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[280px]" style={{zIndex: 3}}>
+                   <div className="absolute left-26 -top-14 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[280px] animate-slide-in-left" style={{zIndex: 3}}>
                      <span className="bg-green-100 rounded-full p-2">
                        <FaShieldAlt className="text-green-500 w-6 h-6" />
                      </span>
@@ -437,20 +437,20 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
                 <div className="text-gray-500 text-sm">Lorem Ipsum Dolar Amet</div>
               </div>
             </div> */}
-            {/* Professionals bar */}
-            <div className="absolute left-0 -bottom-6 flex items-center bg-white rounded-full shadow-lg px-6 py-3 min-w-[270px] gap-4" style={{zIndex: 4}}>
-              <span className="font-semibold text-gray-800">58M+ Professionals</span>
-              <div className="flex -space-x-2">
-                {AVATARS.map((src, i) => (
-                  <img
-                    key={i}
-                    src={src}
-                    alt="avatar"
-                    className="w-10 h-10 rounded-full border-2 border-white object-cover"
-                  />
-                ))}
-              </div>
-            </div>
+                               {/* Professionals bar */}
+                   <div className="absolute left-0 -bottom-6 flex items-center bg-white rounded-full shadow-lg px-6 py-3 min-w-[270px] gap-4 animate-slide-in-right" style={{zIndex: 4}}>
+                     <span className="font-semibold text-gray-800">58M+ Professionals</span>
+                     <div className="flex -space-x-2">
+                       {AVATARS.map((src, i) => (
+                         <img
+                           key={i}
+                           src={src}
+                           alt="avatar"
+                           className="w-10 h-10 rounded-full border-2 border-white object-cover"
+                         />
+                       ))}
+                     </div>
+                   </div>
           </div>
         </div>
       </div>

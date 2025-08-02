@@ -44,3 +44,68 @@ body {
     transform: translateX(100%);
   }
 }
+
+/* Fade in up animation for hero images */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1.5s ease-out forwards;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 1.5s ease-out forwards;
+}
+
+/* Slide in from left animation */
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 1.5s ease-out forwards;
+  opacity: 0;
+}
+
+/* Slide in from right animation */
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 1.5s ease-out forwards;
+  opacity: 0;
+}
