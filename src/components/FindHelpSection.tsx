@@ -72,7 +72,7 @@ export default function FindHelpSection() {
             </li>
           </ul>
 
-          <button className="bg-green-500 text-white px-6 py-3 rounded-full font-medium flex items-center gap-2 hover:bg-green-600">
+          <button className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white px-6 py-3 rounded-full font-medium flex items-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl">
             Find Help <FiArrowUpRight />
           </button>
         </div>

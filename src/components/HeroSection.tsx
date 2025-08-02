@@ -42,6 +42,8 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
+  
+
 
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
@@ -55,6 +57,8 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
       setShowSuggestions(false);
     }
   }, [searchQuery]);
+
+
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -299,6 +303,31 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
         </svg>
       </div>
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20">
+        {/* Concentric circles above the heading */}
+        <div className="absolute top-0 left-0 w-1/4 h-1/4 opacity-10">
+          <svg className="w-full h-full" viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="40" stroke="#10b981" strokeWidth="2" fill="none"/>
+            <circle cx="50" cy="50" r="30" stroke="#34d399" strokeWidth="1.5" fill="none"/>
+            <circle cx="50" cy="50" r="20" stroke="#6ee7b7" strokeWidth="1" fill="none"/>
+          </svg>
+        </div>
+        
+        <div className="absolute top-10 right-1/3 w-1/6 h-1/6 opacity-8">
+          <svg className="w-full h-full" viewBox="0 0 80 80" fill="none">
+            <circle cx="40" cy="40" r="32" stroke="#34d399" strokeWidth="1.5" fill="none"/>
+            <circle cx="40" cy="40" r="24" stroke="#6ee7b7" strokeWidth="1" fill="none"/>
+            <circle cx="40" cy="40" r="16" stroke="#a7f3d0" strokeWidth="0.8" fill="none"/>
+          </svg>
+        </div>
+        
+        <div className="absolute top-20 left-1/4 w-1/8 h-1/8 opacity-6">
+          <svg className="w-full h-full" viewBox="0 0 60 60" fill="none">
+            <circle cx="30" cy="30" r="24" stroke="#6ee7b7" strokeWidth="1" fill="none"/>
+            <circle cx="30" cy="30" r="18" stroke="#a7f3d0" strokeWidth="0.8" fill="none"/>
+            <circle cx="30" cy="30" r="12" stroke="#d1fae5" strokeWidth="0.6" fill="none"/>
+          </svg>
+        </div>
+        
         <div className="flex flex-col items-start">
           <h1 className="text-white font-bold leading-tight mb-3 text-left" style={{ fontSize: '40px' }}>
             Exchange Skills. Earn Time Credits.
@@ -322,7 +351,7 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
               />
               <button
                 onClick={handleSearch}
-                className="bg-green-500 hover:bg-green-600 transition-colors text-white font-semibold text-lg px-10 py-4 rounded-full ml-2 mr-2"
+                className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition-all duration-200 text-white font-semibold text-lg px-10 py-4 rounded-full ml-2 mr-2 shadow-lg hover:shadow-xl"
               >
                 Search
               </button>
@@ -347,22 +376,26 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
             )}
           </div>
           {/* STATS */}
-          <div className="flex flex-wrap gap-8 mt-2">
-            <div className="text-center min-w-[120px]">
-              <div className="text-white font-bold text-2xl md:text-3xl lg:text-4xl">960M</div>
-              <div className="text-gray-200 text-base mt-1">Total Freelancer</div>
+          <div className="flex flex-wrap gap-6 mt-2">
+            <div className="text-center min-w-[100px]">
+              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">50K+</div>
+              <div className="text-gray-200 text-sm mt-1">Active Users</div>
             </div>
-            <div className="text-center min-w-[120px]">
-              <div className="text-white font-bold text-2xl md:text-3xl lg:text-4xl">850M</div>
-              <div className="text-gray-200 text-base mt-1">Positive Review</div>
+            <div className="text-center min-w-[100px]">
+              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">25K+</div>
+              <div className="text-gray-200 text-sm mt-1">Services Offered</div>
             </div>
-            <div className="text-center min-w-[120px]">
-              <div className="text-white font-bold text-2xl md:text-3xl lg:text-4xl">98M</div>
-              <div className="text-gray-200 text-base mt-1">Order recieved</div>
+            <div className="text-center min-w-[100px]">
+              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">15K+</div>
+              <div className="text-gray-200 text-sm mt-1">Successful Trades</div>
             </div>
-            <div className="text-center min-w-[120px]">
-              <div className="text-white font-bold text-2xl md:text-3xl lg:text-4xl">250M</div>
-              <div className="text-gray-200 text-base mt-1">Projects Completed</div>
+            <div className="text-center min-w-[100px]">
+              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">4.8</div>
+              <div className="text-gray-200 text-sm mt-1">Average Rating</div>
+            </div>
+            <div className="text-center min-w-[100px]">
+              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">200+</div>
+              <div className="text-gray-200 text-sm mt-1">Cities Covered</div>
             </div>
           </div>
         </div>
@@ -384,16 +417,16 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
               className="absolute left-32 top-24 w-[340px] h-[300px] object-cover rounded-2xl shadow-lg"
               style={{zIndex: 1}}
             />
-            {/* Proof of quality popup */}
-            <div className="absolute left-26 -top-14 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[220px]" style={{zIndex: 3}}>
-              <span className="bg-green-100 rounded-full p-2">
-                <FaShieldAlt className="text-green-500 w-6 h-6" />
-              </span>
-              <div>
-                <div className="font-semibold text-gray-900">Proof of quality</div>
-                <div className="text-gray-500 text-sm">Lorem Ipsum Dolar Amet</div>
-              </div>
-            </div>
+                               {/* Proof of quality popup */}
+                   <div className="absolute left-26 -top-14 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[280px]" style={{zIndex: 3}}>
+                     <span className="bg-green-100 rounded-full p-2">
+                       <FaShieldAlt className="text-green-500 w-6 h-6" />
+                     </span>
+                     <div>
+                       <div className="font-semibold text-gray-900">Verified Professionals</div>
+                       <div className="text-gray-500 text-sm">Background checked & rated</div>
+                     </div>
+                   </div>
             {/* Safe and secure popup */}
             {/* <div className="absolute right-10 bottom-8 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[220px]" style={{zIndex: 3}}>
               <span className="bg-green-100 rounded-full p-2">

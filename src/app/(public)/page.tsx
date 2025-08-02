@@ -11,7 +11,7 @@ import HeroSection from '@/components/HeroSection';
 import HowItWorks from '@/components/HowItWorks';
 import HowItWorksSection from '@/components/HowItWorksSection';
 import HowTradeMinutesModal from '@/components/HowTradeMinutesModal';
-import Navbar from '@/components/Navbar';
+import HomepageNavbar from '@/components/HomepageNavbar';
 import Pricing from '@/components/Pricing';
 import TalentCallout from '@/components/TalentCallout';
 import Testimonials from '@/components/Testimonials';
@@ -25,7 +25,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-white text-gray-900 font-sans">
       {/* Navbar */}
-      <Navbar />
+      <HomepageNavbar />
 
       {/* Sections with spacing */}
       <div className="space-y-10">
