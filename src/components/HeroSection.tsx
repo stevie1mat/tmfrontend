@@ -65,12 +65,8 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative min-h-[100vh] flex items-center justify-center bg-gray-50 overflow-hidden">
-      {/* Subtle gradient background */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-0 w-1/2 h-full bg-amber-50"></div>
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-amber-50"></div>
-      </div>
+    <section className="relative min-h-[100vh] flex items-center justify-center bg-amber-50 overflow-hidden">
+
       <div className="relative z-10 w-full px-16 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* LEFT SIDE */}
@@ -83,7 +79,7 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
             </p>
             {/* SEARCH BAR */}
             <div className="w-full max-w-2xl mb-8">
-                              <div className="flex items-center bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="flex items-center bg-white rounded-full shadow-lg overflow-hidden">
                 <span className="pl-6 pr-2 text-gray-400">
                   <FaSearch className="w-5 h-5" />
                 </span>
@@ -121,15 +117,16 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
                 </div>
               )}
             </div>
-                        {/* POPULAR SERVICES */}
-            <div className="flex items-center gap-2 mt-2 w-full max-w-2xl mx-auto">
-              
-              <span className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm">Web Development</span>
-              <span className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm">Dog Walking</span>
-              <span className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm">Coding Help</span>
-              <span className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm">Resume Review</span>
-              <span className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm">Piano Lessons</span>
+            
+            {/* POPULAR SERVICES */}
+            <div className="flex items-center justify-center gap-2 mt-0 w-full max-w-2xl mx-auto">
+              <span className="text-gray-400 text-sm">Web Development,</span>
+              <span className="text-gray-400 text-sm">Dog Walking,</span>
+              <span className="text-gray-400 text-sm">Coding Help,</span>
+              <span className="text-gray-400 text-sm">Resume Review,</span>
+              <span className="text-gray-400 text-sm">Piano Lessons</span>
             </div>
+            
           </div>
           {/* RIGHT SIDE */}
           <div className="relative flex items-center justify-center min-h-[500px]">
@@ -137,14 +134,14 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
             <div className="relative w-[370px] h-[480px]">
               {/* Main image */}
               <img
-                src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/service16-768x576.jpg"
+                src="https://demoapus1.com/freeio/wp-content/uploads/2022/09/h35.png"
                 alt="service"
-                className="absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl"
+                className="absolute -left-30 -top-30 w-[470px] h-[380px] object-cover rounded-2xl shadow-xl"
                 style={{zIndex: 1}}
               />
               {/* Overlapping image */}
               <img
-                src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/service13-768x576.jpg"
+                src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/service16-768x576.jpg"
                 alt="service"
                 className="absolute left-32 top-24 w-[340px] h-[300px] object-cover rounded-2xl shadow-lg"
                 style={{zIndex: 0}}
