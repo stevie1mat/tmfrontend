@@ -147,14 +147,14 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
           <div className="relative w-[370px] h-[480px]">
             {/* Main image */}
             <img
-              src="https://demoapus1.com/freeio/wp-content/uploads/2022/09/h2.png"
+              src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/service16-768x576.jpg"
               alt="service"
               className="absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl"
               style={{zIndex: 1}}
             />
             {/* Overlapping image */}
             <img
-              src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/service15.jpg"
+              src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/service13-768x576.jpg"
               alt="service"
               className="absolute left-32 top-24 w-[340px] h-[300px] object-cover rounded-2xl shadow-lg"
               style={{zIndex: 0}}
