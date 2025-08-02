@@ -85,7 +85,7 @@ export default function HomepageNavbar() {
             <>
               <Link href="/login" className="hover:text-green-300 text-white text-base">Sign in</Link>
               <Link href="/register">
-                <button className="bg-white/20 text-white text-base px-4 py-2 rounded hover:bg-white/30">
+                <button className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-base px-4 py-2 rounded transition-all duration-200">
                   Join
                 </button>
               </Link>
@@ -117,7 +117,7 @@ export default function HomepageNavbar() {
             <>
               <Link href="/login" className="text-white">Sign in</Link>
               <Link href="/register">
-                <button className="w-full bg-white/20 text-white py-2 rounded">Join</button>
+                <button className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-2 rounded transition-all duration-200">Join</button>
               </Link>
             </>
           )}

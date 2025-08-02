@@ -1,87 +1,119 @@
 'use client';
 
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaApple, FaAndroid, FaChevronUp } from 'react-icons/fa';
 
 export default function Footer() {
   return (
-    <footer className="bg-zinc-900 text-gray-300 pt-10">
-      <div className="border-b border-gray-700 px-6 pb-6 flex flex-wrap justify-between items-center max-w-7xl mx-auto">
-        <div className="space-x-6 text-sm">
-          <a href="#" className="hover:underline">Terms of Service</a>
-          <a href="#" className="hover:underline">Privacy Policy</a>
-          <a href="#" className="hover:underline">Site Map</a>
+    <footer className="bg-emerald-900 text-white">
+      {/* Top section with links and social */}
+      <div className="border-b border-emerald-800 px-8 py-6 flex flex-wrap justify-between items-center max-w-7xl mx-auto">
+        <div className="space-x-8 text-sm">
+          <a href="#" className="hover:text-green-300 transition-colors px-2 py-1">Terms of Service</a>
+          <a href="#" className="hover:text-green-300 transition-colors px-2 py-1">Privacy Policy</a>
+          <a href="#" className="hover:text-green-300 transition-colors px-2 py-1">Site Map</a>
         </div>
-        <div className="flex items-center gap-4 mt-4 md:mt-0">
-          <span>Follow us</span>
-          <a href="#" className="hover:text-white"><FaFacebookF /></a>
-          <a href="#" className="hover:text-white"><FaTwitter /></a>
-          <a href="#" className="hover:text-white"><FaInstagram /></a>
-          <a href="#" className="hover:text-white"><FaLinkedinIn /></a>
+        <div className="flex items-center gap-6 mt-4 md:mt-0">
+          <span className="text-sm px-2 py-1">Follow Us</span>
+          <div className="flex gap-4">
+            <a href="#" className="hover:text-green-300 transition-colors p-2"><FaFacebookF /></a>
+            <a href="#" className="hover:text-green-300 transition-colors p-2"><FaTwitter /></a>
+            <a href="#" className="hover:text-green-300 transition-colors p-2"><FaInstagram /></a>
+            <a href="#" className="hover:text-green-300 transition-colors p-2"><FaLinkedinIn /></a>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 px-6 py-10 max-w-7xl mx-auto">
+      {/* Main content */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-12 px-8 py-16 max-w-7xl mx-auto">
         {/* About */}
-        <div>
-          <h4 className="text-white font-semibold mb-4">About</h4>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#">Our Mission</a></li>
-            <li><a href="#">Community Stories</a></li>
-            <li><a href="#">Partnerships</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Use</a></li>
+        <div className="px-4 py-2">
+          <h4 className="text-white font-semibold mb-6 text-lg">About</h4>
+          <ul className="space-y-3 text-sm">
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">About Us</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Become Seller</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Jobs on TradeMinutes</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Pricing</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Services TradeMinutes</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Terms of Service</a></li>
           </ul>
         </div>
 
         {/* Categories */}
-        <div>
-          <h4 className="text-white font-semibold mb-4">Categories</h4>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#">Household Help</a></li>
-            <li><a href="#">Tutoring</a></li>
-            <li><a href="#">Elderly Care</a></li>
-            <li><a href="#">Pet Services</a></li>
-            <li><a href="#">Tech Support</a></li>
+        <div className="px-4 py-2">
+          <h4 className="text-white font-semibold mb-6 text-lg">Categories</h4>
+          <ul className="space-y-3 text-sm">
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Design & Creative</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Development & IT</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Music & Audio</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Programming & Tech</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Digital Marketing</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Finance & Accounting</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Writing & Translation</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Trending</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Lifestyle</a></li>
           </ul>
         </div>
 
         {/* Support */}
-        <div>
-          <h4 className="text-white font-semibold mb-4">Support</h4>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#">Help Center</a></li>
-            <li><a href="#">Trust & Safety</a></li>
-            <li><a href="#">Become a Helper</a></li>
-            <li><a href="#">Using Time Credits</a></li>
+        <div className="px-4 py-2">
+          <h4 className="text-white font-semibold mb-6 text-lg">Support</h4>
+          <ul className="space-y-3 text-sm">
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Help & Support</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">FAQ TradeMinutes</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Contact Us</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Services</a></li>
+            <li><a href="#" className="hover:text-green-300 transition-colors py-1 block">Terms of Service</a></li>
           </ul>
         </div>
 
         {/* Subscribe */}
-        <div className="col-span-2">
-          <h4 className="text-white font-semibold mb-4">Subscribe</h4>
-          <div className="flex items-center bg-zinc-800 rounded overflow-hidden max-w-md">
+        <div className="px-4 py-2">
+          <h4 className="text-white font-semibold mb-6 text-lg">Subscribe</h4>
+          <div className="flex items-center bg-emerald-800 rounded overflow-hidden max-w-md mb-6">
             <input
               type="email"
               placeholder="Your email address"
-              className="bg-transparent p-3 w-full outline-none text-white"
+              className="bg-transparent p-4 w-full outline-none text-white placeholder-gray-300"
             />
-            <button className="bg-emerald-600 px-4 py-2 text-white font-medium hover:bg-emerald-700">
+            <button className="bg-emerald-600 px-6 py-4 text-white font-medium hover:bg-emerald-700 transition-colors">
               Send
             </button>
           </div>
+        </div>
 
-          <div className="mt-6">
-            <h4 className="text-white font-semibold mb-2">Apps</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#">📱 iOS App</a></li>
-              <li><a href="#">📱 Android App</a></li>
-            </ul>
-          </div>
+        {/* Apps */}
+        <div className="px-4 py-2">
+          <h4 className="text-white font-semibold mb-6 text-lg">Apps</h4>
+          <ul className="space-y-4 text-sm">
+            <li>
+              <a href="#" className="flex items-center gap-3 hover:text-green-300 transition-colors py-2">
+                <FaApple className="text-xl" />
+                <span>iOS App</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" className="flex items-center gap-3 hover:text-green-300 transition-colors py-2">
+                <FaAndroid className="text-xl" />
+                <span>Android App</span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
 
-      <div className="text-center text-sm border-t border-gray-700 py-4 text-gray-500">
-        © TradeMinutes 2025. All rights reserved.
+      {/* Bottom section */}
+      <div className="border-t border-emerald-800 px-8 py-6 flex flex-wrap justify-between items-center max-w-7xl mx-auto">
+        <div className="text-sm text-gray-300 px-2 py-1">
+          © TradeMinutes. 2025 CreativeLayers. All rights reserved.
+        </div>
+        <div className="flex items-center gap-6 mt-4 md:mt-0">
+          <select className="bg-emerald-800 text-white text-sm px-4 py-2 rounded border border-emerald-700">
+            <option>English</option>
+          </select>
+          <button className="bg-emerald-800 hover:bg-emerald-700 text-white p-3 rounded-full transition-colors">
+            <FaChevronUp />
+          </button>
+        </div>
       </div>
     </footer>
   );
