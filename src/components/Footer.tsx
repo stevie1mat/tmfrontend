@@ -24,7 +24,7 @@ export default function Footer() {
       </div>
 
       {/* Main content */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-12 px-8 py-16 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 px-8 py-16 max-w-7xl mx-auto">
         {/* About */}
         <div className="px-4 py-2">
           <h4 className="text-white font-semibold mb-6 text-lg">About</h4>
@@ -66,7 +66,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Subscribe */}
+        {/* Subscribe and Apps in one line */}
         <div className="px-4 py-2">
           <h4 className="text-white font-semibold mb-6 text-lg">Subscribe</h4>
           <div className="flex items-center bg-emerald-800 rounded overflow-hidden max-w-md mb-6">
@@ -79,25 +79,18 @@ export default function Footer() {
               Send
             </button>
           </div>
-        </div>
-
-        {/* Apps */}
-        <div className="px-4 py-2">
-          <h4 className="text-white font-semibold mb-6 text-lg">Apps</h4>
-          <ul className="space-y-4 text-sm">
-            <li>
-              <a href="#" className="flex items-center gap-3 hover:text-green-300 transition-colors py-2">
-                <FaApple className="text-xl" />
-                <span>iOS App</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="flex items-center gap-3 hover:text-green-300 transition-colors py-2">
-                <FaAndroid className="text-xl" />
-                <span>Android App</span>
-              </a>
-            </li>
-          </ul>
+          
+          <h4 className="text-white font-semibold mb-4 text-lg">Apps</h4>
+          <div className="flex gap-6 text-sm">
+            <a href="#" className="flex items-center gap-2 hover:text-green-300 transition-colors py-1">
+              <FaApple className="text-lg" />
+              <span>iOS App</span>
+            </a>
+            <a href="#" className="flex items-center gap-2 hover:text-green-300 transition-colors py-1">
+              <FaAndroid className="text-lg" />
+              <span>Android App</span>
+            </a>
+          </div>
         </div>
       </div>
 

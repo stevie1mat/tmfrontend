@@ -27654,3 +27654,491 @@ Data: {
   }
 }
 
+[2025-08-02T23:41:43.874Z] SET INITIAL SELECTED TIER
+Data: {
+  "selectedTier": "Basic",
+  "availableTiers": [
+    "Basic",
+    "Standard",
+    "Premium"
+  ]
+}
+
+[2025-08-02T23:41:43.873Z] TIERS PARSING START
+Data: {
+  "originalTiersData": [
+    {
+      "name": "Basic",
+      "title": "2-day meal planning",
+      "description": "2-day meal planning",
+      "credits": 25,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 2
+    },
+    {
+      "name": "Standard",
+      "title": "4-day meal planning",
+      "description": "4-day meal planning",
+      "credits": 30,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 4
+    },
+    {
+      "name": "Premium",
+      "title": "5-day meal planning",
+      "description": "5-day meal planning",
+      "credits": 35,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 5
+    }
+  ],
+  "originalType": "object"
+}
+
+[2025-08-02T23:41:43.873Z] FINAL TIERS DATA SET
+Data: [
+  {
+    "name": "Basic",
+    "title": "2-day meal planning",
+    "description": "2-day meal planning",
+    "credits": 25,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 2
+  },
+  {
+    "name": "Standard",
+    "title": "4-day meal planning",
+    "description": "4-day meal planning",
+    "credits": 30,
+    "features": [],
+    "availableTimeSlot": "8:00 AM - 6:00 PM",
+    "maxDays": 4
+  },
+  {
+    "name": "Premium",
+    "title": "5-day meal planning",
+    "description": "5-day meal planning",
+    "credits": 35,
+    "features": [],
+    "availableTimeSlot": "24/7 Available",
+    "maxDays": 5
+  }
+]
+
+[2025-08-02T23:41:43.809Z] TIERS DEBUG START
+Data: {
+  "tiersProperty": [
+    {
+      "name": "Basic",
+      "title": "2-day meal planning",
+      "description": "2-day meal planning",
+      "credits": 25,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 2
+    },
+    {
+      "name": "Standard",
+      "title": "4-day meal planning",
+      "description": "4-day meal planning",
+      "credits": 30,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 4
+    },
+    {
+      "name": "Premium",
+      "title": "5-day meal planning",
+      "description": "5-day meal planning",
+      "credits": 35,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 5
+    }
+  ],
+  "tiersType": "object",
+  "tiersTypeLowercase": "undefined",
+  "tiersIsArray": true,
+  "tiersIsArrayLowercase": false,
+  "tiersLength": 3,
+  "firstTier": {
+    "name": "Basic",
+    "title": "2-day meal planning",
+    "description": "2-day meal planning",
+    "credits": 25,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 2
+  }
+}
+
+[2025-08-02T23:42:01.415Z] TIERS DEBUG START
+Data: {
+  "tiersProperty": [
+    {
+      "name": "Basic",
+      "title": "2-day meal planning",
+      "description": "2-day meal planning",
+      "credits": 25,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 2
+    },
+    {
+      "name": "Standard",
+      "title": "4-day meal planning",
+      "description": "4-day meal planning",
+      "credits": 30,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 4
+    },
+    {
+      "name": "Premium",
+      "title": "5-day meal planning",
+      "description": "5-day meal planning",
+      "credits": 35,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 5
+    }
+  ],
+  "tiersType": "object",
+  "tiersTypeLowercase": "undefined",
+  "tiersIsArray": true,
+  "tiersIsArrayLowercase": false,
+  "tiersLength": 3,
+  "firstTier": {
+    "name": "Basic",
+    "title": "2-day meal planning",
+    "description": "2-day meal planning",
+    "credits": 25,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 2
+  }
+}
+
+[2025-08-02T23:42:01.471Z] TIERS PARSING START
+Data: {
+  "originalTiersData": [
+    {
+      "name": "Basic",
+      "title": "2-day meal planning",
+      "description": "2-day meal planning",
+      "credits": 25,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 2
+    },
+    {
+      "name": "Standard",
+      "title": "4-day meal planning",
+      "description": "4-day meal planning",
+      "credits": 30,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 4
+    },
+    {
+      "name": "Premium",
+      "title": "5-day meal planning",
+      "description": "5-day meal planning",
+      "credits": 35,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 5
+    }
+  ],
+  "originalType": "object"
+}
+
+[2025-08-02T23:42:01.471Z] FINAL TIERS DATA SET
+Data: [
+  {
+    "name": "Basic",
+    "title": "2-day meal planning",
+    "description": "2-day meal planning",
+    "credits": 25,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 2
+  },
+  {
+    "name": "Standard",
+    "title": "4-day meal planning",
+    "description": "4-day meal planning",
+    "credits": 30,
+    "features": [],
+    "availableTimeSlot": "8:00 AM - 6:00 PM",
+    "maxDays": 4
+  },
+  {
+    "name": "Premium",
+    "title": "5-day meal planning",
+    "description": "5-day meal planning",
+    "credits": 35,
+    "features": [],
+    "availableTimeSlot": "24/7 Available",
+    "maxDays": 5
+  }
+]
+
+[2025-08-02T23:42:01.471Z] SET INITIAL SELECTED TIER
+Data: {
+  "selectedTier": "Basic",
+  "availableTiers": [
+    "Basic",
+    "Standard",
+    "Premium"
+  ]
+}
+
+[2025-08-02T23:42:31.394Z] TIERS DEBUG START
+Data: {
+  "tiersProperty": [
+    {
+      "name": "Basic",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 20,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 40,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "tiersType": "object",
+  "tiersTypeLowercase": "undefined",
+  "tiersIsArray": true,
+  "tiersIsArrayLowercase": false,
+  "tiersLength": 3,
+  "firstTier": {
+    "name": "Basic",
+    "title": "I will teach you magic",
+    "description": "I will teach you magic",
+    "credits": 20,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  }
+}
+
+[2025-08-02T23:42:47.834Z] TIERS DEBUG START
+Data: {
+  "tiersProperty": [
+    {
+      "name": "Basic",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 20,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 40,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "tiersType": "object",
+  "tiersTypeLowercase": "undefined",
+  "tiersIsArray": true,
+  "tiersIsArrayLowercase": false,
+  "tiersLength": 3,
+  "firstTier": {
+    "name": "Basic",
+    "title": "I will teach you magic",
+    "description": "I will teach you magic",
+    "credits": 20,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  }
+}
+
+[2025-08-02T23:42:47.960Z] TIERS PARSING START
+Data: {
+  "originalTiersData": [
+    {
+      "name": "Basic",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 20,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 40,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "originalType": "object"
+}
+
+[2025-08-02T23:42:47.960Z] SET INITIAL SELECTED TIER
+Data: {
+  "selectedTier": "Basic",
+  "availableTiers": [
+    "Basic",
+    "Standard",
+    "Premium"
+  ]
+}
+
+[2025-08-02T23:42:47.960Z] FINAL TIERS DATA SET
+Data: [
+  {
+    "name": "Basic",
+    "title": "I will teach you magic",
+    "description": "I will teach you magic",
+    "credits": 20,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  },
+  {
+    "name": "Standard",
+    "title": "I will teach you magic",
+    "description": "I will teach you magic",
+    "credits": 40,
+    "features": [],
+    "availableTimeSlot": "8:00 AM - 6:00 PM",
+    "maxDays": 14
+  },
+  {
+    "name": "Premium",
+    "title": "I will teach you magic",
+    "description": "I will teach you magic",
+    "credits": 60,
+    "features": [],
+    "availableTimeSlot": "24/7 Available",
+    "maxDays": 30
+  }
+]
+
+[2025-08-02T23:42:48.009Z] TIERS PARSING START
+Data: {
+  "originalTiersData": [
+    {
+      "name": "Basic",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 20,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 40,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will teach you magic",
+      "description": "I will teach you magic",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "originalType": "object"
+}
+
+[2025-08-02T23:42:48.009Z] FINAL TIERS DATA SET
+Data: [
+  {
+    "name": "Basic",
+    "title": "I will teach you magic",
+    "description": "I will teach you magic",
+    "credits": 20,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  },
+  {
+    "name": "Standard",
+    "title": "I will teach you magic",
+    "description": "I will teach you magic",
+    "credits": 40,
+    "features": [],
+    "availableTimeSlot": "8:00 AM - 6:00 PM",
+    "maxDays": 14
+  },
+  {
+    "name": "Premium",
+    "title": "I will teach you magic",
+    "description": "I will teach you magic",
+    "credits": 60,
+    "features": [],
+    "availableTimeSlot": "24/7 Available",
+    "maxDays": 30
+  }
+]
+
+[2025-08-02T23:42:48.009Z] SET INITIAL SELECTED TIER
+Data: {
+  "selectedTier": "Basic",
+  "availableTiers": [
+    "Basic",
+    "Standard",
+    "Premium"
+  ]
+}
+

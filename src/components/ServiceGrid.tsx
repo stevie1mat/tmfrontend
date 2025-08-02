@@ -29,8 +29,8 @@ const useTaskImages = (taskId: string) => {
       setLoading(true);
       setError(null);
       try {
-        // Use low quality thumbnails for better performance: 40% quality, 300px max width
-        const response = await fetch(`http://localhost:8084/api/tasks/images?taskId=${taskId}&quality=40&width=300`);
+        // Use very low quality thumbnails for faster loading: 30% quality, 200px max width
+        const response = await fetch(`http://localhost:8084/api/tasks/images?taskId=${taskId}&quality=30&width=200`);
         if (!response.ok) {
           throw new Error('Failed to load images');
         }
@@ -116,8 +116,8 @@ const useBatchImages = (services: Service[]) => {
         if (!taskIds) return;
 
         const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
-        // Use compression for better performance: 40% quality, 300px max width
-        const response = await fetch(`${API_BASE_URL}/api/tasks/images/batch?taskIds=${taskIds}&quality=40&width=300`);
+        // Use very low quality thumbnails for faster loading: 30% quality, 200px max width
+        const response = await fetch(`${API_BASE_URL}/api/tasks/images/batch?taskIds=${taskIds}&quality=30&width=200`);
         
         if (response.ok) {
           const data = await response.json();
@@ -234,7 +234,7 @@ const ServiceCard = ({ service, idx }: { service: Service; idx: number }) => {
       onClick={handleCardClick}
     >
       {/* Header/Image Area with gradient border */}
-      <div className="relative h-48 bg-gradient-to-br from-pink-100 to-purple-100">
+      <div className="relative h-36 bg-gradient-to-br from-pink-100 to-purple-100">
         {image ? (
           <div className="w-full h-full">
             <LazyImage
@@ -260,8 +260,8 @@ const ServiceCard = ({ service, idx }: { service: Service; idx: number }) => {
         </div>
       </div>
 
-            {/* Content Area */}
-      <div className="p-4">
+                  {/* Content Area */}
+      <div className="p-4 flex flex-col min-h-[180px]">
         {/* Category */}
         <div className="text-gray-500 text-sm mb-2">
           {category || 'Design & Creative'}
@@ -279,34 +279,37 @@ const ServiceCard = ({ service, idx }: { service: Service; idx: number }) => {
           <span className="text-xs text-gray-500">({reviews} Review)</span>
         </div>
         
-                 {/* Border line */}
-         <div className="border-t border-gray-100 my-3"></div>
-         
-         {/* Provider and Price in one line */}
-         <div className="flex items-center justify-between">
-           <div className="flex items-center gap-2">
-             {avatar ? (
-               <LazyImage
-                 src={avatar}
-                 alt={userName || 'User avatar'}
-                 className="w-8 h-8 rounded-full object-cover"
-                 width={32}
-                 height={32}
-               />
-             ) : (
-               <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                 <span className="text-xs font-semibold text-gray-600">
-                   {userName.charAt(0).toUpperCase()}
-                 </span>
-               </div>
-             )}
-             <span className="text-sm text-gray-700 font-medium">{userName}</span>
-           </div>
-           
-           <div className="text-sm text-gray-600">
-             Starting at: <span className="text-lg font-bold text-gray-900">${price}</span>
-           </div>
-         </div>
+        {/* Spacer to push author/price to bottom */}
+        <div className="flex-1"></div>
+        
+        {/* Border line */}
+        <div className="border-t border-gray-100 my-3"></div>
+        
+        {/* Provider and Price in one line - always at bottom */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {avatar ? (
+              <LazyImage
+                src={avatar}
+                alt={userName || 'User avatar'}
+                className="w-8 h-8 rounded-full object-cover"
+                width={32}
+                height={32}
+              />
+            ) : (
+              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                <span className="text-xs font-semibold text-gray-600">
+                  {userName.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
+            <span className="text-sm text-gray-700 font-medium">{userName}</span>
+          </div>
+          
+          <div className="text-sm text-gray-600">
+            Starting at: <span className="text-lg font-bold text-gray-900">${price}</span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -413,7 +416,7 @@ export default function ServiceGrid({ items = [] }: { items?: Service[] }) {
       </div>
 
       {/* grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {paginated.map((s, idx) => (
           <ServiceCard key={`${s.ID || s.id}-${idx}`} service={s} idx={idx} />
         ))}
