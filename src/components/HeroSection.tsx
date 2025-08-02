@@ -66,12 +66,237 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
 
   return (
     <section className="relative min-h-[100vh] flex items-center justify-center bg-emerald-900 overflow-hidden">
-      {/* Subtle background patterns */}
-      <div className="absolute inset-0 z-0 opacity-10">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-green-400 rounded-full blur-xl"></div>
-        <div className="absolute top-40 right-40 w-24 h-24 bg-green-300 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 left-1/3 w-40 h-40 bg-green-500 rounded-full blur-xl"></div>
-        <div className="absolute bottom-40 right-20 w-28 h-28 bg-green-400 rounded-full blur-xl"></div>
+      {/* Circular background patterns */}
+      <div className="absolute inset-0 z-0">
+        {/* Large concentric circles */}
+        <svg className="absolute top-10 right-10 w-1/3 h-1/3 opacity-8" viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="80" stroke="#10b981" strokeWidth="2" fill="none"/>
+          <circle cx="100" cy="100" r="60" stroke="#34d399" strokeWidth="1.5" fill="none"/>
+          <circle cx="100" cy="100" r="40" stroke="#6ee7b7" strokeWidth="1" fill="none"/>
+          <circle cx="100" cy="100" r="20" stroke="#a7f3d0" strokeWidth="0.8" fill="none"/>
+        </svg>
+        
+        {/* Medium concentric circles */}
+        <svg className="absolute bottom-20 left-20 w-1/4 h-1/4 opacity-6" viewBox="0 0 150 150" fill="none">
+          <circle cx="75" cy="75" r="60" stroke="#34d399" strokeWidth="1.5" fill="none"/>
+          <circle cx="75" cy="75" r="45" stroke="#6ee7b7" strokeWidth="1.2" fill="none"/>
+          <circle cx="75" cy="75" r="30" stroke="#a7f3d0" strokeWidth="0.8" fill="none"/>
+          <circle cx="75" cy="75" r="15" stroke="#d1fae5" strokeWidth="0.5" fill="none"/>
+        </svg>
+        
+        {/* Small concentric circles */}
+        <svg className="absolute top-1/3 left-1/3 w-1/6 h-1/6 opacity-5" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="40" stroke="#6ee7b7" strokeWidth="1" fill="none"/>
+          <circle cx="50" cy="50" r="30" stroke="#a7f3d0" strokeWidth="0.8" fill="none"/>
+          <circle cx="50" cy="50" r="20" stroke="#d1fae5" strokeWidth="0.6" fill="none"/>
+          <circle cx="50" cy="50" r="10" stroke="#ecfdf5" strokeWidth="0.4" fill="none"/>
+        </svg>
+        
+        {/* More circular patterns */}
+        <svg className="absolute top-1/2 right-1/4 w-1/8 h-1/8 opacity-4" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="32" stroke="#a7f3d0" strokeWidth="0.8" fill="none"/>
+          <circle cx="40" cy="40" r="24" stroke="#d1fae5" strokeWidth="0.6" fill="none"/>
+          <circle cx="40" cy="40" r="16" stroke="#ecfdf5" strokeWidth="0.4" fill="none"/>
+          <circle cx="40" cy="40" r="8" stroke="#f0fdf4" strokeWidth="0.2" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-1/3 right-1/6 w-1/7 h-1/7 opacity-3" viewBox="0 0 70 70" fill="none">
+          <circle cx="35" cy="35" r="28" stroke="#d1fae5" strokeWidth="0.6" fill="none"/>
+          <circle cx="35" cy="35" r="21" stroke="#ecfdf5" strokeWidth="0.4" fill="none"/>
+          <circle cx="35" cy="35" r="14" stroke="#f0fdf4" strokeWidth="0.3" fill="none"/>
+          <circle cx="35" cy="35" r="7" stroke="#f7fee7" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-1/4 left-1/6 w-1/9 h-1/9 opacity-2" viewBox="0 0 60 60" fill="none">
+          <circle cx="30" cy="30" r="24" stroke="#ecfdf5" strokeWidth="0.4" fill="none"/>
+          <circle cx="30" cy="30" r="18" stroke="#f0fdf4" strokeWidth="0.3" fill="none"/>
+          <circle cx="30" cy="30" r="12" stroke="#f7fee7" strokeWidth="0.2" fill="none"/>
+          <circle cx="30" cy="30" r="6" stroke="#fafdf8" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        {/* Additional circular patterns with different sizes */}
+        <svg className="absolute top-1/6 right-1/8 w-1/10 h-1/10 opacity-3" viewBox="0 0 50 50" fill="none">
+          <circle cx="25" cy="25" r="20" stroke="#d1fae5" strokeWidth="0.5" fill="none"/>
+          <circle cx="25" cy="25" r="15" stroke="#ecfdf5" strokeWidth="0.4" fill="none"/>
+          <circle cx="25" cy="25" r="10" stroke="#f0fdf4" strokeWidth="0.3" fill="none"/>
+          <circle cx="25" cy="25" r="5" stroke="#f7fee7" strokeWidth="0.2" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-1/6 left-1/8 w-1/12 h-1/12 opacity-2" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="16" stroke="#a7f3d0" strokeWidth="0.4" fill="none"/>
+          <circle cx="20" cy="20" r="12" stroke="#d1fae5" strokeWidth="0.3" fill="none"/>
+          <circle cx="20" cy="20" r="8" stroke="#ecfdf5" strokeWidth="0.2" fill="none"/>
+          <circle cx="20" cy="20" r="4" stroke="#f0fdf4" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-2/3 right-1/3 w-1/8 h-1/8 opacity-4" viewBox="0 0 80 80" fill="none">
+          <circle cx="40" cy="40" r="32" stroke="#6ee7b7" strokeWidth="1" fill="none"/>
+          <circle cx="40" cy="40" r="24" stroke="#a7f3d0" strokeWidth="0.8" fill="none"/>
+          <circle cx="40" cy="40" r="16" stroke="#d1fae5" strokeWidth="0.6" fill="none"/>
+          <circle cx="40" cy="40" r="8" stroke="#ecfdf5" strokeWidth="0.4" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-1/2 left-1/4 w-1/11 h-1/11 opacity-3" viewBox="0 0 45 45" fill="none">
+          <circle cx="22.5" cy="22.5" r="18" stroke="#34d399" strokeWidth="0.6" fill="none"/>
+          <circle cx="22.5" cy="22.5" r="13.5" stroke="#6ee7b7" strokeWidth="0.5" fill="none"/>
+          <circle cx="22.5" cy="22.5" r="9" stroke="#a7f3d0" strokeWidth="0.4" fill="none"/>
+          <circle cx="22.5" cy="22.5" r="4.5" stroke="#d1fae5" strokeWidth="0.3" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-1/3 right-1/5 w-1/13 h-1/13 opacity-2" viewBox="0 0 35 35" fill="none">
+          <circle cx="17.5" cy="17.5" r="14" stroke="#10b981" strokeWidth="0.5" fill="none"/>
+          <circle cx="17.5" cy="17.5" r="10.5" stroke="#34d399" strokeWidth="0.4" fill="none"/>
+          <circle cx="17.5" cy="17.5" r="7" stroke="#6ee7b7" strokeWidth="0.3" fill="none"/>
+          <circle cx="17.5" cy="17.5" r="3.5" stroke="#a7f3d0" strokeWidth="0.2" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-1/4 right-1/3 w-1/9 h-1/9 opacity-3" viewBox="0 0 60 60" fill="none">
+          <circle cx="30" cy="30" r="24" stroke="#a7f3d0" strokeWidth="0.7" fill="none"/>
+          <circle cx="30" cy="30" r="18" stroke="#d1fae5" strokeWidth="0.6" fill="none"/>
+          <circle cx="30" cy="30" r="12" stroke="#ecfdf5" strokeWidth="0.5" fill="none"/>
+          <circle cx="30" cy="30" r="6" stroke="#f0fdf4" strokeWidth="0.4" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-1/2 left-1/5 w-1/14 h-1/14 opacity-1" viewBox="0 0 30 30" fill="none">
+          <circle cx="15" cy="15" r="12" stroke="#6ee7b7" strokeWidth="0.4" fill="none"/>
+          <circle cx="15" cy="15" r="9" stroke="#a7f3d0" strokeWidth="0.3" fill="none"/>
+          <circle cx="15" cy="15" r="6" stroke="#d1fae5" strokeWidth="0.2" fill="none"/>
+          <circle cx="15" cy="15" r="3" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        {/* 20 Additional circular patterns */}
+        <svg className="absolute top-1/8 right-1/10 w-1/15 h-1/15 opacity-2" viewBox="0 0 25 25" fill="none">
+          <circle cx="12.5" cy="12.5" r="10" stroke="#10b981" strokeWidth="0.4" fill="none"/>
+          <circle cx="12.5" cy="12.5" r="7.5" stroke="#34d399" strokeWidth="0.3" fill="none"/>
+          <circle cx="12.5" cy="12.5" r="5" stroke="#6ee7b7" strokeWidth="0.2" fill="none"/>
+          <circle cx="12.5" cy="12.5" r="2.5" stroke="#a7f3d0" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-1/8 left-1/12 w-1/16 h-1/16 opacity-1" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="8" stroke="#34d399" strokeWidth="0.3" fill="none"/>
+          <circle cx="10" cy="10" r="6" stroke="#6ee7b7" strokeWidth="0.2" fill="none"/>
+          <circle cx="10" cy="10" r="4" stroke="#a7f3d0" strokeWidth="0.1" fill="none"/>
+          <circle cx="10" cy="10" r="2" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-3/4 right-1/7 w-1/13 h-1/13 opacity-3" viewBox="0 0 35 35" fill="none">
+          <circle cx="17.5" cy="17.5" r="14" stroke="#6ee7b7" strokeWidth="0.5" fill="none"/>
+          <circle cx="17.5" cy="17.5" r="10.5" stroke="#a7f3d0" strokeWidth="0.4" fill="none"/>
+          <circle cx="17.5" cy="17.5" r="7" stroke="#d1fae5" strokeWidth="0.3" fill="none"/>
+          <circle cx="17.5" cy="17.5" r="3.5" stroke="#ecfdf5" strokeWidth="0.2" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-3/4 left-1/9 w-1/17 h-1/17 opacity-1" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="7.2" stroke="#a7f3d0" strokeWidth="0.3" fill="none"/>
+          <circle cx="9" cy="9" r="5.4" stroke="#d1fae5" strokeWidth="0.2" fill="none"/>
+          <circle cx="9" cy="9" r="3.6" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+          <circle cx="9" cy="9" r="1.8" stroke="#f0fdf4" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-1/4 right-1/6 w-1/12 h-1/12 opacity-2" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="16" stroke="#10b981" strokeWidth="0.6" fill="none"/>
+          <circle cx="20" cy="20" r="12" stroke="#34d399" strokeWidth="0.5" fill="none"/>
+          <circle cx="20" cy="20" r="8" stroke="#6ee7b7" strokeWidth="0.4" fill="none"/>
+          <circle cx="20" cy="20" r="4" stroke="#a7f3d0" strokeWidth="0.3" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-1/3 left-1/7 w-1/18 h-1/18 opacity-1" viewBox="0 0 15 15" fill="none">
+          <circle cx="7.5" cy="7.5" r="6" stroke="#34d399" strokeWidth="0.3" fill="none"/>
+          <circle cx="7.5" cy="7.5" r="4.5" stroke="#6ee7b7" strokeWidth="0.2" fill="none"/>
+          <circle cx="7.5" cy="7.5" r="3" stroke="#a7f3d0" strokeWidth="0.1" fill="none"/>
+          <circle cx="7.5" cy="7.5" r="1.5" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-2/5 right-1/9 w-1/19 h-1/19 opacity-1" viewBox="0 0 12 12" fill="none">
+          <circle cx="6" cy="6" r="4.8" stroke="#6ee7b7" strokeWidth="0.3" fill="none"/>
+          <circle cx="6" cy="6" r="3.6" stroke="#a7f3d0" strokeWidth="0.2" fill="none"/>
+          <circle cx="6" cy="6" r="2.4" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+          <circle cx="6" cy="6" r="1.2" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-2/5 left-1/11 w-1/20 h-1/20 opacity-1" viewBox="0 0 10 10" fill="none">
+          <circle cx="5" cy="5" r="4" stroke="#a7f3d0" strokeWidth="0.3" fill="none"/>
+          <circle cx="5" cy="5" r="3" stroke="#d1fae5" strokeWidth="0.2" fill="none"/>
+          <circle cx="5" cy="5" r="2" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+          <circle cx="5" cy="5" r="1" stroke="#f0fdf4" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-1/5 right-1/4 w-1/10 h-1/10 opacity-3" viewBox="0 0 50 50" fill="none">
+          <circle cx="25" cy="25" r="20" stroke="#10b981" strokeWidth="0.7" fill="none"/>
+          <circle cx="25" cy="25" r="15" stroke="#34d399" strokeWidth="0.6" fill="none"/>
+          <circle cx="25" cy="25" r="10" stroke="#6ee7b7" strokeWidth="0.5" fill="none"/>
+          <circle cx="25" cy="25" r="5" stroke="#a7f3d0" strokeWidth="0.4" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-1/5 left-1/10 w-1/21 h-1/21 opacity-1" viewBox="0 0 8 8" fill="none">
+          <circle cx="4" cy="4" r="3.2" stroke="#34d399" strokeWidth="0.3" fill="none"/>
+          <circle cx="4" cy="4" r="2.4" stroke="#6ee7b7" strokeWidth="0.2" fill="none"/>
+          <circle cx="4" cy="4" r="1.6" stroke="#a7f3d0" strokeWidth="0.1" fill="none"/>
+          <circle cx="4" cy="4" r="0.8" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-3/5 right-1/12 w-1/22 h-1/22 opacity-1" viewBox="0 0 6 6" fill="none">
+          <circle cx="3" cy="3" r="2.4" stroke="#6ee7b7" strokeWidth="0.3" fill="none"/>
+          <circle cx="3" cy="3" r="1.8" stroke="#a7f3d0" strokeWidth="0.2" fill="none"/>
+          <circle cx="3" cy="3" r="1.2" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+          <circle cx="3" cy="3" r="0.6" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-3/5 left-1/13 w-1/23 h-1/23 opacity-1" viewBox="0 0 5 5" fill="none">
+          <circle cx="2.5" cy="2.5" r="2" stroke="#a7f3d0" strokeWidth="0.3" fill="none"/>
+          <circle cx="2.5" cy="2.5" r="1.5" stroke="#d1fae5" strokeWidth="0.2" fill="none"/>
+          <circle cx="2.5" cy="2.5" r="1" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+          <circle cx="2.5" cy="2.5" r="0.5" stroke="#f0fdf4" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-4/5 right-1/14 w-1/24 h-1/24 opacity-1" viewBox="0 0 4 4" fill="none">
+          <circle cx="2" cy="2" r="1.6" stroke="#34d399" strokeWidth="0.3" fill="none"/>
+          <circle cx="2" cy="2" r="1.2" stroke="#6ee7b7" strokeWidth="0.2" fill="none"/>
+          <circle cx="2" cy="2" r="0.8" stroke="#a7f3d0" strokeWidth="0.1" fill="none"/>
+          <circle cx="2" cy="2" r="0.4" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-4/5 left-1/15 w-1/25 h-1/25 opacity-1" viewBox="0 0 3 3" fill="none">
+          <circle cx="1.5" cy="1.5" r="1.2" stroke="#6ee7b7" strokeWidth="0.3" fill="none"/>
+          <circle cx="1.5" cy="1.5" r="0.9" stroke="#a7f3d0" strokeWidth="0.2" fill="none"/>
+          <circle cx="1.5" cy="1.5" r="0.6" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+          <circle cx="1.5" cy="1.5" r="0.3" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-1/7 right-1/16 w-1/26 h-1/26 opacity-1" viewBox="0 0 2 2" fill="none">
+          <circle cx="1" cy="1" r="0.8" stroke="#a7f3d0" strokeWidth="0.3" fill="none"/>
+          <circle cx="1" cy="1" r="0.6" stroke="#d1fae5" strokeWidth="0.2" fill="none"/>
+          <circle cx="1" cy="1" r="0.4" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+          <circle cx="1" cy="1" r="0.2" stroke="#f0fdf4" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-1/7 left-1/17 w-1/27 h-1/27 opacity-1" viewBox="0 0 1 1" fill="none">
+          <circle cx="0.5" cy="0.5" r="0.4" stroke="#34d399" strokeWidth="0.3" fill="none"/>
+          <circle cx="0.5" cy="0.5" r="0.3" stroke="#6ee7b7" strokeWidth="0.2" fill="none"/>
+          <circle cx="0.5" cy="0.5" r="0.2" stroke="#a7f3d0" strokeWidth="0.1" fill="none"/>
+          <circle cx="0.5" cy="0.5" r="0.1" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-1/9 right-1/18 w-1/28 h-1/28 opacity-1" viewBox="0 0 0.5 0.5" fill="none">
+          <circle cx="0.25" cy="0.25" r="0.2" stroke="#6ee7b7" strokeWidth="0.3" fill="none"/>
+          <circle cx="0.25" cy="0.25" r="0.15" stroke="#a7f3d0" strokeWidth="0.2" fill="none"/>
+          <circle cx="0.25" cy="0.25" r="0.1" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+          <circle cx="0.25" cy="0.25" r="0.05" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute bottom-1/9 left-1/19 w-1/29 h-1/29 opacity-1" viewBox="0 0 0.25 0.25" fill="none">
+          <circle cx="0.125" cy="0.125" r="0.1" stroke="#a7f3d0" strokeWidth="0.3" fill="none"/>
+          <circle cx="0.125" cy="0.125" r="0.075" stroke="#d1fae5" strokeWidth="0.2" fill="none"/>
+          <circle cx="0.125" cy="0.125" r="0.05" stroke="#ecfdf5" strokeWidth="0.1" fill="none"/>
+          <circle cx="0.125" cy="0.125" r="0.025" stroke="#f0fdf4" strokeWidth="0.1" fill="none"/>
+        </svg>
+        
+        <svg className="absolute top-1/11 right-1/20 w-1/30 h-1/30 opacity-1" viewBox="0 0 0.125 0.125" fill="none">
+          <circle cx="0.0625" cy="0.0625" r="0.05" stroke="#34d399" strokeWidth="0.3" fill="none"/>
+          <circle cx="0.0625" cy="0.0625" r="0.0375" stroke="#6ee7b7" strokeWidth="0.2" fill="none"/>
+          <circle cx="0.0625" cy="0.0625" r="0.025" stroke="#a7f3d0" strokeWidth="0.1" fill="none"/>
+          <circle cx="0.0625" cy="0.0625" r="0.0125" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
+        </svg>
       </div>
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20">
         <div className="flex flex-col items-start">
@@ -150,14 +375,14 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
               src="https://demoapus1.com/freeio/wp-content/uploads/2022/09/h2.png"
               alt="service"
               className="absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl"
-              style={{zIndex: 1}}
+              style={{zIndex: 0}}
             />
             {/* Overlapping image */}
             <img
               src="https://demoapus1.com/freeio/wp-content/uploads/2022/11/service15.jpg"
               alt="service"
               className="absolute left-32 top-24 w-[340px] h-[300px] object-cover rounded-2xl shadow-lg"
-              style={{zIndex: 0}}
+              style={{zIndex: 1}}
             />
             {/* Proof of quality popup */}
             <div className="absolute left-26 -top-14 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[220px]" style={{zIndex: 3}}>
