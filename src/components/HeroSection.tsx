@@ -387,24 +387,28 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
           </p>
                      {/* SEARCH BAR */}
            <div className="w-full max-w-2xl mb-10 relative z-20 px-4 sm:px-0">
-            <div className="flex items-center bg-white rounded-full shadow-lg overflow-hidden">
-              <span className="pl-6 pr-2 text-gray-400">
-                <FaSearch className="w-5 h-5" />
-              </span>
-              <input
-                type="text"
-                placeholder="What are you looking for?"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                onFocus={() => setShowSuggestions(true)}
-                className="flex-1 py-5 text-lg text-gray-900 outline-none bg-transparent placeholder-gray-400"
-              />
-              <button
-                onClick={handleSearch}
-                className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition-all duration-200 text-white font-semibold text-lg px-10 py-4 rounded-full ml-2 mr-2 shadow-lg hover:shadow-xl"
-              >
-                Search
-              </button>
+            <div className="flex flex-col sm:flex-row items-center bg-white rounded-2xl sm:rounded-full shadow-2xl sm:shadow-lg overflow-hidden">
+              <div className="flex items-center w-full px-4 sm:pl-6 sm:pr-2 py-4 sm:py-5">
+                <span className="text-emerald-500 sm:text-gray-400 mr-3 sm:mr-0">
+                  <FaSearch className="w-5 h-5 sm:w-5 sm:h-5" />
+                </span>
+                <input
+                  type="text"
+                  placeholder="What are you looking for?"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  onFocus={() => setShowSuggestions(true)}
+                  className="flex-1 text-base sm:text-lg text-gray-900 outline-none bg-transparent placeholder-gray-500 sm:placeholder-gray-400"
+                />
+              </div>
+              <div className="w-full sm:w-auto px-4 sm:px-0 pb-4 sm:pb-0 sm:pl-0">
+                <button
+                  onClick={handleSearch}
+                  className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition-all duration-200 text-white font-semibold text-base sm:text-lg py-3 sm:py-4 px-6 sm:px-10 rounded-xl sm:rounded-full ml-0 sm:ml-2 mr-0 sm:mr-2 shadow-lg hover:shadow-xl transform hover:scale-105 sm:hover:scale-100"
+                >
+                  Search
+                </button>
+              </div>
             </div>
             {/* Suggestions dropdown */}
             {showSuggestions && searchSuggestions.length > 0 && (
