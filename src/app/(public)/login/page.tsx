@@ -47,7 +47,7 @@ export default function LoginPage() {
     setLoading(true);
     
     try {
-      const authUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
+      const authUrl = process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080';
       console.log('🔗 Attempting login to:', `${authUrl}/api/auth/login`);
       
       const res = await fetch(

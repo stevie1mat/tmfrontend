@@ -3,9 +3,8 @@ import { dashboardCache, cacheUtils } from './cache';
 
 // API base URLs
 const API_BASE_URLS = {
-  PROFILE: process.env.NEXT_PUBLIC_PROFILE_API_URL || 'http://localhost:8081',
+  USER: process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080', // Unified user service
   TASK: process.env.NEXT_PUBLIC_TASK_API_URL || 'http://localhost:8084',
-  AUTH: process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080',
   MESSAGING: process.env.NEXT_PUBLIC_MESSAGING_API_URL || 'http://localhost:8085'
 };
 
@@ -52,7 +51,7 @@ export const profileAPI = {
       dashboardCache.keys.PROFILE,
       async () => {
         try {
-          const response = await authenticatedFetch(`${API_BASE_URLS.PROFILE}/api/profile/get`);
+          const response = await authenticatedFetch(`${API_BASE_URLS.USER}/api/profile/get`);
           
           if (!response.ok) {
             console.warn(`Profile API returned ${response.status}: ${response.statusText}`);
@@ -114,7 +113,7 @@ export const profileAPI = {
   },
 
   async updateProfile(profileData: any) {
-    const response = await authenticatedFetch(`${API_BASE_URLS.PROFILE}/api/profile/update-info`, {
+    const response = await authenticatedFetch(`${API_BASE_URLS.USER}/api/profile/update-info`, {
       method: 'POST',
       body: JSON.stringify(profileData),
     });
@@ -144,7 +143,8 @@ export const servicesAPI = {
         }
 
         const data = await response.json();
-        const services = data && Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : [];
+        // The API returns an array directly, not wrapped in a data property
+        const services = Array.isArray(data) ? data : [];
         
         return {
           total: services.length,
@@ -186,7 +186,8 @@ export const tasksAPI = {
         }
 
         const data = await response.json();
-        const tasks = data && Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : [];
+        // The API returns an array directly, not wrapped in a data property
+        const tasks = Array.isArray(data) ? data : [];
         
         return {
           total: tasks.length,
@@ -209,7 +210,7 @@ export const activitiesAPI = {
         
         try {
           // Get user profile for ID
-          const profileData = await authenticatedFetch(`${API_BASE_URLS.AUTH}/api/auth/profile`);
+          const profileData = await authenticatedFetch(`${API_BASE_URLS.USER}/api/auth/profile`);
           const profile = await profileData.json();
           const userId = profile.ID || profile.id;
 
@@ -221,7 +222,8 @@ export const activitiesAPI = {
             authenticatedFetch(`${API_BASE_URLS.TASK}/api/tasks/get/user?limit=3`)
               .then(res => res.json())
               .then(data => {
-                const services = data?.data || data || [];
+                // The API returns an array directly, not wrapped in a data property
+                const services = Array.isArray(data) ? data : [];
                 return services.map((service: any, index: number) => ({
                   id: `service-${service.ID || service.id || index}`,
                   type: "service_created",
@@ -400,6 +402,17 @@ export const cacheManagement = {
   // Invalidate all dashboard cache
   invalidateAll() {
     dashboardCache.invalidateAll();
+  },
+
+  // Clear all cache and force fresh data fetch
+  clearAllCache() {
+    dashboardCache.invalidateAll();
+    // Also clear localStorage cache
+    if (typeof window !== 'undefined') {
+      Object.values(dashboardCache.keys).forEach(key => {
+        localStorage.removeItem(key);
+      });
+    }
   }
 };
 

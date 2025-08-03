@@ -126,7 +126,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 async function updateUserCredits(email: string, creditsToAdd: number) {
   try {
     // First, get the user by email from the auth service
-    const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
+    const authApiUrl = process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080';
     console.log('🔍 Auth API URL for webhook:', authApiUrl);
     console.log('🔍 Looking up user by email:', email);
     

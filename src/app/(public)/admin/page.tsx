@@ -190,9 +190,9 @@ export default function AdminPage() {
   const fetchUsers = useCallback(async (reset: boolean = true) => {
     try {
       setUserLoading(true);
-      const API_BASE_URL = process.env.NEXT_PUBLIC_PROFILE_API_URL || "http://localhost:8081";
+      const API_BASE_URL = process.env.NEXT_PUBLIC_USER_API_URL || "http://localhost:8080";
       const params = buildUserApiParams();
-      const response = await fetch(`${API_BASE_URL}/api/users/public?${params}`);
+      const response = await fetch(`${API_BASE_URL}/api/users?${params}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch users');
@@ -267,7 +267,7 @@ export default function AdminPage() {
         setTasks(prev => prev.filter(task => (task.ID || task.id) !== itemToDelete.id));
         setTaskTotalCount(prev => prev - 1);
       } else {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_PROFILE_API_URL || "http://localhost:8081";
+        const API_BASE_URL = process.env.NEXT_PUBLIC_USER_API_URL || "http://localhost:8080";
         const response = await fetch(`${API_BASE_URL}/api/admin/delete/${itemToDelete.id}`, {
           method: 'DELETE',
         });

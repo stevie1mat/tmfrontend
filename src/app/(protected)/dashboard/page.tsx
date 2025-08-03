@@ -310,23 +310,32 @@ export default function ProfileDashboardPage() {
 
         // Handle services data
         if (servicesData.status === 'fulfilled') {
+          console.log("✅ Services data fetched successfully:", servicesData.value);
           setServiceStats(servicesData.value);
         } else {
-          console.error("Failed to fetch services:", servicesData.reason);
+          console.error("❌ Failed to fetch services:", servicesData.reason);
+          // Set empty services data to show the empty state
+          setServiceStats({ total: 0, earnings: 0, recent: [] });
         }
 
         // Handle tasks data
         if (tasksData.status === 'fulfilled') {
+          console.log("✅ Tasks data fetched successfully:", tasksData.value);
           setTaskStats(tasksData.value);
         } else {
-          console.error("Failed to fetch tasks:", tasksData.reason);
+          console.error("❌ Failed to fetch tasks:", tasksData.reason);
+          // Set empty tasks data
+          setTaskStats({ total: 0, credits: 0, recent: [] });
         }
 
         // Handle activities data
         if (activitiesData.status === 'fulfilled') {
+          console.log("✅ Activities data fetched successfully:", activitiesData.value);
           setRecentActivities(activitiesData.value);
         } else {
-          console.error("Failed to fetch activities:", activitiesData.reason);
+          console.error("❌ Failed to fetch activities:", activitiesData.reason);
+          // Set empty activities data
+          setRecentActivities([]);
         }
 
         // Handle marketplace stats
@@ -360,6 +369,9 @@ export default function ProfileDashboardPage() {
       }
     };
 
+    // Clear cache to ensure fresh data
+    cacheManagement.clearAllCache();
+    
     // Start fetching immediately
     fetchAllData();
 

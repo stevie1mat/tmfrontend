@@ -64,33 +64,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLastFetchTime(now);
 
     try {
-      // Try profile service first (has complete user data)
-      const PROFILE_API_URL = process.env.NEXT_PUBLIC_PROFILE_API_URL || 'http://localhost:8081';
-      let res = await fetch(`${PROFILE_API_URL}/api/profile/get`, {
+      // Use unified user service
+      const USER_API_URL = process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080';
+      console.log("🔍 Fetching profile from:", `${USER_API_URL}/api/profile/get`);
+      console.log("🔍 Token:", authToken ? authToken.substring(0, 50) + "..." : "missing");
+      
+      let res = await fetch(`${USER_API_URL}/api/profile/get`, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       
+      console.log("📡 Profile response status:", res.status);
+      
       if (res.ok) {
         const profile = await res.json();
-        console.log("✅ Profile service data:", profile);
+        console.log("✅ User service data:", profile);
         setUser(profile);
         return;
       }
       
-      // Fallback to auth service if profile service fails
-      console.log("⚠️ Profile service failed, trying auth service...");
-      const AUTH_API_URL = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
-      res = await fetch(`${AUTH_API_URL}/api/auth/profile`, {
+      // Fallback to auth endpoint if profile endpoint fails
+      console.log("⚠️ Profile endpoint failed (status:", res.status, "), trying auth endpoint...");
+      res = await fetch(`${USER_API_URL}/api/auth/profile`, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       
+      console.log("📡 Auth response status:", res.status);
+      
       if (res.ok) {
         const profile = await res.json();
-        console.log("✅ Auth service data:", profile);
+        console.log("✅ Auth endpoint data:", profile);
         setUser(profile);
       } else {
         // Token might be invalid, clear it
-        console.log("❌ Auth service failed, logging out");
+        console.log("❌ Auth endpoint failed, logging out");
         logout();
       }
     } catch (error) {
@@ -129,10 +135,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initializeAuth = async () => {
+      console.log("🔍 Initializing auth...");
       const storedToken = localStorage.getItem("token");
+      console.log("🔍 Stored token:", storedToken ? "exists" : "missing");
+      
       if (storedToken) {
+        console.log("✅ Setting token and fetching profile...");
         setToken(storedToken);
         await fetchUserProfile(storedToken);
+      } else {
+        console.log("⚠️ No stored token found");
       }
       setLoading(false);
     };

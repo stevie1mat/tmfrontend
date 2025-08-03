@@ -33,7 +33,7 @@ export default function RegisterPage() {
     }
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_AUTH_API_URL}/api/auth/register`,
+        `${process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}/api/auth/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
