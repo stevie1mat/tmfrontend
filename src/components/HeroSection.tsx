@@ -352,7 +352,7 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
           <circle cx="0.0625" cy="0.0625" r="0.0125" stroke="#d1fae5" strokeWidth="0.1" fill="none"/>
         </svg>
       </div>
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
         {/* Concentric circles above the heading */}
         <div className="absolute top-0 left-0 w-1/4 h-1/4 opacity-10">
           <svg className="w-full h-full" viewBox="0 0 100 100" fill="none">
@@ -378,37 +378,43 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
           </svg>
         </div>
         
-        <div className="flex flex-col items-start">
-          <h1 className="text-white font-bold leading-tight mb-3 text-left" style={{ fontSize: '40px' }}>
+        <div className="flex flex-col items-center text-center">
+          <h1 className="text-white font-bold leading-tight mb-3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl max-w-4xl">
             Exchange Skills. Earn Time Credits.
           </h1>
-          <p className="text-gray-200 text-sm md:text-base mb-10 text-left max-w-4xl whitespace-nowrap">
+          <p className="text-gray-200 text-sm md:text-base mb-6 sm:mb-10 max-w-3xl">
             TradeMinutes lets you help others and get help in return — no money involved, just your time.
           </p>
           {/* SEARCH BAR */}
-          <div className="w-full max-w-2xl mb-10 relative z-20">
-            <div className="flex items-center bg-white rounded-full shadow-lg overflow-hidden">
-              <span className="pl-6 pr-2 text-gray-400">
-                <FaSearch className="w-5 h-5" />
-              </span>
-              <input
-                type="text"
-                placeholder="What are you looking for?"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                onFocus={() => setShowSuggestions(true)}
-                className="flex-1 py-5 text-lg text-gray-900 outline-none bg-transparent placeholder-gray-400"
-              />
-              <button
-                onClick={handleSearch}
-                className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition-all duration-200 text-white font-semibold text-lg px-10 py-4 rounded-full ml-2 mr-2 shadow-lg hover:shadow-xl"
-              >
-                Search
-              </button>
+          <div className="w-full max-w-2xl mb-6 sm:mb-10 relative z-20">
+            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
+              <div className="flex flex-col sm:flex-row items-center">
+                <div className="flex items-center w-full px-4 sm:px-6 py-4 sm:py-5">
+                  <span className="text-emerald-500 mr-3">
+                    <FaSearch className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="What are you looking for?"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    onFocus={() => setShowSuggestions(true)}
+                    className="flex-1 text-lg sm:text-xl text-gray-900 outline-none bg-transparent placeholder-gray-500 font-medium"
+                  />
+                </div>
+                <div className="w-full sm:w-auto px-4 sm:px-6 pb-4 sm:pb-5 sm:pl-0">
+                  <button
+                    onClick={handleSearch}
+                    className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition-all duration-300 text-white font-bold text-lg sm:text-xl py-4 sm:py-5 px-8 sm:px-12 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    Search
+                  </button>
+                </div>
+              </div>
             </div>
             {/* Suggestions dropdown */}
             {showSuggestions && searchSuggestions.length > 0 && (
-              <div className="absolute bg-white border border-gray-200 rounded-lg shadow-lg mt-2 w-full max-w-2xl z-50">
+              <div className="absolute bg-white border border-gray-200 rounded-xl shadow-2xl mt-3 w-full max-w-2xl z-50 overflow-hidden">
                 {searchSuggestions.map((suggestion, idx) => (
                   <button
                     key={idx}
@@ -417,7 +423,7 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
                       setSelectedCategory(suggestion);
                       setShowSuggestions(false);
                     }}
-                    className="block w-full text-left px-6 py-3 hover:bg-gray-50 text-gray-700"
+                    className="block w-full text-left px-6 py-4 hover:bg-emerald-50 text-gray-700 text-base font-medium border-b border-gray-100 last:border-b-0 transition-colors duration-200"
                   >
                     {suggestion}
                   </button>
@@ -426,31 +432,31 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
             )}
           </div>
           {/* STATS */}
-          <div className="flex flex-wrap gap-6 mt-2">
-            <div className="text-center min-w-[100px]">
-              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">50K+</div>
-              <div className="text-gray-200 text-sm mt-1">Active Users</div>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-4 sm:mt-6">
+            <div className="text-center min-w-[80px] sm:min-w-[100px]">
+              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">50K+</div>
+              <div className="text-gray-200 text-xs sm:text-sm mt-1">Active Users</div>
             </div>
-            <div className="text-center min-w-[100px]">
-              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">25K+</div>
-              <div className="text-gray-200 text-sm mt-1">Services Offered</div>
+            <div className="text-center min-w-[80px] sm:min-w-[100px]">
+              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">25K+</div>
+              <div className="text-gray-200 text-xs sm:text-sm mt-1">Services Offered</div>
             </div>
-            <div className="text-center min-w-[100px]">
-              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">15K+</div>
-              <div className="text-gray-200 text-sm mt-1">Successful Trades</div>
+            <div className="text-center min-w-[80px] sm:min-w-[100px]">
+              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">15K+</div>
+              <div className="text-gray-200 text-xs sm:text-sm mt-1">Successful Trades</div>
             </div>
-            <div className="text-center min-w-[100px]">
-              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">4.8</div>
-              <div className="text-gray-200 text-sm mt-1">Average Rating</div>
+            <div className="text-center min-w-[80px] sm:min-w-[100px]">
+              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">4.8</div>
+              <div className="text-gray-200 text-xs sm:text-sm mt-1">Average Rating</div>
             </div>
-            <div className="text-center min-w-[100px]">
-              <div className="text-white font-bold text-xl md:text-2xl lg:text-3xl">200+</div>
-              <div className="text-gray-200 text-sm mt-1">Cities Covered</div>
+            <div className="text-center min-w-[80px] sm:min-w-[100px]">
+              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">200+</div>
+              <div className="text-gray-200 text-xs sm:text-sm mt-1">Cities Covered</div>
             </div>
           </div>
         </div>
         {/* RIGHT SIDE - OVERLAPPING */}
-        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 flex items-center justify-center min-h-[500px] z-10">
+        <div className="hidden lg:flex absolute right-0 top-1/2 transform -translate-y-1/2 items-center justify-center min-h-[500px] z-10">
           {/* IMAGE CARDS */}
           <div className="relative w-[370px] h-[480px]">
             {/* Main image */}

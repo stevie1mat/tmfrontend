@@ -11,7 +11,7 @@ import { useAuth } from "../contexts/AuthContext";
 function Dropdown({ label, items, isHomepage }: { label: string; items: { name: string; href: string }[]; isHomepage?: boolean }) {
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className={`inline-flex items-center gap-1 ${isHomepage ? "hover:text-green-300" : "hover:text-green-500"}`}>
+      <Menu.Button className={`inline-flex items-center gap-1 whitespace-nowrap ${isHomepage ? "hover:text-green-300" : "hover:text-green-500"}`}>
         {label}
         <ChevronDownIcon className="w-4 h-4" />
       </Menu.Button>
@@ -50,20 +50,20 @@ export default function Navbar() {
   const isHomepage = pathname === "/";
 
   return (
-    <header className={`${isHomepage ? 'bg-transparent text-white' : 'bg-white shadow-lg text-black'} w-full z-50`}>
-      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center">
+    <header className={`${isHomepage ? 'bg-transparent text-white' : 'bg-white shadow-lg text-black'} w-full z-50 relative`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         {/* Logo on left */}
-        <Link href="/" className="text-2xl font-bold">
+        <Link href="/" className="text-xl sm:text-2xl font-bold flex-shrink-0">
           <span className={isHomepage ? "text-white" : "text-black"}>TradeMinutes</span>
-          <span className="text-green-400 text-4xl">.</span>
+          <span className="text-green-400 text-2xl sm:text-4xl">.</span>
         </Link>
 
-        {/* Spacer pushes the right section */}
-        <div className="hidden md:flex items-center gap-6 ml-auto">
+        {/* Desktop Navigation */}
+        <div className="hidden lg:flex items-center gap-4 xl:gap-6 ml-auto">
           {/* Nav dropdowns */}
-          <nav className="flex gap-6 text-base font-medium items-center">
+          <nav className="flex gap-4 xl:gap-6 text-sm xl:text-base font-medium items-center">
            
-            <Link href="/services/all" className={isHomepage ? "hover:text-green-300" : "hover:text-green-600"}>Browse Services</Link>
+            <Link href="/services/all" className={`${isHomepage ? "hover:text-green-300" : "hover:text-green-600"} whitespace-nowrap`}>Browse Services</Link>
             <Dropdown
               label="Users"
               items={[
@@ -76,21 +76,21 @@ export default function Navbar() {
           </nav>
           {/* Credits badge removed */}
           {/* Right buttons */}
-          <Link href="/seller" className={`${isHomepage ? "hover:text-green-300" : "hover:text-green-600"} text-base`}>Become a Seller</Link>
+          <Link href="/seller" className={`${isHomepage ? "hover:text-green-300" : "hover:text-green-600"} text-sm xl:text-base whitespace-nowrap`}>Become a Seller</Link>
           
           {user ? (
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3 xl:space-x-4">
               <Link href="/dashboard">
-                <button className={`bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-base px-4 py-2 rounded transition-all duration-200`}>
+                <button className={`bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-sm xl:text-base px-3 xl:px-4 py-2 rounded transition-all duration-200 whitespace-nowrap`}>
                   Dashboard
                 </button>
               </Link>
             </div>
           ) : (
             <>
-              <Link href="/login" className={`${isHomepage ? "hover:text-green-300" : "hover:text-green-600"} text-base`}>Sign in</Link>
+              <Link href="/login" className={`${isHomepage ? "hover:text-green-300" : "hover:text-green-600"} text-sm xl:text-base whitespace-nowrap`}>Sign in</Link>
               <Link href="/register">
-                <button className={`bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-base px-4 py-2 rounded transition-all duration-200`}>
+                <button className={`bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-sm xl:text-base px-3 xl:px-4 py-2 rounded transition-all duration-200 whitespace-nowrap`}>
                   Join
                 </button>
               </Link>
@@ -99,31 +99,45 @@ export default function Navbar() {
         </div>
 
         {/* Mobile toggle */}
-        <button onClick={() => setOpen(!open)} className={`md:hidden ml-auto ${isHomepage ? "text-white" : "text-black"}`}>
+        <button 
+          onClick={() => setOpen(!open)} 
+          className={`lg:hidden ml-auto ${isHomepage ? "text-white" : "text-black"} p-2 hover:bg-black/10 rounded transition-colors`}
+          aria-label="Toggle mobile menu"
+        >
           <FaBars size={20} />
         </button>
       </div>
 
       {/* Mobile Menu */}
       {open && (
-        <div className={`md:hidden px-4 py-4 space-y-3 shadow-md text-sm ${isHomepage ? "bg-emerald-900/90 backdrop-blur-sm" : "bg-white"}`}>
-          <Link href="/services/all" className={isHomepage ? "text-white" : "text-black"}>Browse Services</Link>
-          <Link href="/users" className={isHomepage ? "text-white" : "text-black"}>Users</Link>
+        <div className={`lg:hidden px-4 py-4 space-y-3 shadow-md text-sm ${isHomepage ? "bg-emerald-900/90 backdrop-blur-sm border-t border-emerald-800" : "bg-white border-t border-gray-200"}`}>
+          <div className="space-y-2">
+            <Link href="/services/all" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>Browse Services</Link>
+            <Link href="/users/top" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>Top Rated Users</Link>
+            <Link href="/users/nearby" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>Nearby Users</Link>
+            <Link href="/seller" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>Become a Seller</Link>
+          </div>
           
-          {user ? (
-            <>
-              <Link href="/dashboard">
-                <button className={`w-full py-2 rounded bg-gradient-to-r from-emerald-500 to-green-600 text-white`}>Dashboard</button>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/login" className={isHomepage ? "text-white" : "text-black"}>Sign in</Link>
-              <Link href="/register">
-                <button className={`w-full py-2 rounded bg-gradient-to-r from-emerald-500 to-green-600 text-white`}>Join</button>
-              </Link>
-            </>
-          )}
+          <div className="pt-2 border-t border-gray-300">
+            {user ? (
+              <div className="space-y-2">
+                <Link href="/dashboard">
+                  <button className={`w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-3 rounded transition-all duration-200 font-medium`}>
+                    Dashboard
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Link href="/login" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>Sign in</Link>
+                <Link href="/register">
+                  <button className={`w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-3 rounded transition-all duration-200 font-medium`}>
+                    Join TradeMinutes
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </header>
