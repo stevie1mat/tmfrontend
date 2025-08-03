@@ -413,74 +413,74 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
   const chatUI = (
     <div className="flex flex-col h-full bg-white rounded-2xl shadow-xl overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-            <FaBrain className="w-4 h-4" />
+      <div className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white/20 rounded-full flex items-center justify-center">
+            <FaBrain className="w-3 h-3 sm:w-4 sm:h-4" />
           </div>
           <div>
-            <h3 className="font-semibold text-sm">TradeMate</h3>
+            <h3 className="font-semibold text-xs sm:text-sm">TradeMate</h3>
             <p className="text-xs text-white/80">Your AI companion</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
         <button 
           onClick={() => setIsModal(!isModal)} 
-            className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+            className="p-1.5 sm:p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
           aria-label="Toggle size"
         >
           {isModal ? (
-              <FaCompress className="w-3 h-3" />
+              <FaCompress className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           ) : (
-              <FaExpand className="w-3 h-3" />
+              <FaExpand className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           )}
         </button>
         <button 
           onClick={() => setIsOpen(false)} 
-            className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+            className="p-1.5 sm:p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
           aria-label="Close"
         >
-            <FaTimes className="w-3 h-3" />
+            <FaTimes className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
         </button>
         </div>
       </div>
       
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 bg-gray-50">
         {messages.length === 1 && messages[0].sender === "agent" ? (
           // Welcome state
-          <div className="flex flex-col items-center justify-center h-full space-y-6 text-center">
+          <div className="flex flex-col items-center justify-center h-full space-y-4 sm:space-y-6 text-center px-2">
             {/* Welcome Icon */}
-            <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full flex items-center justify-center shadow-lg">
-              <FaBrain className="w-8 h-8 text-white" />
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full flex items-center justify-center shadow-lg">
+              <FaBrain className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Welcome to TradeMinutes!</h3>
-              <p className="text-sm text-gray-600 mb-6">Ask me anything about services, credits, or how to get started.</p>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Welcome to TradeMinutes!</h3>
+              <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6">Ask me anything about services, credits, or how to get started.</p>
             </div>
             
             {/* Quick Actions */}
-            <div className="w-full max-w-sm space-y-3">
+            <div className="w-full max-w-sm space-y-2 sm:space-y-3">
               {/* Normal Query */}
               <button
                 onClick={() => sendMessage("What services are available?")}
-                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 hover:border-emerald-300 transition-all duration-200 text-left shadow-sm"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:border-emerald-300 transition-all duration-200 text-left shadow-sm"
               >
                 What services are available?
               </button>
               
               {/* Navigation Queries Side by Side */}
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3">
                 <button
                   onClick={() => sendMessage("Take me to services")}
-                  className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 hover:border-emerald-300 transition-all duration-200 text-left shadow-sm"
+                  className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-white border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:border-emerald-300 transition-all duration-200 text-left shadow-sm"
                 >
                   Browse Services
                 </button>
                 <button
                   onClick={() => sendMessage("Show me AI agents")}
-                  className="flex-1 px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 hover:border-emerald-300 transition-all duration-200 text-left shadow-sm"
+                  className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-white border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-700 hover:bg-gray-50 hover:border-emerald-300 transition-all duration-200 text-left shadow-sm"
                 >
                   AI Agents
                 </button>
@@ -492,18 +492,18 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
           <>
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`${msg.sender === "user" ? "max-w-[75%]" : msg.tasks && msg.tasks.length > 0 ? "max-w-[95%]" : "max-w-[75%]"} ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"}`}>
+                <div className={`${msg.sender === "user" ? "max-w-[85%]" : msg.tasks && msg.tasks.length > 0 ? "max-w-[98%]" : "max-w-[85%]"} ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"}`}>
                   {/* Message Bubble */}
-                  <div className={`px-4 py-3 rounded-2xl shadow-sm ${
+                  <div className={`px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl shadow-sm ${
                     msg.sender === "user"
                       ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
                       : "bg-white text-gray-800 border border-gray-200"
                   }`}>
-                    <p className="text-sm whitespace-pre-line">{msg.text}</p>
+                    <p className="text-xs sm:text-sm whitespace-pre-line">{msg.text}</p>
                     
                     {/* Tasks/Services */}
                   {msg.sender === "agent" && msg.tasks && msg.tasks.length > 0 && (
-                    <div className="mt-3 space-y-3 w-full min-w-full">
+                    <div className="mt-2 sm:mt-3 space-y-2 sm:space-y-3 w-full min-w-full">
                         {msg.tasks.map((task: Task, taskIdx: number) => {
                           const gradients = [
                             'from-blue-400 to-blue-600',
@@ -534,23 +534,23 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
                           return (
                             <div key={taskIdx} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-1 w-full min-w-full" 
                                  onClick={() => window.open(`/services/view/${task.id || task.ID || task._id || taskIdx}`, '_blank')}>
-                              <div className="p-3">
-                                <div className="flex items-center justify-between mb-2">
-                                  <span className={`inline-block px-2 py-1 ${colors[taskIdx % colors.length].bg} ${colors[taskIdx % colors.length].text} text-xs font-semibold rounded`}>
+                              <div className="p-2 sm:p-3">
+                                <div className="flex items-center justify-between mb-1 sm:mb-2">
+                                  <span className={`inline-block px-1.5 sm:px-2 py-0.5 sm:py-1 ${colors[taskIdx % colors.length].bg} ${colors[taskIdx % colors.length].text} text-xs font-semibold rounded`}>
                                     {task.Category || 'SERVICE'}
                                   </span>
-                                  <div className="flex items-center gap-1 text-sm font-bold text-green-600">
-                                    <FaCoins className="w-3 h-3" />
+                                  <div className="flex items-center gap-1 text-xs sm:text-sm font-bold text-green-600">
+                                    <FaCoins className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                                     <span>{task.Credits || 0}</span>
                                   </div>
                                 </div>
-                                <h4 className="font-semibold text-gray-900 mb-1 text-sm">
+                                <h4 className="font-semibold text-gray-900 mb-1 text-xs sm:text-sm">
                                   {task.Title}
                                 </h4>
                                 
                                 {/* Description */}
                                 {task.Description && (
-                                  <div className="mb-2">
+                                  <div className="mb-1 sm:mb-2">
                                     <p className="text-xs text-gray-600 line-clamp-2">
                                       {task.Description}
                                     </p>
@@ -558,7 +558,7 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
                                 )}
                                 
                                 {/* Author */}
-                                <div className="flex items-center gap-2 text-xs text-gray-500">
+                                <div className="flex items-center gap-1 sm:gap-2 text-xs text-gray-500">
                                   <span>By {task.Author?.Name || 'Unknown'}</span>
                                 </div>
                               </div>
@@ -575,14 +575,14 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
             {/* Loading indicator */}
             {loading && (
               <div className="flex justify-start">
-                <div className="px-4 py-3 rounded-2xl bg-white text-gray-800 border border-gray-200 shadow-sm">
+                <div className="px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl bg-white text-gray-800 border border-gray-200 shadow-sm">
                   <div className="flex items-center gap-2">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                       <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: '0.1s' }}></div>
                       <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
                     </div>
-                    <span className="text-sm text-gray-600">thinking...</span>
+                    <span className="text-xs sm:text-sm text-gray-600">thinking...</span>
                   </div>
                 </div>
               </div>
@@ -593,11 +593,11 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
       </div>
       
       {/* Input Area */}
-      <div className="p-4 bg-white border-t border-gray-200">
-        <div className="flex items-center gap-3">
+      <div className="p-3 sm:p-4 bg-white border-t border-gray-200">
+        <div className="flex items-center gap-2 sm:gap-3">
         <input
             ref={inputRef}
-            className="flex-1 px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+            className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors text-xs sm:text-sm"
           value={input}
           onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && !e.shiftKey && sendMessage()}
@@ -605,12 +605,12 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
           disabled={loading}
         />
         <button
-            className="p-3 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
+            className="p-2.5 sm:p-3 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105"
             onClick={() => sendMessage()}
           disabled={loading || !input.trim()}
             aria-label="Send message"
         >
-            <FaPaperPlane className="w-4 h-4" />
+            <FaPaperPlane className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
         </div>
       </div>
@@ -618,14 +618,14 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
   );
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50">
       {!isOpen && (
         <button
           onClick={() => { setIsOpen(true); setIsModal(false); }}
-          className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-green-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+          className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-500 to-green-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
           aria-label="Open chat"
         >
-          <FaBrain className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
+          <FaBrain className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform duration-200" />
         </button>
       )}
       
@@ -633,8 +633,8 @@ export default function ChatBot({ userSkills }: ChatBotProps) {
         <div
           className={`${
             isModal 
-              ? "fixed inset-4 md:inset-8 lg:inset-32 max-h-[100vh]" 
-              : "fixed bottom-6 right-6 w-[420px] h-[650px]"
+              ? "fixed inset-2 sm:inset-4 md:inset-8 lg:inset-32 max-h-[100vh]" 
+              : "fixed bottom-4 sm:bottom-6 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-[420px] h-[calc(100vh-8rem)] sm:h-[650px] max-w-[420px]"
           } transition-all duration-300 ease-in-out`}
         >
           {chatUI}
