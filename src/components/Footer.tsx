@@ -97,7 +97,7 @@ export default function Footer() {
       {/* Bottom section */}
       <div className="border-t border-emerald-800 px-8 py-6 flex flex-wrap justify-between items-center max-w-7xl mx-auto">
         <div className="text-sm text-gray-300 px-2 py-1">
-          © TradeMinutes. 2025 CreativeLayers. All rights reserved.
+          © TradeMinutes. 2025. All rights reserved.
         </div>
         <div className="flex items-center gap-6 mt-4 md:mt-0">
           <select className="bg-emerald-800 text-white text-sm px-4 py-2 rounded border border-emerald-700">

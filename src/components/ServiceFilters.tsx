@@ -9,18 +9,14 @@ interface ServiceFiltersProps {
 
 interface FilterState {
   serviceOptions: string[];
-  sellerDetails: string[];
   budget: string;
-  deliveryTime: string;
   sortBy: string;
 }
 
 export default function ServiceFilters({ onFiltersChange, totalResults = 0, onSortChange }: ServiceFiltersProps) {
   const [filters, setFilters] = useState<FilterState>({
     serviceOptions: [],
-    sellerDetails: [],
     budget: '',
-    deliveryTime: '',
     sortBy: 'Best selling'
   });
 
@@ -66,15 +62,6 @@ export default function ServiceFilters({ onFiltersChange, totalResults = 0, onSo
     'Other'
   ];
 
-  const sellerDetails = [
-    'Top Rated Sellers',
-    'Level 1 Sellers',
-    'Level 2 Sellers',
-    'New Sellers',
-    'Online',
-    'Offline'
-  ];
-
   const budgetRanges = [
     'Any Budget',
     'Under $50',
@@ -82,15 +69,6 @@ export default function ServiceFilters({ onFiltersChange, totalResults = 0, onSo
     '$100 - $200',
     '$200 - $500',
     'Over $500'
-  ];
-
-  const deliveryTimes = [
-    'Any Time',
-    '1 day delivery',
-    '2 days delivery',
-    '3 days delivery',
-    '1 week delivery',
-    '2 weeks delivery'
   ];
 
   const sortOptions = [
@@ -109,12 +87,13 @@ export default function ServiceFilters({ onFiltersChange, totalResults = 0, onSo
     console.log(`Filter changed: ${key} =`, value);
   };
 
-  const handleArrayFilterChange = (key: 'serviceOptions' | 'sellerDetails', value: string) => {
+  const handleArrayFilterChange = (key: 'serviceOptions', value: string) => {
     const currentArray = filters[key];
     const newArray = currentArray.includes(value)
       ? currentArray.filter(item => item !== value)
       : [...currentArray, value];
     
+    console.log('Array filter change:', { key, value, currentArray, newArray });
     handleFilterChange(key, newArray);
   };
 
@@ -167,7 +146,10 @@ export default function ServiceFilters({ onFiltersChange, totalResults = 0, onSo
                   name={label}
                   value={option}
                   checked={isArray ? (selected as string[]).includes(option) : selected === option}
-                  onChange={() => onSelect(option)}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    onSelect(option);
+                  }}
                   className="mr-3"
                 />
                 <span className="text-sm">{option}</span>
@@ -228,25 +210,10 @@ export default function ServiceFilters({ onFiltersChange, totalResults = 0, onSo
         />
         
         <FilterDropdown
-          label="Seller details"
-          options={sellerDetails}
-          selected={filters.sellerDetails}
-          onSelect={(value) => handleArrayFilterChange('sellerDetails', value)}
-          isArray={true}
-        />
-        
-        <FilterDropdown
           label="Budget"
           options={budgetRanges}
           selected={filters.budget}
           onSelect={(value) => handleFilterChange('budget', value)}
-        />
-        
-        <FilterDropdown
-          label="Delivery time"
-          options={deliveryTimes}
-          selected={filters.deliveryTime}
-          onSelect={(value) => handleFilterChange('deliveryTime', value)}
         />
         
         <div className="flex items-center gap-2 ml-auto h-10">

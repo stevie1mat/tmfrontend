@@ -8,7 +8,7 @@ import {
   FiChevronRight,
   FiStar,
 } from 'react-icons/fi';
-import { FaMapMarkerAlt, FaClock, FaCoins } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaClock, FaCoins, FaStar } from 'react-icons/fa';
 
 // Hook to fetch task images with caching
 const useTaskImages = (taskId: string) => {
@@ -111,13 +111,6 @@ const ServiceCard = ({ service, index }: { service: Service; index: number }) =>
     'from-pink-400 to-pink-600',
     'from-indigo-400 to-indigo-600'
   ];
-  const colors = [
-    { bg: 'bg-blue-100', text: 'text-blue-600' },
-    { bg: 'bg-purple-100', text: 'text-purple-600' },
-    { bg: 'bg-green-100', text: 'text-green-600' },
-    { bg: 'bg-pink-100', text: 'text-pink-600' },
-    { bg: 'bg-indigo-100', text: 'text-indigo-600' }
-  ];
   
   // Use service's own images first, then fallback to loaded images
   const imageUrl = service.Images?.[0] || images[0];
@@ -129,20 +122,33 @@ const ServiceCard = ({ service, index }: { service: Service; index: number }) =>
     }
   };
 
+  // Get service data
+  const title = service.Title || service.title || 'Service Title';
+  const category = service.Category || service.category || 'Design & Creative';
+  const price = service.Tiers && service.Tiers.length > 0 
+    ? service.Tiers.find((tier: any) => tier.name === 'Basic')?.credits || service.Tiers[0].credits
+    : service.Credits || service.credits || 0;
+  const rating = service.rating || 4.5;
+  const reviews = service.reviewCount || Math.floor(Math.random() * 50) + 10;
+  const userName = service.Author?.Name || service.Author?.name || service.author?.name || 'User';
+  const avatar = service.Author?.Avatar || service.Author?.avatar || service.author?.avatar;
+
   return (
     <div
       onClick={handleServiceClick}
-      className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-1 min-w-[300px] max-w-[300px] snap-start flex-shrink-0"
+      className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-300 transition-all duration-300 cursor-pointer transform hover:-translate-y-1 min-w-[300px] max-w-[300px] snap-start flex-shrink-0"
     >
-      {/* image */}
-      <div className="h-32 relative">
+      {/* Header/Image Area with gradient border */}
+      <div className="relative h-36 bg-gradient-to-br from-pink-100 to-purple-100">
         {imageUrl ? (
-          <LazyImage
-            src={imageUrl}
-            alt={service.Title || service.title || 'Service'}
-            className="w-full h-full object-cover"
-            fill={true}
-          />
+          <div className="w-full h-full">
+            <LazyImage
+              src={imageUrl}
+              alt={title || 'Service image'}
+              className="w-full h-full object-cover"
+              fill={true}
+            />
+          </div>
         ) : imagesLoading ? (
           // Show grey shimmer loading while fetching images
           <div className="w-full h-full bg-gray-200 rounded-md overflow-hidden">
@@ -158,59 +164,70 @@ const ServiceCard = ({ service, index }: { service: Service; index: number }) =>
             </div>
           </div>
         ) : (
-          <div className={`w-full h-full bg-gradient-to-br ${gradients[index % gradients.length]}`}></div>
+          <div className={`w-full h-full bg-gradient-to-br ${gradients[index % gradients.length]} flex items-center justify-center`}>
+            <div className="text-white text-4xl font-bold opacity-20">
+              {title?.charAt(1) || 'S'}
+            </div>
+          </div>
         )}
-        <div className="absolute inset-0 bg-black/20"></div>
+        
+        {/* Arrow icon in top right */}
+        <div className="absolute top-2 right-2 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center">
+          <svg className="w-4 h-4 text-gray-600 transform -rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
       </div>
 
-      {/* content */}
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className={`inline-block px-2 py-1 ${colors[index % colors.length].bg} ${colors[index % colors.length].text} text-xs font-semibold rounded`}>
-            {service.Category || service.category || 'General'}
-          </span>
-          <div className="flex items-center gap-1 text-sm font-bold text-green-600">
-            <FaCoins className="w-4 h-4" />
-            <span>
-              {service.Tiers && service.Tiers.length > 0 
-                ? service.Tiers.find((tier: any) => tier.name === 'Basic')?.credits || service.Tiers[0].credits
-                : service.Credits || service.credits || 0
-              }
-            </span>
-            {service.Tiers && service.Tiers.length > 0 && (
-              <span className="text-xs text-gray-500 font-normal">(Basic)</span>
-            )}
-          </div>
+      {/* Content Area */}
+      <div className="p-4 flex flex-col min-h-[180px]">
+        {/* Category */}
+        <div className="text-gray-500 text-sm mb-2">
+          {category}
         </div>
-        <h3 className="font-semibold text-gray-900 mb-3">
-          {service.Title || service.title || 'Service Title'}
-        </h3>
         
-        {/* Location and Time Details */}
-        <div className="space-y-2 mb-3">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <FaMapMarkerAlt className="w-4 h-4 text-gray-400 flex-shrink-0" />
-            <span className="truncate max-w-[200px]">{service.Location || service.location || 'Online'}</span>
-            <span className="text-xs bg-gray-100 px-2 py-1 rounded flex-shrink-0">
-              {service.LocationType || service.locationType || 'Online'}
-            </span>
-          </div>
-          
-          {(service.Availability && service.Availability.length > 0) && (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <FaClock className="w-4 h-4 text-gray-400" />
-              <span>{service.Availability[0].TimeFrom} - {service.Availability[0].TimeTo}</span>
-            </div>
-          )}
-        </div>
+        {/* Title */}
+        <h4 className="font-bold text-gray-700 text-lg mb-3 line-clamp-2">
+          {title}
+        </h4>
         
         {/* Rating */}
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <FiStar className="w-4 h-4 text-yellow-400" />
-          <span>
-            {service.rating || 4.5} 
-            ({service.reviewCount || Math.floor(Math.random() * 50) + 10} reviews)
-          </span>
+        <div className="flex items-center gap-1 mb-4">
+          <FaStar className="w-4 h-4 text-yellow-400" />
+          <span className="text-sm font-semibold text-gray-900">{rating}</span>
+          <span className="text-xs text-gray-500">({reviews} Review)</span>
+        </div>
+        
+        {/* Spacer to push author/price to bottom */}
+        <div className="flex-1"></div>
+        
+        {/* Border line */}
+        <div className="border-t border-gray-100 my-3"></div>
+        
+        {/* Provider and Price in one line - always at bottom */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {avatar ? (
+              <LazyImage
+                src={avatar}
+                alt={userName || 'User avatar'}
+                className="w-8 h-8 rounded-full object-cover"
+                width={32}
+                height={32}
+              />
+            ) : (
+              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                <span className="text-xs font-semibold text-gray-600">
+                  {userName.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
+            <span className="text-sm text-gray-700 font-medium">{userName}</span>
+          </div>
+          
+          <div className="text-sm text-gray-600">
+            <FaCoins className="w-4 h-4 text-gray-400 inline mr-1 -mt-1" /> <span className="text-lg font-bold text-gray-900">{price}</span>
+          </div>
         </div>
       </div>
     </div>

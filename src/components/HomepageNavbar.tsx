@@ -66,8 +66,7 @@ export default function HomepageNavbar() {
                 { name: "Nearby", href: "/users/nearby" },
               ]}
             />
-           <Link href="/about" className="hover:text-green-300 text-white">About</Link>
-            <Link href="/contact" className="hover:text-green-300 text-white">Contact</Link>
+
           </nav>
           {/* Credits badge removed */}
           {/* Right buttons */}

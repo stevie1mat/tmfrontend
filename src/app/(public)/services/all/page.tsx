@@ -15,9 +15,7 @@ import ChatBotWithAuth from '@/components/ChatBotWithAuth';
 
 interface FilterState {
   serviceOptions: string[];
-  sellerDetails: string[];
   budget: string;
-  deliveryTime: string;
   sortBy: string;
 }
 
@@ -69,9 +67,7 @@ export default function Services() {
   const [currentPage, setCurrentPage] = useState(0);
   const [filters, setFilters] = useState<FilterState>({
     serviceOptions: [],
-    sellerDetails: [],
     budget: '',
-    deliveryTime: '',
     sortBy: 'Best selling'
   });
 
@@ -87,6 +83,11 @@ export default function Services() {
     // Only add category if selected
     if (filters.serviceOptions.length > 0) {
       params.append('category', filters.serviceOptions[0]);
+    }
+
+    // Add budget filter if selected
+    if (filters.budget && filters.budget !== 'Any Budget') {
+      params.append('budget', filters.budget);
     }
 
     // Only add sort if not default
