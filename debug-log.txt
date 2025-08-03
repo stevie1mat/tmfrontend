@@ -28630,3 +28630,247 @@ Data: {
   ]
 }
 
+[2025-08-03T15:28:55.241Z] TIERS PARSING START
+Data: {
+  "originalTiersData": [
+    {
+      "name": "Basic",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 20,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 37,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "originalType": "object"
+}
+
+[2025-08-03T15:28:55.242Z] SET INITIAL SELECTED TIER
+Data: {
+  "selectedTier": "Basic",
+  "availableTiers": [
+    "Basic",
+    "Standard",
+    "Premium"
+  ]
+}
+
+[2025-08-03T15:28:55.167Z] TIERS DEBUG START
+Data: {
+  "tiersProperty": [
+    {
+      "name": "Basic",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 20,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 37,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "tiersType": "object",
+  "tiersTypeLowercase": "undefined",
+  "tiersIsArray": true,
+  "tiersIsArrayLowercase": false,
+  "tiersLength": 3,
+  "firstTier": {
+    "name": "Basic",
+    "title": "I will teach you",
+    "description": "I will teach you",
+    "credits": 20,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  }
+}
+
+[2025-08-03T15:28:55.242Z] FINAL TIERS DATA SET
+Data: [
+  {
+    "name": "Basic",
+    "title": "I will teach you",
+    "description": "I will teach you",
+    "credits": 20,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  },
+  {
+    "name": "Standard",
+    "title": "I will teach you",
+    "description": "I will teach you",
+    "credits": 37,
+    "features": [],
+    "availableTimeSlot": "8:00 AM - 6:00 PM",
+    "maxDays": 14
+  },
+  {
+    "name": "Premium",
+    "title": "I will teach you",
+    "description": "I will teach you",
+    "credits": 60,
+    "features": [],
+    "availableTimeSlot": "24/7 Available",
+    "maxDays": 30
+  }
+]
+
+[2025-08-03T15:28:56.865Z] TIERS DEBUG START
+Data: {
+  "tiersProperty": [
+    {
+      "name": "Basic",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 20,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 37,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "tiersType": "object",
+  "tiersTypeLowercase": "undefined",
+  "tiersIsArray": true,
+  "tiersIsArrayLowercase": false,
+  "tiersLength": 3,
+  "firstTier": {
+    "name": "Basic",
+    "title": "I will teach you",
+    "description": "I will teach you",
+    "credits": 20,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  }
+}
+
+[2025-08-03T15:28:56.922Z] TIERS PARSING START
+Data: {
+  "originalTiersData": [
+    {
+      "name": "Basic",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 20,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 37,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will teach you",
+      "description": "I will teach you",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "originalType": "object"
+}
+
+[2025-08-03T15:28:56.923Z] SET INITIAL SELECTED TIER
+Data: {
+  "selectedTier": "Basic",
+  "availableTiers": [
+    "Basic",
+    "Standard",
+    "Premium"
+  ]
+}
+
+[2025-08-03T15:28:56.922Z] FINAL TIERS DATA SET
+Data: [
+  {
+    "name": "Basic",
+    "title": "I will teach you",
+    "description": "I will teach you",
+    "credits": 20,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  },
+  {
+    "name": "Standard",
+    "title": "I will teach you",
+    "description": "I will teach you",
+    "credits": 37,
+    "features": [],
+    "availableTimeSlot": "8:00 AM - 6:00 PM",
+    "maxDays": 14
+  },
+  {
+    "name": "Premium",
+    "title": "I will teach you",
+    "description": "I will teach you",
+    "credits": 60,
+    "features": [],
+    "availableTimeSlot": "24/7 Available",
+    "maxDays": 30
+  }
+]
+

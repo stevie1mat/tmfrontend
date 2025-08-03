@@ -10,7 +10,7 @@ import { useAuth } from "../contexts/AuthContext";
 function Dropdown({ label, items }: { label: string; items: { name: string; href: string }[] }) {
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <Menu.Button className="inline-flex items-center gap-1 hover:text-green-300 text-white">
+      <Menu.Button className="inline-flex items-center gap-1 hover:text-green-300 text-white whitespace-nowrap">
         {label}
         <ChevronDownIcon className="w-4 h-4" />
       </Menu.Button>
@@ -45,20 +45,20 @@ export default function HomepageNavbar() {
   const userName = user?.Name ?? user?.name ?? null;
 
   return (
-    <header className="bg-emerald-900 shadow-lg text-white w-full z-50">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center">
+    <header className="bg-emerald-900 shadow-lg text-white w-full z-50 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         {/* Logo on left */}
-        <Link href="/" className="text-2xl font-bold">
+        <Link href="/" className="text-xl sm:text-2xl font-bold flex-shrink-0">
           <span className="text-white">TradeMinutes</span>
-          <span className="text-green-400 text-4xl">.</span>
+          <span className="text-green-400 text-2xl sm:text-4xl">.</span>
         </Link>
 
-        {/* Spacer pushes the right section */}
-        <div className="hidden md:flex items-center gap-6 ml-auto">
+        {/* Desktop Navigation */}
+        <div className="hidden lg:flex items-center gap-4 xl:gap-6 ml-auto">
           {/* Nav dropdowns */}
-          <nav className="flex gap-6 text-base font-medium items-center">
+          <nav className="flex gap-4 xl:gap-6 text-sm xl:text-base font-medium items-center">
            
-            <Link href="/services/all" className="hover:text-green-300 text-white">Browse Services</Link>
+            <Link href="/services/all" className="hover:text-green-300 text-white whitespace-nowrap">Browse Services</Link>
             <Dropdown
               label="Users"
               items={[
@@ -70,21 +70,21 @@ export default function HomepageNavbar() {
           </nav>
           {/* Credits badge removed */}
           {/* Right buttons */}
-          <Link href="/seller" className="hover:text-green-300 text-white text-base">Become a Seller</Link>
+          <Link href="/seller" className="hover:text-green-300 text-white text-sm xl:text-base whitespace-nowrap">Become a Seller</Link>
           
                     {user ? (
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3 xl:space-x-4">
               <Link href="/dashboard">
-                <button className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-base px-4 py-2 rounded transition-all duration-200">
+                <button className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-sm xl:text-base px-3 xl:px-4 py-2 rounded transition-all duration-200 whitespace-nowrap">
                   Dashboard
                 </button>
               </Link>
             </div>
           ) : (
             <>
-              <Link href="/login" className="hover:text-green-300 text-white text-base">Sign in</Link>
+              <Link href="/login" className="hover:text-green-300 text-white text-sm xl:text-base whitespace-nowrap">Sign in</Link>
               <Link href="/register">
-                <button className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-base px-4 py-2 rounded transition-all duration-200">
+                <button className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-sm xl:text-base px-3 xl:px-4 py-2 rounded transition-all duration-200 whitespace-nowrap">
                   Join
                 </button>
               </Link>
@@ -93,33 +93,45 @@ export default function HomepageNavbar() {
         </div>
 
         {/* Mobile toggle */}
-        <button onClick={() => setOpen(!open)} className="md:hidden ml-auto text-white">
+        <button 
+          onClick={() => setOpen(!open)} 
+          className="lg:hidden ml-auto text-white p-2 hover:bg-emerald-800 rounded transition-colors"
+          aria-label="Toggle mobile menu"
+        >
           <FaBars size={20} />
         </button>
       </div>
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden bg-emerald-800 px-4 py-4 space-y-3 shadow-md text-base">
-          <Link href="/services/all" className="text-white">Browse Services</Link>
-          <Link href="/users" className="text-white">Users</Link>
-          <Link href="/about" className="text-white">Pages</Link>
-          <Link href="/contact" className="text-white">Contact</Link>
+        <div className="lg:hidden bg-emerald-800 px-4 py-4 space-y-3 shadow-md text-base border-t border-emerald-700">
+          <div className="space-y-2">
+            <Link href="/services/all" className="block text-white hover:text-green-300 py-2 transition-colors">Browse Services</Link>
+            <Link href="/users/top" className="block text-white hover:text-green-300 py-2 transition-colors">Top Rated Users</Link>
+            <Link href="/users/nearby" className="block text-white hover:text-green-300 py-2 transition-colors">Nearby Users</Link>
+            <Link href="/seller" className="block text-white hover:text-green-300 py-2 transition-colors">Become a Seller</Link>
+          </div>
           
-          {user ? (
-            <>
-              <Link href="/dashboard">
-                <button className="w-full bg-white/20 text-white py-2 rounded">Dashboard</button>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/login" className="text-white">Sign in</Link>
-              <Link href="/register">
-                <button className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-2 rounded transition-all duration-200">Join</button>
-              </Link>
-            </>
-          )}
+          <div className="pt-2 border-t border-emerald-700">
+            {user ? (
+              <div className="space-y-2">
+                <Link href="/dashboard">
+                  <button className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-3 rounded transition-all duration-200 font-medium">
+                    Dashboard
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Link href="/login" className="block text-white hover:text-green-300 py-2 transition-colors">Sign in</Link>
+                <Link href="/register">
+                  <button className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-3 rounded transition-all duration-200 font-medium">
+                    Join TradeMinutes
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </header>

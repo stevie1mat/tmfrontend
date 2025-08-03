@@ -584,8 +584,8 @@ export default function MessagesPage() {
   };
 
   return (
-    <ProtectedLayout>
-      <div className="flex h-[calc(100vh-80px)] bg-gray-50 overflow-hidden">
+    <ProtectedLayout hideTopBar={true}>
+      <div className="flex h-screen bg-gray-50 overflow-hidden">
         {/* Sidebar */}
         <aside className="w-80 bg-white border-r border-gray-200 flex flex-col">
           <div className="p-4 border-b border-gray-200">

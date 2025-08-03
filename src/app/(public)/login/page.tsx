@@ -116,14 +116,14 @@ export default function LoginPage() {
         </div>
       )}
       {/* Left: Login Form */}
-      <div className={`flex flex-col justify-center items-center w-full md:w-1/2 min-h-screen px-6 py-12 bg-white relative transition-all duration-200 ${loading || loginSuccess ? 'blur-sm pointer-events-none select-none' : ''}`}>
+      <div className={`flex flex-col justify-center items-center w-full md:w-1/2 min-h-screen px-4 sm:px-6 py-8 sm:py-12 bg-white relative transition-all duration-200 ${loading || loginSuccess ? 'blur-sm pointer-events-none select-none' : ''}`}>
         {/* Logo */}
         {/* <div className="mb-8">
           <div className="text-2xl font-bold text-[#22c55e]">TradeMinutes</div>
         </div> */}
         <div className="w-full max-w-md flex flex-col items-center">
-          <h2 className="text-3xl font-bold text-[#1a1446] mb-2 w-full text-left">Login to TradeMinutes</h2>
-          <p className="text-gray-500 mb-8 w-full text-left">Connect with your community and exchange skills for time credits!</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1446] mb-2 w-full text-left">Login to TradeMinutes</h2>
+          <p className="text-gray-500 mb-6 sm:mb-8 w-full text-left text-sm sm:text-base">Connect with your community and exchange skills for time credits!</p>
           
           {/* Error and Success Messages */}
           {error && (
@@ -134,9 +134,9 @@ export default function LoginPage() {
           
           <button
             onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
-            className="w-full flex items-center justify-center gap-2 border border-gray-200 rounded-full py-3 bg-white hover:bg-gray-50 transition-colors text-[#1a1446] font-medium text-lg mb-4"
+            className="w-full flex items-center justify-center gap-2 border border-gray-200 rounded-full py-3 bg-white hover:bg-gray-50 transition-colors text-[#1a1446] font-medium text-base sm:text-lg mb-4"
           >
-            <FaGithub className="text-2xl" /> Sign in with GitHub
+            <FaGithub className="text-xl sm:text-2xl" /> Sign in with GitHub
           </button>
           <div className="flex items-center w-full my-2">
             <div className="flex-grow h-px bg-gray-200" />
@@ -146,15 +146,15 @@ export default function LoginPage() {
           <form onSubmit={handleLogin} className="space-y-5 w-full">
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-1 text-[#1a1446]">Email Address<span className="text-[#22c55e]">*</span></label>
-              <div className="flex items-center bg-white rounded-full border border-gray-200 px-5 py-3 focus-within:border-[#22c55e]">
-                <FiMail className="text-xl text-[#22c55e] mr-3" />
+              <div className="flex items-center bg-white rounded-full border border-gray-200 px-4 sm:px-5 py-3 focus-within:border-[#22c55e]">
+                <FiMail className="text-lg sm:text-xl text-[#22c55e] mr-2 sm:mr-3" />
                 <input
                   id="email"
                   type="email"
                   placeholder="Enter your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 bg-transparent outline-none text-[#1a1446] placeholder-gray-400 text-base"
+                  className="flex-1 bg-transparent outline-none text-[#1a1446] placeholder-gray-400 text-sm sm:text-base"
                   required
                   disabled={loading}
                 />
@@ -162,15 +162,15 @@ export default function LoginPage() {
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium mb-1 text-[#1a1446]">Password<span className="text-[#22c55e]">*</span></label>
-              <div className="flex items-center bg-white rounded-full border border-gray-200 px-5 py-3 focus-within:border-[#22c55e]">
-                <FiLock className="text-xl text-[#22c55e] mr-3" />
+              <div className="flex items-center bg-white rounded-full border border-gray-200 px-4 sm:px-5 py-3 focus-within:border-[#22c55e]">
+                <FiLock className="text-lg sm:text-xl text-[#22c55e] mr-2 sm:mr-3" />
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="flex-1 bg-transparent outline-none text-[#1a1446] placeholder-gray-400 text-base"
+                  className="flex-1 bg-transparent outline-none text-[#1a1446] placeholder-gray-400 text-sm sm:text-base"
                   required
                   disabled={loading}
                 />
@@ -195,12 +195,12 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-white font-semibold rounded-full py-3 mt-2 transition-colors duration-150 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#22c55e] hover:bg-[#16a34a] text-white font-semibold rounded-full py-3 mt-2 transition-colors duration-150 text-base sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Logging in..." : "Login to TradeMinutes"}
             </button>
           </form>
-          <p className="text-center text-sm mt-8 text-[#1a1446]">
+          <p className="text-center text-xs sm:text-sm mt-6 sm:mt-8 text-[#1a1446]">
             Don't have an account?{' '}
             <button
               type="button"
@@ -211,7 +211,7 @@ export default function LoginPage() {
             </button>
           </p>
         </div>
-        <div className="absolute bottom-4 left-0 w-full text-center text-xs text-gray-400">©2024 TradeMinutes. All rights reserved.</div>
+        <div className="absolute bottom-2 sm:bottom-4 left-0 w-full text-center text-xs text-gray-400">©2024 TradeMinutes. All rights reserved.</div>
       </div>
       {/* Right: Abstract Illustration & Widgets */}
       <div className={`hidden md:flex flex-1 items-stretch min-h-screen bg-gradient-to-br from-[#22c55e] via-[#16a34a] to-[#134e2f] relative overflow-hidden transition-all duration-200 ${loading || loginSuccess ? 'blur-sm pointer-events-none select-none' : ''}`}>
