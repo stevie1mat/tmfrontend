@@ -216,7 +216,7 @@ export default function ServiceFilters({ onFiltersChange, totalResults = 0, onSo
           onSelect={(value) => handleFilterChange('budget', value)}
         />
         
-        <div className="flex items-center gap-2 ml-auto h-10">
+        <div className="hidden sm:flex items-center gap-2 ml-auto h-10">
           <span className="text-sm text-gray-600">Sort by:</span>
           <FilterDropdown
             label={filters.sortBy}
