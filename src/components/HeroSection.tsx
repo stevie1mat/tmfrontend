@@ -432,26 +432,26 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
             )}
           </div>
           {/* STATS */}
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-4 sm:mt-6">
-            <div className="text-center min-w-[80px] sm:min-w-[100px]">
-              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">50K+</div>
-              <div className="text-gray-200 text-xs sm:text-sm mt-1">Active Users</div>
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4 sm:mt-6">
+            <div className="text-center min-w-[70px] sm:min-w-[80px]">
+              <div className="text-white font-bold text-base sm:text-lg md:text-xl lg:text-2xl">50K+</div>
+              <div className="text-gray-200 text-xs mt-1">Active Users</div>
             </div>
-            <div className="text-center min-w-[80px] sm:min-w-[100px]">
-              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">25K+</div>
-              <div className="text-gray-200 text-xs sm:text-sm mt-1">Services Offered</div>
+            <div className="text-center min-w-[70px] sm:min-w-[80px]">
+              <div className="text-white font-bold text-base sm:text-lg md:text-xl lg:text-2xl">25K+</div>
+              <div className="text-gray-200 text-xs mt-1">Services Offered</div>
             </div>
-            <div className="text-center min-w-[80px] sm:min-w-[100px]">
-              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">15K+</div>
-              <div className="text-gray-200 text-xs sm:text-sm mt-1">Successful Trades</div>
+            <div className="text-center min-w-[70px] sm:min-w-[80px]">
+              <div className="text-white font-bold text-base sm:text-lg md:text-xl lg:text-2xl">15K+</div>
+              <div className="text-gray-200 text-xs mt-1">Successful Trades</div>
             </div>
-            <div className="text-center min-w-[80px] sm:min-w-[100px]">
-              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">4.8</div>
-              <div className="text-gray-200 text-xs sm:text-sm mt-1">Average Rating</div>
+            <div className="text-center min-w-[70px] sm:min-w-[80px]">
+              <div className="text-white font-bold text-base sm:text-lg md:text-xl lg:text-2xl">4.8</div>
+              <div className="text-gray-200 text-xs mt-1">Average Rating</div>
             </div>
-            <div className="text-center min-w-[80px] sm:min-w-[100px]">
-              <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">200+</div>
-              <div className="text-gray-200 text-xs sm:text-sm mt-1">Cities Covered</div>
+            <div className="text-center min-w-[70px] sm:min-w-[80px]">
+              <div className="text-white font-bold text-base sm:text-lg md:text-xl lg:text-2xl">200+</div>
+              <div className="text-gray-200 text-xs mt-1">Cities Covered</div>
             </div>
           </div>
         </div>
