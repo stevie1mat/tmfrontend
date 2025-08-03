@@ -307,7 +307,7 @@ const ServiceCard = ({ service, idx }: { service: Service; idx: number }) => {
           </div>
           
           <div className="text-sm text-gray-600">
-            Starting at: <span className="text-lg font-bold text-gray-900">${price}</span>
+            <FaCoins className="w-4 h-4 text-gray-400 inline mr-1 -mt-1" /> <span className="text-lg font-bold text-gray-900">{price}</span>
           </div>
         </div>
       </div>
