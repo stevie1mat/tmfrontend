@@ -54,10 +54,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [lastFetchTime, setLastFetchTime] = useState<number>(0);
 
-  const fetchUserProfile = async (authToken: string) => {
-    // Debounce: don't fetch if we've fetched in the last 5 seconds
+  const fetchUserProfile = async (authToken: string, force = false) => {
+    // Debounce: don't fetch if we've fetched in the last 5 seconds (unless forced)
     const now = Date.now();
-    if (now - lastFetchTime < 5000) {
+    if (!force && now - lastFetchTime < 5000) {
       console.log("⏱️ Skipping profile fetch - too soon since last request");
       return;
     }
@@ -105,10 +105,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const login = (authToken: string) => {
+  const login = (authToken: string, userData?: User) => {
     localStorage.setItem("token", authToken);
     setToken(authToken);
-    fetchUserProfile(authToken);
+    
+    // If user data is provided immediately, set it without debounce
+    if (userData) {
+      console.log("✅ Setting immediate user data from login:", userData);
+      setUser(userData);
+    }
+    
+    // Still fetch the full profile in the background (force fetch)
+    fetchUserProfile(authToken, true);
   };
 
   const logout = () => {

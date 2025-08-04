@@ -4,7 +4,6 @@ import { useEffect, useState, ReactNode, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Sidebar from "../common/Sidebar";
 import { NotificationBell } from "../common/Sidebar";
-
 import { FiPlusCircle } from "react-icons/fi";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -25,11 +24,17 @@ interface RealTimeActivity {
 
 // Optimized TopBar component - loads instantly with AuthContext
 function TopBar({ realTimeActivities, loadingActivities }: { realTimeActivities: RealTimeActivity[], loadingActivities: boolean }) {
-  const { user, logout } = useAuth(); // Use AuthContext for instant data
+  const { user, logout, token } = useAuth(); // Use AuthContext for instant data
   const userImage: string | undefined = user?.ProfilePictureURL || user?.profilePictureURL;
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+  
+  // Prevent hydration mismatch by ensuring client-side rendering
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   // Search functionality
   const [searchQuery, setSearchQuery] = useState("");
@@ -99,8 +104,76 @@ function TopBar({ realTimeActivities, loadingActivities }: { realTimeActivities:
   // Use AuthContext data for instant loading - no API calls needed!
   const profileUserId = user?.ID || user?.id || null;
   const credits = user?.Credits ?? user?.credits ?? null;
-  const profilePicture = user?.ProfilePictureURL || user?.profilePictureURL || null;
-  const userName = user?.Name || user?.name || "User";
+  
+  // Get profile picture from AuthContext or fallback to localStorage
+  let profilePicture = user?.ProfilePictureURL || user?.profilePictureURL || null;
+  
+  // Get user name from AuthContext or fallback to JWT token data
+  let userName = user?.Name || user?.name || "User";
+  
+  // Client-side only: additional fallbacks for userName
+  if (isClient) {
+    // If AuthContext doesn't have the name yet, try to get it from the JWT token
+    if (userName === "User" && token) {
+      try {
+        console.log("🔍 Attempting to decode JWT token for user name...");
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log("🔍 JWT payload:", payload);
+        
+        // Try different possible field names for the name
+        const tokenName = payload.name || payload.Name || payload.username || payload.Username || 
+                         (payload.email ? payload.email.split('@')[0] : null) ||
+                         (payload.Email ? payload.Email.split('@')[0] : null);
+        
+        console.log("🔍 Extracted token name:", tokenName);
+        
+        if (tokenName) {
+          userName = tokenName;
+          console.log("✅ Using token name:", userName);
+        } else {
+          console.log("❌ No valid name found in JWT token");
+        }
+      } catch (error) {
+        console.error("❌ Could not decode token for user name:", error);
+      }
+    } else {
+      console.log("🔍 AuthContext user name:", userName, "Token exists:", !!token);
+    }
+    
+    // Additional fallback: try to get profile data from localStorage if available
+    if (userName === "User") {
+      try {
+        const storedProfile = localStorage.getItem("userProfile");
+        if (storedProfile) {
+          const profileData = JSON.parse(storedProfile);
+          const profileName = profileData.Name || profileData.name;
+          if (profileName) {
+            userName = profileName;
+            console.log("✅ Using profile name from localStorage:", userName);
+          }
+        }
+      } catch (error) {
+        console.log("Could not get profile from localStorage");
+      }
+    }
+  }
+  
+  // Client-side only: Profile picture fallback
+  if (isClient && !profilePicture) {
+    try {
+      const storedProfile = localStorage.getItem("userProfile");
+      if (storedProfile) {
+        const profileData = JSON.parse(storedProfile);
+        const storedProfilePicture = profileData.ProfilePictureURL || profileData.profilePictureURL || profileData.Avatar || profileData.avatar;
+        if (storedProfilePicture) {
+          profilePicture = storedProfilePicture;
+          console.log("✅ Using profile picture from localStorage:", profilePicture);
+        }
+      }
+    } catch (error) {
+      console.log("Could not get profile picture from localStorage");
+    }
+  }
 
   const userId = user?.ID || user?.id;
 
@@ -173,11 +246,19 @@ function TopBar({ realTimeActivities, loadingActivities }: { realTimeActivities:
             className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 border border-gray-200 shadow-sm hover:bg-emerald-50 transition-colors"
             onClick={() => setDropdownOpen((open) => !open)}
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-sm">
-              <span className="text-white font-semibold text-sm">
-                {userName.charAt(0).toUpperCase()}
-              </span>
-            </div>
+            {isClient && profilePicture ? (
+              <img
+                src={profilePicture}
+                alt={userName}
+                className="w-8 h-8 rounded-full object-cover shadow-sm"
+              />
+            ) : (
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-sm">
+                <span className="text-white font-semibold text-sm">
+                  {userName.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
             <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
           </button>
           {/* Dropdown menu */}

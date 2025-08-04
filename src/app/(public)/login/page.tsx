@@ -81,9 +81,17 @@ export default function LoginPage() {
       
       const data = await res.json();
       console.log('✅ Login successful, token received:', !!data.token);
+      console.log('✅ Login response data:', data);
       
       if (data.token) {
         localStorage.setItem("token", data.token);
+        
+        // If the login response includes user data, store it immediately
+        if (data.user) {
+          console.log('✅ User data included in login response:', data.user);
+          // You could store this in localStorage or pass it to AuthContext
+        }
+        
         setLoginSuccess(true);
         setTimeout(() => router.push("/dashboard"), 1500);
       } else {

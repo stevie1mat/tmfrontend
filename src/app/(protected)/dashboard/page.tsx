@@ -285,6 +285,14 @@ export default function ProfileDashboardPage() {
         if (profileData.status === 'fulfilled') {
           setProfile(profileData.value);
           
+          // Store profile data in localStorage for top bar access
+          try {
+            localStorage.setItem("userProfile", JSON.stringify(profileData.value));
+            console.log("✅ Profile data stored in localStorage for top bar access");
+          } catch (error) {
+            console.log("Could not store profile in localStorage");
+          }
+          
           // Check for missing profile fields
           const hasUniversity = profileData.value.university && profileData.value.university.trim() !== "";
           const hasProgram = profileData.value.program && profileData.value.program.trim() !== "";

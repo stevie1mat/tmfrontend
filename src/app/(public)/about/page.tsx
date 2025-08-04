@@ -15,7 +15,7 @@ export default function AboutPage() {
       <Navbar/>
       <TradeMinutesHero />
 
-      {/* Additional About content */}
+     
       <section className="max-w-4xl mx-auto px-6 py-16">
         <h2 className="text-2xl font-bold mb-4">Why TradeMinutes?</h2>
         <p className="text-gray-600 text-sm leading-relaxed mb-6">

@@ -72,7 +72,10 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    console.log("🔍 Profile page useEffect - token:", token ? "exists" : "missing", "loading:", loading);
+    console.log("🔍 Profile page useEffect triggered");
+    console.log("🔍 Token:", token ? "exists" : "missing");
+    console.log("🔍 Loading state:", loading);
+    console.log("🔍 Profile data:", profile ? "exists" : "missing");
     
     // Wait for AuthContext to finish loading
     if (loading) {
@@ -87,30 +90,38 @@ export default function ProfilePage() {
     }
 
     console.log("✅ Token exists, fetching profile...");
+    console.log("✅ Token preview:", token.substring(0, 50) + "...");
     fetchProfile();
   }, [token, loading, router]);
 
   const fetchProfile = async () => {
     try {
+      console.log("🚀 Starting profile fetch...");
       setLoading(true);
       const headers = getAuthHeaders();
       console.log("🔍 Fetching profile with headers:", headers);
       console.log("🔍 API URL:", `${process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}/api/profile/get`);
       
+      const startTime = Date.now();
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}/api/profile/get`,
         { headers }
       );
-
+      const endTime = Date.now();
       console.log("📡 Profile response status:", res.status);
+      console.log("⏱️ Request took:", endTime - startTime, "ms");
       
       if (!res.ok) {
         console.error("❌ Profile fetch failed with status:", res.status);
-        throw new Error("Failed to fetch profile");
+        console.error("❌ Response headers:", Object.fromEntries(res.headers.entries()));
+        const errorText = await res.text();
+        console.error("❌ Error response body:", errorText);
+        throw new Error(`Failed to fetch profile: ${res.status} ${errorText}`);
       }
 
       const data = await res.json();
       console.log("✅ Profile data received:", data);
+      console.log("✅ Profile data keys:", Object.keys(data));
       setProfile(data);
       setFormData({
         Name: data.Name || "",
@@ -123,10 +134,16 @@ export default function ProfilePage() {
         Skills: data.Skills || [],
         newSkill: ""
       });
+      console.log("✅ Profile state updated successfully");
     } catch (error) {
-      console.error("Failed to fetch profile:", error);
+      console.error("❌ Failed to fetch profile:", error);
+      console.error("❌ Error details:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       toast.error("Failed to load profile");
     } finally {
+      console.log("🏁 Setting loading to false");
       setLoading(false);
     }
   };
@@ -210,6 +227,19 @@ export default function ProfilePage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading profile...</p>
+          
+          {/* Debug Information */}
+          <div className="mt-8 p-4 bg-gray-100 rounded-lg max-w-md mx-auto text-left">
+            <h3 className="font-semibold text-gray-800 mb-2">Debug Information:</h3>
+            <div className="text-sm text-gray-600 space-y-1">
+              <p><strong>Token:</strong> {token ? "✅ Exists" : "❌ Missing"}</p>
+              <p><strong>Loading State:</strong> {loading ? "⏳ Loading" : "✅ Complete"}</p>
+              <p><strong>Profile Data:</strong> {profile ? "✅ Loaded" : "❌ Not loaded"}</p>
+              <p><strong>API URL:</strong> {process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}</p>
+              <p><strong>Environment:</strong> {process.env.NODE_ENV}</p>
+              <p><strong>Timestamp:</strong> {new Date().toLocaleTimeString()}</p>
+            </div>
+          </div>
         </div>
       </div>
     );
