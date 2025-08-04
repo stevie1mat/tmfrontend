@@ -3,12 +3,12 @@ import { dashboardCache, cacheUtils } from './cache';
 
 // API base URLs
 const API_BASE_URLS = {
-  USER: process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080', // Unified user service
-  TASK: process.env.NEXT_PUBLIC_TASK_API_URL || 'http://localhost:8084',
-  MESSAGING: process.env.NEXT_PUBLIC_MESSAGING_API_URL || 'http://localhost:8085'
+  USER: process.env.NEXT_PUBLIC_USER_API_URL || 'https://trademinutes-user-service.onrender.com', // Unified user service
+  TASK: process.env.NEXT_PUBLIC_TASK_API_URL || 'https://trademinutes-task-core.onrender.com',
+  MESSAGING: process.env.NEXT_PUBLIC_MESSAGING_API_URL || 'https://trademinutes-messaging.onrender.com'
 };
 
-// Helper function to get auth token
+
 const getAuthToken = (): string | null => {
   if (typeof window === 'undefined') {
     return null;

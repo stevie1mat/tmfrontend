@@ -91,7 +91,7 @@ export default function MessagesPage() {
   useEffect(() => {
     if (!currentUser?.email) return;
 
-    const wsUrl = `${process.env.NEXT_PUBLIC_MESSAGING_WS_URL || 'ws://localhost:8085'}/ws?userId=${currentUser.email}`;
+    const wsUrl = `${process.env.NEXT_PUBLIC_MESSAGING_WS_URL || 'wss://trademinutes-messaging.onrender.com'}/ws?userId=${currentUser.email}`;
     console.log("Connecting to WebSocket:", wsUrl);
     const websocket = new WebSocket(wsUrl);
 
