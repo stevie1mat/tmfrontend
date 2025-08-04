@@ -192,13 +192,19 @@ export default function AdminPage() {
       setUserLoading(true);
       const API_BASE_URL = process.env.NEXT_PUBLIC_USER_API_URL || "http://localhost:8080";
       const params = buildUserApiParams();
-      const response = await fetch(`${API_BASE_URL}/api/users?${params}`);
+      const url = `${API_BASE_URL}/api/admin/test-users?${params}`;
+      console.log('🔗 Fetching users from:', url);
+      const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error('Failed to fetch users');
+        console.error('❌ Users API error:', response.status, response.statusText);
+        const errorText = await response.text();
+        console.error('❌ Error response:', errorText);
+        throw new Error(`Failed to fetch users: ${response.status} ${errorText}`);
       }
 
       const data: UserApiResponse = await response.json();
+      console.log('📡 Users API response:', data);
 
       if (reset) {
         setUsers(data.data);

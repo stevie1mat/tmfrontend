@@ -57,6 +57,16 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [debugLogs, setDebugLogs] = useState<string[]>([]);
+  
+  // Debug logging function
+  const addDebugLog = (message: string) => {
+    const timestamp = new Date().toLocaleTimeString();
+    const logMessage = `[${timestamp}] ${message}`;
+    setDebugLogs(prev => [...prev, logMessage].slice(-10)); // Keep last 10 logs
+    console.log(logMessage);
+  };
   
   // Form state
   const [formData, setFormData] = useState({
@@ -72,57 +82,66 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    console.log("🔍 Profile page useEffect triggered");
-    console.log("🔍 Token:", token ? "exists" : "missing");
-    console.log("🔍 Loading state:", loading);
-    console.log("🔍 Profile data:", profile ? "exists" : "missing");
+    addDebugLog("🔍 Profile page useEffect triggered");
+    addDebugLog(`🔍 Token: ${token ? "exists" : "missing"}`);
+    addDebugLog(`🔍 Loading state: ${loading}`);
+    addDebugLog(`🔍 Profile data: ${profile ? "exists" : "missing"}`);
+    addDebugLog(`🔍 useEffect dependencies - token: ${!!token}, loading: ${loading}`);
     
-    // Wait for AuthContext to finish loading
-    if (loading) {
-      console.log("⏳ AuthContext still loading, waiting...");
-      return;
-    }
-    
+    // Check if we have a token
     if (!token) {
-      console.log("🔄 No token, redirecting to login");
-      router.push("/login");
+      addDebugLog("⏳ No token yet, waiting...");
       return;
     }
 
-    console.log("✅ Token exists, fetching profile...");
-    console.log("✅ Token preview:", token.substring(0, 50) + "...");
+    addDebugLog("✅ Token exists, fetching profile...");
+    addDebugLog(`✅ Token preview: ${token.substring(0, 50)}...`);
+    addDebugLog("🔍 About to call fetchProfile...");
     fetchProfile();
+    addDebugLog("🔍 fetchProfile called");
   }, [token, loading, router]);
 
   const fetchProfile = async () => {
     try {
-      console.log("🚀 Starting profile fetch...");
+      addDebugLog("🚀 Starting profile fetch...");
       setLoading(true);
+      setError(null);
+      
       const headers = getAuthHeaders();
-      console.log("🔍 Fetching profile with headers:", headers);
-      console.log("🔍 API URL:", `${process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}/api/profile/get`);
+      addDebugLog(`🔍 Fetching profile with headers: ${JSON.stringify(headers)}`);
+      addDebugLog(`🔍 Token from headers: ${headers.Authorization ? headers.Authorization.substring(0, 50) + "..." : "No token"}`);
+      addDebugLog(`🔍 Token exists: ${!!headers.Authorization}`);
+      addDebugLog(`🔍 API URL: ${process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}/api/profile/get`);
       
       const startTime = Date.now();
+      addDebugLog("📡 Making fetch request...");
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}/api/profile/get`,
         { headers }
       );
       const endTime = Date.now();
-      console.log("📡 Profile response status:", res.status);
-      console.log("⏱️ Request took:", endTime - startTime, "ms");
+      addDebugLog(`📡 Profile response status: ${res.status}`);
+      addDebugLog(`📡 Profile response headers: ${JSON.stringify(Object.fromEntries(res.headers.entries()))}`);
+      addDebugLog(`⏱️ Request took: ${endTime - startTime}ms`);
       
       if (!res.ok) {
-        console.error("❌ Profile fetch failed with status:", res.status);
-        console.error("❌ Response headers:", Object.fromEntries(res.headers.entries()));
+        addDebugLog(`❌ Profile fetch failed with status: ${res.status}`);
+        addDebugLog(`❌ Response headers: ${JSON.stringify(Object.fromEntries(res.headers.entries()))}`);
         const errorText = await res.text();
-        console.error("❌ Error response body:", errorText);
-        throw new Error(`Failed to fetch profile: ${res.status} ${errorText}`);
+        addDebugLog(`❌ Error response body: ${errorText}`);
+        const errorMessage = `Failed to fetch profile: ${res.status} ${errorText}`;
+        addDebugLog(`❌ Setting error state: ${errorMessage}`);
+        setError(errorMessage);
+        throw new Error(errorMessage);
       }
 
+      addDebugLog("📡 Response received, parsing JSON...");
       const data = await res.json();
-      console.log("✅ Profile data received:", data);
-      console.log("✅ Profile data keys:", Object.keys(data));
+      addDebugLog(`✅ Profile data received: ${JSON.stringify(data).substring(0, 200)}...`);
+      addDebugLog(`✅ Profile data keys: ${Object.keys(data).join(', ')}`);
+      addDebugLog("✅ Setting profile state...");
       setProfile(data);
+      addDebugLog("✅ Profile state set successfully");
       setFormData({
         Name: data.Name || "",
         Email: data.Email || "",
@@ -136,14 +155,16 @@ export default function ProfilePage() {
       });
       console.log("✅ Profile state updated successfully");
     } catch (error) {
-      console.error("❌ Failed to fetch profile:", error);
-      console.error("❌ Error details:", {
+      addDebugLog(`❌ Failed to fetch profile: ${error}`);
+      addDebugLog(`❌ Error details: ${JSON.stringify({
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined
-      });
+      })}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      setError(errorMessage);
       toast.error("Failed to load profile");
     } finally {
-      console.log("🏁 Setting loading to false");
+      addDebugLog("🏁 Setting loading to false");
       setLoading(false);
     }
   };
@@ -237,7 +258,22 @@ export default function ProfilePage() {
               <p><strong>Profile Data:</strong> {profile ? "✅ Loaded" : "❌ Not loaded"}</p>
               <p><strong>API URL:</strong> {process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}</p>
               <p><strong>Environment:</strong> {process.env.NODE_ENV}</p>
-              <p><strong>Timestamp:</strong> {new Date().toLocaleTimeString()}</p>
+              <p><strong>Token Length:</strong> {token ? token.length : 0}</p>
+              <p><strong>Token Preview:</strong> {token ? token.substring(0, 20) + "..." : "None"}</p>
+              <p><strong>Profile Object:</strong> {profile ? JSON.stringify(profile).substring(0, 100) + "..." : "null"}</p>
+              <p><strong>Form Data:</strong> {formData.Name ? "✅ Has data" : "❌ Empty"}</p>
+              <p><strong>Error State:</strong> {error ? "❌ Has error" : "✅ No errors"}</p>
+              <p><strong>Error Message:</strong> {error || "None"}</p>
+            </div>
+            
+            {/* Console Logs */}
+            <div className="mt-4 p-4 bg-gray-200 rounded-lg max-w-md mx-auto text-left">
+              <h3 className="font-semibold text-gray-800 mb-2">Console Logs:</h3>
+              <div className="text-xs text-gray-600 space-y-1 max-h-40 overflow-y-auto">
+                {debugLogs.map((log, index) => (
+                  <p key={index} className="font-mono">{log}</p>
+                ))}
+              </div>
             </div>
           </div>
         </div>
