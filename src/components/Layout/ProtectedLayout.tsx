@@ -427,7 +427,7 @@ export default function ProtectedLayout({ children, headerName, hideTopBar, hide
 
       {/* Main content */}
       <main className={`overflow-y-auto ${hideTopBar ? 'flex-1' : 'flex-1'}`}>
-        {!hideTopBar && !hideTopBarOnly && pathname !== '/ai-agents/create-workflow' && (
+        {!hideTopBar && !hideTopBarOnly && pathname !== '/ai-agents/create-workflow' && pathname !== '/tasks/list' && (
           <TopBar realTimeActivities={realTimeActivities} loadingActivities={loadingActivities} />
         )}
         <div className={`${hideTopBar ? 'px-0 py-0' : 'px-6 py-4'}`}>
