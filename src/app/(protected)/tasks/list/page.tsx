@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FaHeart, FaStar, FaTrash, FaCalendar, FaMapMarkerAlt, FaClock, FaCoins, FaPlus, FaEdit, FaClipboardList } from "react-icons/fa";
+import { FaHeart, FaStar, FaTrash, FaCalendar, FaMapMarkerAlt, FaClock, FaCoins, FaPlus, FaEdit, FaClipboardList, FaFilter, FaSearch, FaTimes } from "react-icons/fa";
 
 interface Availability {
   Date: string;
@@ -53,6 +53,7 @@ interface Task {
 
 function TaskListPageContent() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -61,6 +62,13 @@ function TaskListPageContent() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [priceRange, setPriceRange] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  
   const router = useRouter();
   const searchParams = useSearchParams();
   const isModalOpenFromParams = searchParams?.get("create") === "1";
@@ -134,6 +142,44 @@ function TaskListPageContent() {
     fetchTasks();
   }, []);
 
+  // Filter tasks based on search term, category, and price range
+  useEffect(() => {
+    let filtered = [...tasks];
+    
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(task => 
+        task.Title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.Description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    // Category filter
+    if (selectedCategory) {
+      filtered = filtered.filter(task => 
+        task.Category === selectedCategory || task.Type === selectedCategory
+      );
+    }
+    
+    // Price range filter
+    if (priceRange) {
+      const [min, max] = priceRange.split('-').map(Number);
+      filtered = filtered.filter(task => {
+        const taskPrice = task.Tiers && task.Tiers.length > 0 
+          ? task.Tiers.find(tier => tier.name === 'Basic')?.credits || task.Tiers[0].credits
+          : task.Credits;
+        
+        if (max) {
+          return taskPrice >= min && taskPrice <= max;
+        } else {
+          return taskPrice >= min;
+        }
+      });
+    }
+    
+    setFilteredTasks(filtered);
+  }, [tasks, searchTerm, selectedCategory, priceRange]);
+
   // Refresh tasks when modal closes after creation
   useEffect(() => {
     if (prevModalOpen.current && !isModalOpenFromParams) {
@@ -193,7 +239,7 @@ function TaskListPageContent() {
   console.log("task", tasks);
 
   // Ensure all tasks have proper id mapping
-  const mappedTasks = tasks.map((task: any) => ({ 
+  const mappedTasks = filteredTasks.map((task: any) => ({ 
     ...task, 
     id: task.id || task._id || task.ID 
   }));
@@ -226,6 +272,117 @@ function TaskListPageContent() {
         </div>
       </div>
 
+      {/* Filters Section */}
+      <div className="mb-6">
+        <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+          {/* Search Bar */}
+          <div className="flex-1 max-w-md">
+            <div className="relative">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search your listings..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <FaTimes className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Filter Toggle Button */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <FaFilter className="w-4 h-4" />
+            <span>Filters</span>
+          </button>
+        </div>
+
+        {/* Expanded Filters */}
+        {showFilters && (
+          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Category Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                >
+                  <option value="">All Categories</option>
+                  <option value="Academic Help">Academic Help</option>
+                  <option value="Tech & Digital Skills">Tech & Digital Skills</option>
+                  <option value="Creative & Arts">Creative & Arts</option>
+                  <option value="Personal Development">Personal Development</option>
+                  <option value="Language & Culture">Language & Culture</option>
+                  <option value="Health & Wellness">Health & Wellness</option>
+                  <option value="Handy Skills & Repair">Handy Skills & Repair</option>
+                  <option value="Everyday Help">Everyday Help</option>
+                  <option value="Administrative & Misc Help">Administrative & Misc Help</option>
+                  <option value="Social & Community">Social & Community</option>
+                  <option value="Entrepreneurship & Business">Entrepreneurship & Business</option>
+                  <option value="Specialized Skills">Specialized Skills</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              {/* Price Range Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Price Range (Credits)</label>
+                <select
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                >
+                  <option value="">All Prices</option>
+                  <option value="0-50">0 - 50 Credits</option>
+                  <option value="50-100">50 - 100 Credits</option>
+                  <option value="100-200">100 - 200 Credits</option>
+                  <option value="200-500">200 - 500 Credits</option>
+                  <option value="500-">500+ Credits</option>
+                </select>
+              </div>
+
+              {/* Clear Filters */}
+              <div className="flex items-end">
+                <button
+                  onClick={() => {
+                    setSearchTerm("");
+                    setSelectedCategory("");
+                    setPriceRange("");
+                  }}
+                  className="w-full px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Results Count */}
+      {!loading && tasks.length > 0 && (
+        <div className="mb-4 text-sm text-gray-600">
+          Showing {filteredTasks.length} of {tasks.length} listings
+          {(searchTerm || selectedCategory || priceRange) && (
+            <span className="ml-2 text-emerald-600">
+              (filtered)
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Content Section */}
       <div className="py-8">
 
@@ -242,19 +399,26 @@ function TaskListPageContent() {
             </div>
           ))}
         </div>
-      ) : tasks.length === 0 ? (
+      ) : filteredTasks.length === 0 ? (
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="bg-white rounded-2xl p-8 shadow-sm max-w-md mx-auto text-center">
             <div className="flex items-center justify-center mb-4">
               <FaClipboardList className="w-16 h-16 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No listings yet</h3>
-            <p className="text-gray-600">You haven't created any service listings yet.</p>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              {tasks.length === 0 ? "No listings yet" : "No matching listings"}
+            </h3>
+            <p className="text-gray-600">
+              {tasks.length === 0 
+                ? "You haven't created any service listings yet."
+                : "Try adjusting your filters to see more results."
+              }
+            </p>
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mappedTasks.map((task: Task, idx: number) => {
+          {filteredTasks.map((task: Task, idx: number) => {
             const gradients = [
               'from-blue-400 to-blue-600',
               'from-purple-400 to-purple-600', 
