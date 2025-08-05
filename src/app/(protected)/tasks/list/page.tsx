@@ -417,121 +417,126 @@ function TaskListPageContent() {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredTasks.map((task: Task, idx: number) => {
+            // Generate gradient background for image placeholder
             const gradients = [
-              'from-blue-400 to-blue-600',
-              'from-purple-400 to-purple-600', 
-              'from-green-400 to-green-600',
-              'from-pink-400 to-pink-600',
-              'from-yellow-400 to-yellow-600',
-              'from-orange-400 to-orange-600'
+              'from-pink-400 to-purple-500',
+              'from-blue-400 to-cyan-500', 
+              'from-green-400 to-teal-500',
+              'from-yellow-400 to-orange-500',
+              'from-purple-400 to-pink-500',
+              'from-indigo-400 to-purple-500'
             ];
-            const colors = [
-              { bg: 'bg-blue-100', text: 'text-blue-600' },
-              { bg: 'bg-purple-100', text: 'text-purple-600' },
-              { bg: 'bg-green-100', text: 'text-green-600' },
-              { bg: 'bg-pink-100', text: 'text-pink-600' },
-              { bg: 'bg-yellow-100', text: 'text-yellow-600' },
-              { bg: 'bg-orange-100', text: 'text-orange-600' }
-            ];
-            
-            // Debug image rendering
-            console.log(`=== RENDERING TASK ${idx + 1}: ${task.Title} ===`);
-            console.log('Task images:', task.Images);
-            console.log('Has images:', task.Images && task.Images.length > 0);
-            console.log('First image:', task.Images && task.Images.length > 0 ? task.Images[0] : 'None');
             
             // Convert primitive.A to string array if needed
             const imageUrls = task.Images && Array.isArray(task.Images) ? task.Images : [];
-            console.log('Image URLs:', imageUrls);
-            console.log('Has image URLs:', imageUrls.length > 0);
+            const image = imageUrls[0] || '';
+            
+            // Get task data
+            const title = task.Title || 'Service Title';
+            const category = task.Type || task.Category || 'Design & Creative';
+            const rating = 4.5;
+            const reviews = 12;
+            const userName = task.Author?.Name || 'Provider';
+            const price = task.Tiers && task.Tiers.length > 0 
+              ? task.Tiers.find(tier => tier.name === 'Basic')?.credits || task.Tiers[0].credits
+              : task.Credits || 0;
             
             return (
-              <div key={task.id ?? idx} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-1" onClick={() => {
-                console.log('Clicking task:', task.id, task.Title);
-                router.push(`/services/view/${String(task.id)}`);
-              }}>
-                <div className="h-32 relative">
-                  {imageUrls.length > 0 ? (
-                    <img
-                      src={imageUrls[0]}
-                      alt={task.Title}
-                      className="w-full h-full object-cover"
-                    />
+              <div 
+                key={task.id ?? idx}
+                className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-300 transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
+                onClick={() => {
+                  console.log('Clicking task:', task.id, task.Title);
+                  router.push(`/services/view/${String(task.id)}`);
+                }}
+              >
+                {/* Header/Image Area with gradient border */}
+                <div className="relative h-36 bg-gradient-to-br from-pink-100 to-purple-100">
+                  {image ? (
+                    <div className="w-full h-full">
+                      <img
+                        src={image}
+                        alt={title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                   ) : (
-                    <div className={`w-full h-full bg-gradient-to-br ${gradients[idx % gradients.length]}`}></div>
-                  )}
-                <div className="absolute top-3 right-3 flex gap-2">
-                  <button
-                    onClick={e => {
-                      e.stopPropagation();
-                      setTaskToEdit(task);
-                      setIsEditModalOpen(true);
-                    }}
-                    className="text-white hover:text-blue-400 transition-colors bg-black/20 rounded-full p-2 hover:bg-black/40"
-                    title="Edit"
-                  >
-                    <FaEdit className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={e => {
-                      e.stopPropagation();
-                      setTaskToDelete(task.id);
-                      setShowConfirmModal(true);
-                    }}
-                    className="text-white hover:text-red-400 transition-colors bg-black/20 rounded-full p-2 hover:bg-black/40"
-                    title="Delete"
-                  >
-                    <FaTrash className="w-4 h-4" />
-                  </button>
-                </div>
-                </div>
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className={`inline-block px-2 py-1 ${colors[idx % colors.length].bg} ${colors[idx % colors.length].text} text-xs font-semibold rounded`}>
-                      {task.Type || task.Category || 'SERVICE'}
-                    </span>
-                    <div className="flex items-center gap-1 text-sm font-bold text-green-600">
-                      <FaCoins className="w-4 h-4" />
-                      <span>
-                        {task.Tiers && task.Tiers.length > 0 
-                          ? task.Tiers.find(tier => tier.name === 'Basic')?.credits || task.Tiers[0].credits
-                          : task.Credits
-                        }
-                      </span>
-                      {task.Tiers && task.Tiers.length > 0 && (
-                        <span className="text-xs text-gray-500 font-normal">(Basic)</span>
-                      )}
-                    </div>
-                  </div>
-                  <h4 className="font-semibold text-gray-900 mb-1">
-                    {task.Title}
-                  </h4>
-                  
-                  {/* Description */}
-                  {task.Description && (
-                    <div className="mb-3">
-                      <p className="text-sm text-gray-600 line-clamp-2">
-                        {task.Description}
-                      </p>
-                    </div>
-                  )}
-                  
-                  {/* Time Details Only (Location Hidden) */}
-                  {task.Availability?.length > 0 && (
-                    <div className="space-y-2 mb-3">
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <FaClock className="w-4 h-4 text-gray-400" />
-                        <span>{task.Availability[0].TimeFrom} - {task.Availability[0].TimeTo}</span>
+                    <div className={`w-full h-full bg-gradient-to-br ${gradients[idx % gradients.length]} flex items-center justify-center`}>
+                      <div className="text-white text-4xl font-bold opacity-20">
+                        {title.charAt(1) || 'S'}
                       </div>
                     </div>
                   )}
                   
+                  {/* Action buttons in top right */}
+                  <div className="absolute top-2 right-2 flex gap-1">
+                    <button
+                      onClick={e => {
+                        e.stopPropagation();
+                        setTaskToEdit(task);
+                        setIsEditModalOpen(true);
+                      }}
+                      className="w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors"
+                      title="Edit"
+                    >
+                      <FaEdit className="w-4 h-4 text-gray-600" />
+                    </button>
+                    <button
+                      onClick={e => {
+                        e.stopPropagation();
+                        setTaskToDelete(task.id);
+                        setShowConfirmModal(true);
+                      }}
+                      className="w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors"
+                      title="Delete"
+                    >
+                      <FaTrash className="w-4 h-4 text-gray-600" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Content Area */}
+                <div className="p-4 flex flex-col min-h-[180px]">
+                  {/* Category */}
+                  <div className="text-gray-500 text-sm mb-2">
+                    {category}
+                  </div>
+                  
+                  {/* Title */}
+                  <h4 className="font-bold text-gray-700 text-lg mb-3 line-clamp-2">
+                    {title}
+                  </h4>
+                  
                   {/* Rating */}
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-1 mb-4">
                     <FaStar className="w-4 h-4 text-yellow-400" />
-                    <span>4.5 (12 reviews)</span>
+                    <span className="text-sm font-semibold text-gray-900">{rating}</span>
+                    <span className="text-xs text-gray-500">({reviews} Review)</span>
+                  </div>
+                  
+                  {/* Spacer to push author/price to bottom */}
+                  <div className="flex-1"></div>
+                  
+                  {/* Border line */}
+                  <div className="border-t border-gray-100 my-3"></div>
+                  
+                  {/* Provider and Price in one line - always at bottom */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-semibold text-gray-600">
+                          {userName.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <span className="text-sm text-gray-700 font-medium">{userName}</span>
+                    </div>
+                    
+                    <div className="text-sm text-gray-600">
+                      <FaCoins className="w-4 h-4 text-gray-400 inline mr-1 -mt-1" /> 
+                      <span className="text-lg font-bold text-gray-900">{price}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -628,21 +633,23 @@ function TaskListPageContent() {
 
 export default function TaskListPage() {
   return (
-    <Suspense fallback={
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[60vh]">
-        {[1,2,3,4,5,6].map((i) => (
-          <div key={i} className="bg-gray-100 rounded-xl p-4 animate-pulse h-64 flex flex-col">
-            <div className="h-32 bg-gray-200 rounded mb-4"></div>
-            <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
-            <div className="flex-1"></div>
-            <div className="h-8 bg-gray-300 rounded w-full mt-2"></div>
-          </div>
-        ))}
-      </div>
-    }>
-      <TaskListPageContent />
-    </Suspense>
+    <div className="bg-white text-black min-h-screen">
+      <Suspense fallback={
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[60vh]">
+          {[1,2,3,4,5,6].map((i) => (
+            <div key={i} className="bg-gray-100 rounded-xl p-4 animate-pulse h-64 flex flex-col">
+              <div className="h-32 bg-gray-200 rounded mb-4"></div>
+              <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+              <div className="flex-1"></div>
+              <div className="h-8 bg-gray-300 rounded w-full mt-2"></div>
+            </div>
+          ))}
+        </div>
+      }>
+        <TaskListPageContent />
+      </Suspense>
+    </div>
   );
 }
