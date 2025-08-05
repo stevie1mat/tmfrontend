@@ -268,16 +268,19 @@ export default function ProfileDashboardPage() {
       return;
     }
 
-    // Optimized data fetching with caching - prioritized loading
+    // Optimized data fetching with caching - independent loading
     const fetchAllData = async () => {
       try {
-        console.log('🚀 Fetching dashboard data with prioritized loading...');
+        console.log('🚀 Fetching dashboard data with independent loading...');
         
-        // First, fetch data needed for Performance Metrics and Quick Actions
-        const [profileData, marketplaceData, userStatsData] = await Promise.allSettled([
+        // Start fetching all data in parallel
+        const [profileData, marketplaceData, userStatsData, servicesData, tasksData, activitiesData] = await Promise.allSettled([
           profileAPI.getProfile(),
           statsAPI.getMarketplaceStats(),
-          statsAPI.getUserStats()
+          statsAPI.getUserStats(),
+          servicesAPI.getUserServices(3),
+          tasksAPI.getUserTasks(5),
+          activitiesAPI.getRecentActivities()
         ]);
 
         // Handle profile data (needed for Performance Metrics)
@@ -335,22 +338,10 @@ export default function ProfileDashboardPage() {
           console.error("Failed to fetch user stats:", userStatsData.reason);
         }
 
-        // Mark Performance Metrics and Quick Actions as loaded
+        // Mark Performance Metrics and Quick Actions as loaded immediately
         setPerformanceMetricsLoaded(true);
         setQuickActionsLoaded(true);
         setProfileLoading(false);
-
-        // Now fetch the remaining data (Recent Services, Activities, etc.)
-        console.log('📊 Loading secondary data (Recent Services, Activities)...');
-        
-        // Add a small delay to ensure Performance Metrics and Quick Actions load first
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const [servicesData, tasksData, activitiesData] = await Promise.allSettled([
-          servicesAPI.getUserServices(3),
-          tasksAPI.getUserTasks(5),
-          activitiesAPI.getRecentActivities()
-        ]);
 
         // Handle services data (Recent Services section)
         if (servicesData.status === 'fulfilled') {
