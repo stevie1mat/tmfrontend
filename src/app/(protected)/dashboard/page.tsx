@@ -247,6 +247,8 @@ export default function ProfileDashboardPage() {
   const [profileLoading, setProfileLoading] = useState(true);
   const [activitiesLoading, setActivitiesLoading] = useState(true);
   const [tasksLoading, setTasksLoading] = useState(true);
+  const [performanceMetricsLoaded, setPerformanceMetricsLoaded] = useState(false);
+  const [quickActionsLoaded, setQuickActionsLoaded] = useState(false);
 
   // --- Recent activities state ---
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
@@ -266,22 +268,19 @@ export default function ProfileDashboardPage() {
       return;
     }
 
-    // Optimized data fetching with caching
+    // Optimized data fetching with caching - prioritized loading
     const fetchAllData = async () => {
       try {
-        console.log('🚀 Fetching dashboard data with caching...');
+        console.log('🚀 Fetching dashboard data with prioritized loading...');
         
-        // Fetch all data in parallel using cached APIs
-        const [profileData, servicesData, tasksData, activitiesData, marketplaceData, userStatsData] = await Promise.allSettled([
+        // First, fetch data needed for Performance Metrics and Quick Actions
+        const [profileData, marketplaceData, userStatsData] = await Promise.allSettled([
           profileAPI.getProfile(),
-          servicesAPI.getUserServices(3),
-          tasksAPI.getUserTasks(5),
-          activitiesAPI.getRecentActivities(),
           statsAPI.getMarketplaceStats(),
           statsAPI.getUserStats()
         ]);
 
-        // Handle profile data
+        // Handle profile data (needed for Performance Metrics)
         if (profileData.status === 'fulfilled') {
           setProfile(profileData.value);
           
@@ -316,7 +315,44 @@ export default function ProfileDashboardPage() {
           console.error("Failed to fetch profile:", profileData.reason);
         }
 
-        // Handle services data
+        // Handle marketplace stats (needed for Performance Metrics)
+        if (marketplaceData.status === 'fulfilled') {
+          setMarketplaceStats(marketplaceData.value);
+        } else {
+          console.error("Failed to fetch marketplace stats:", marketplaceData.reason);
+        }
+
+        // Handle user stats (needed for Performance Metrics)
+        if (userStatsData.status === 'fulfilled') {
+          // Update profile with user stats if needed
+          if (profileData.status === 'fulfilled' && profileData.value) {
+            setProfile(prev => prev ? {
+              ...prev,
+              ...userStatsData.value
+            } : profileData.value);
+          }
+        } else {
+          console.error("Failed to fetch user stats:", userStatsData.reason);
+        }
+
+        // Mark Performance Metrics and Quick Actions as loaded
+        setPerformanceMetricsLoaded(true);
+        setQuickActionsLoaded(true);
+        setProfileLoading(false);
+
+        // Now fetch the remaining data (Recent Services, Activities, etc.)
+        console.log('📊 Loading secondary data (Recent Services, Activities)...');
+        
+        // Add a small delay to ensure Performance Metrics and Quick Actions load first
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const [servicesData, tasksData, activitiesData] = await Promise.allSettled([
+          servicesAPI.getUserServices(3),
+          tasksAPI.getUserTasks(5),
+          activitiesAPI.getRecentActivities()
+        ]);
+
+        // Handle services data (Recent Services section)
         if (servicesData.status === 'fulfilled') {
           console.log("✅ Services data fetched successfully:", servicesData.value);
           setServiceStats(servicesData.value);
@@ -346,35 +382,14 @@ export default function ProfileDashboardPage() {
           setRecentActivities([]);
         }
 
-        // Handle marketplace stats
-        if (marketplaceData.status === 'fulfilled') {
-          setMarketplaceStats(marketplaceData.value);
-        } else {
-          console.error("Failed to fetch marketplace stats:", marketplaceData.reason);
+              } catch (error) {
+          console.error("Error in dashboard data fetching:", error);
+        } finally {
+          setLoading(false);
+          setServicesLoading(false);
+          setTasksLoading(false);
+          setActivitiesLoading(false);
         }
-
-                 // Handle user stats
-         if (userStatsData.status === 'fulfilled') {
-           // Update profile with user stats if needed
-           if (profileData.status === 'fulfilled' && profileData.value) {
-             setProfile(prev => prev ? {
-               ...prev,
-               ...userStatsData.value
-             } : profileData.value);
-           }
-         } else {
-           console.error("Failed to fetch user stats:", userStatsData.reason);
-         }
-
-      } catch (error) {
-        console.error("Error in dashboard data fetching:", error);
-      } finally {
-        setLoading(false);
-        setProfileLoading(false);
-        setServicesLoading(false);
-        setTasksLoading(false);
-        setActivitiesLoading(false);
-      }
     };
 
     // Clear cache to ensure fresh data
@@ -628,7 +643,7 @@ export default function ProfileDashboardPage() {
                   </span>
                 </div>
               </div>
-            {profileLoading ? (
+            {!performanceMetricsLoaded ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="bg-[#FAF6ED] rounded-xl p-6 animate-pulse">
@@ -692,7 +707,22 @@ export default function ProfileDashboardPage() {
             {/* Quick Actions */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {!quickActionsLoaded ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="p-4 bg-[#FAF6ED] rounded-xl animate-pulse">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 bg-gray-200 rounded w-20"></div>
+                          <div className="h-3 bg-gray-200 rounded w-16"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <button
                   onClick={() => setIsCreateModalOpen(true)}
                   className="flex items-center gap-3 p-4 bg-[#FAF6ED] hover:bg-[#F5F0E0] rounded-xl transition-colors w-full text-left"
@@ -736,6 +766,7 @@ export default function ProfileDashboardPage() {
                   </div>
                 </Link>
               </div>
+            )}
             </div>
 
             {/* Recent Services */}
