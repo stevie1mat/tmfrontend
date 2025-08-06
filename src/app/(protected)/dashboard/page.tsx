@@ -857,11 +857,12 @@ export default function ProfileDashboardPage() {
                   <FaStar className="w-3 h-3 text-yellow-500" />
                   <span className="text-gray-700 font-medium">This Week</span>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <span className="text-gray-600">{recentActivities.filter(a => a.type === 'service_completed').length} completed</span>
                   </div>
+                  <span className="text-gray-400">•</span>
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     <span className="text-gray-600">{recentActivities.filter(a => a.type === 'service_provided').length} provided</span>
