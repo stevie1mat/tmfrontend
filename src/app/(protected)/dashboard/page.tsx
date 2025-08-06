@@ -45,7 +45,9 @@ import {
   FaClock,
   FaMapMarkerAlt,
   FaPhone,
-  FaGlobe
+  FaGlobe,
+  FaCoins,
+  FaCircle
 } from "react-icons/fa";
 
 import ServiceSlider from "@/components/ServiceSlider";
@@ -838,42 +840,125 @@ export default function ProfileDashboardPage() {
             </div>
           </div>
 
-          {/* Recent Activity Section (dynamic) */}
+          {/* Recent Activity Section (enhanced) */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
-              <FaClock className="w-4 h-4 text-gray-400" />
+              <div className="flex items-center gap-2">
+                <FaClock className="w-4 h-4 text-gray-400" />
+                <span className="text-xs text-gray-500">{recentActivities.length} activities</span>
+              </div>
             </div>
-            <div className="space-y-4">
-              {activitiesLoading ? (
-                <div className="text-gray-400">Loading...</div>
-            ) : recentActivities.length === 0 ? (
-                <div className="text-gray-400">No recent activity.</div>
-              ) : (
-              recentActivities.map((activity: any, idx: number) => (
-                  <div key={activity.id || idx} className="flex items-start gap-3">
-                    <div className={`w-2 h-2 rounded-full mt-2 ${
-                      activity.type === 'service_completed' ? 'bg-green-500' :
-                      activity.type === 'service_provided' ? 'bg-blue-500' :
-                      activity.type === 'service_booked' ? 'bg-purple-500' :
-                      activity.type === 'review_received' ? 'bg-yellow-500' :
-                      'bg-gray-400'
-                    }`}></div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">{activity.title}</p>
-                      <p className="text-xs text-gray-600">{activity.description}</p>
-                      {activity.credits && (
-                        <p className="text-xs text-emerald-600 font-medium">{activity.credits} credits</p>
-                      )}
-                      <p className="text-xs text-gray-500">
-                        {new Date(activity.timestamp).toLocaleDateString()} • {new Date(activity.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                      </p>
-                    </div>
+            
+            {/* Quick Stats Bar */}
+            <div className="bg-gradient-to-r from-emerald-50 to-blue-50 rounded-lg p-3 mb-4 border border-emerald-100">
+              <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <FaStar className="w-3 h-3 text-yellow-500" />
+                  <span className="text-gray-700 font-medium">This Week</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-gray-600">{recentActivities.filter(a => a.type === 'service_completed').length} completed</span>
                   </div>
-                ))
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-gray-600">{recentActivities.filter(a => a.type === 'service_provided').length} provided</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              {activitiesLoading ? (
+                <div className="text-center py-4">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-500 mx-auto mb-2"></div>
+                  <p className="text-sm text-gray-500">Loading activities...</p>
+                </div>
+              ) : recentActivities.length === 0 ? (
+                <div className="text-center py-6">
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <FaClock className="w-6 h-6 text-gray-300" />
+                  </div>
+                  <p className="text-sm text-gray-500">No recent activity</p>
+                  <p className="text-xs text-gray-400 mt-1">Start creating services to see activity</p>
+                </div>
+              ) : (
+                recentActivities.slice(0, 5).map((activity: any, idx: number) => {
+                  const getActivityIcon = (type: string) => {
+                    switch(type) {
+                      case 'service_completed': return <FaCheck className="w-3 h-3 text-green-600" />;
+                      case 'service_provided': return <FaHandshake className="w-3 h-3 text-blue-600" />;
+                      case 'service_booked': return <FaCalendar className="w-3 h-3 text-purple-600" />;
+                      case 'review_received': return <FaStar className="w-3 h-3 text-yellow-600" />;
+                      case 'credits_earned': return <FaCoins className="w-3 h-3 text-emerald-600" />;
+                      default: return <FaCircle className="w-3 h-3 text-gray-400" />;
+                    }
+                  };
+                  
+                  const getActivityColor = (type: string) => {
+                    switch(type) {
+                      case 'service_completed': return 'bg-green-100 border-green-200';
+                      case 'service_provided': return 'bg-blue-100 border-blue-200';
+                      case 'service_booked': return 'bg-purple-100 border-purple-200';
+                      case 'review_received': return 'bg-yellow-100 border-yellow-200';
+                      case 'credits_earned': return 'bg-emerald-100 border-emerald-200';
+                      default: return 'bg-gray-100 border-gray-200';
+                    }
+                  };
+                  
+                  const getTimeAgo = (timestamp: string) => {
+                    const now = new Date();
+                    const activityTime = new Date(timestamp);
+                    const diffInMinutes = Math.floor((now.getTime() - activityTime.getTime()) / (1000 * 60));
+                    
+                    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+                    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
+                    return `${Math.floor(diffInMinutes / 1440)}d ago`;
+                  };
+                  
+                  return (
+                    <div key={activity.id || idx} className={`p-3 rounded-lg border ${getActivityColor(activity.type)} hover:shadow-sm transition-all duration-200`}>
+                      <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm">
+                          {getActivityIcon(activity.type)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between mb-1">
+                            <p className="text-sm font-semibold text-gray-900 truncate">{activity.title}</p>
+                            <span className="text-xs text-gray-500 flex-shrink-0 ml-2">{getTimeAgo(activity.timestamp)}</span>
+                          </div>
+                          <p className="text-xs text-gray-600 mb-2 line-clamp-2">{activity.description}</p>
+                          {activity.credits && (
+                            <div className="flex items-center gap-1">
+                              <FaCoins className="w-3 h-3 text-emerald-500" />
+                              <span className="text-xs font-medium text-emerald-700">+{activity.credits} credits</span>
+                            </div>
+                          )}
+                          {activity.rating && (
+                            <div className="flex items-center gap-1 mt-1">
+                              <FaStar className="w-3 h-3 text-yellow-500" />
+                              <span className="text-xs text-gray-600">{activity.rating} stars</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
               )}
+            </div>
+            
+            {/* View All Activities Button */}
+            {recentActivities.length > 5 && (
+              <div className="mt-4 text-center">
+                <button className="text-xs text-emerald-600 hover:text-emerald-800 font-medium">
+                  View all {recentActivities.length} activities →
+                </button>
+              </div>
+            )}
           </div>
-        </div>
       </div>
 
       {/* ─── new profile-completion dialog (2-step) ───────────────────────────── */}
