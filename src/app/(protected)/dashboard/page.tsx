@@ -797,6 +797,7 @@ export default function ProfileDashboardPage() {
                 showViewAll={serviceStats.recent.length > 5}
                 onViewAll={() => router.push('/my-listings')}
                 maxItems={5}
+                noPadding={true}
               />
             )}
             </div>

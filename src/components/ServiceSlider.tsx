@@ -36,6 +36,7 @@ interface ServiceSliderProps {
   showViewAll?: boolean;
   onViewAll?: () => void;
   maxItems?: number;
+  noPadding?: boolean;
 }
 
 export default function ServiceSlider({
@@ -45,7 +46,8 @@ export default function ServiceSlider({
   emptyMessage = "No services available",
   showViewAll = true,
   onViewAll,
-  maxItems = 5
+  maxItems = 5,
+  noPadding = false
 }: ServiceSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -140,7 +142,7 @@ export default function ServiceSlider({
   }
 
   return (
-    <div className="bg-white rounded-xl overflow-hidden p-6">
+    <div className={`bg-white rounded-xl overflow-hidden ${noPadding ? '' : 'p-6'}`}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-gray-900">{title}</h3>
         {showViewAll && services.length > maxItems && (
@@ -238,9 +240,15 @@ export default function ServiceSlider({
 
                 {/* Content Area */}
                 <div className="p-4 flex flex-col min-h-[180px]">
-                  {/* Category */}
-                  <div className="text-gray-500 text-sm mb-2">
-                    {category}
+                  {/* Category and Credits in one line */}
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-gray-500 text-sm">
+                      {category}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <FaCoins className="w-4 h-4 text-gray-400 inline mr-1 -mt-1" /> 
+                      <span className="text-lg font-bold text-gray-900">{price}</span>
+                    </div>
                   </div>
                   
                   {/* Title */}
@@ -255,28 +263,8 @@ export default function ServiceSlider({
                     <span className="text-xs text-gray-500">({reviews} Review)</span>
                   </div>
                   
-                  {/* Spacer to push author/price to bottom */}
+                  {/* Spacer to push content to bottom */}
                   <div className="flex-1"></div>
-                  
-                  {/* Border line */}
-                  <div className="border-t border-gray-100 my-3"></div>
-                  
-                  {/* Provider and Price in one line - always at bottom */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-semibold text-gray-600">
-                          {userName.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                      <span className="text-sm text-gray-700 font-medium">{userName}</span>
-                    </div>
-                    
-                    <div className="text-sm text-gray-600">
-                      <FaCoins className="w-4 h-4 text-gray-400 inline mr-1 -mt-1" /> 
-                      <span className="text-lg font-bold text-gray-900">{price}</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             );
