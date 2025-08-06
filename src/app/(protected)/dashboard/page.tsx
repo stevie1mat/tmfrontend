@@ -912,10 +912,27 @@ export default function ProfileDashboardPage() {
                             <span className="text-xs text-gray-500 flex-shrink-0 ml-2">{getTimeAgo(activity.timestamp)}</span>
                           </div>
                           <p className="text-xs text-gray-600 mb-2 line-clamp-2">
-                            {activity.serviceName ? 
-                              activity.description.replace('your service', `"${activity.serviceName}"`) :
-                              activity.description
-                            }
+                            {(() => {
+                              let description = activity.description;
+                              
+                              // Try to replace generic service references with actual service names
+                              if (activity.serviceTitle) {
+                                description = description.replace(/your service/g, `"${activity.serviceTitle}"`);
+                                description = description.replace(/service/g, `"${activity.serviceTitle}"`);
+                              } else if (activity.serviceName) {
+                                description = description.replace(/your service/g, `"${activity.serviceName}"`);
+                                description = description.replace(/service/g, `"${activity.serviceName}"`);
+                              } else if (activity.title && activity.title.includes('service')) {
+                                // If the title contains service info, use it
+                                const serviceMatch = activity.title.match(/"([^"]+)"/);
+                                if (serviceMatch) {
+                                  description = description.replace(/your service/g, `"${serviceMatch[1]}"`);
+                                  description = description.replace(/service/g, `"${serviceMatch[1]}"`);
+                                }
+                              }
+                              
+                              return description;
+                            })()}
                           </p>
                           {activity.credits && (
                             <div className="flex items-center gap-1">
