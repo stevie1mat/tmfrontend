@@ -383,7 +383,7 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
             Exchange Skills. Earn Time Credits.
           </h1>
           <p className="text-gray-200 text-sm md:text-base mb-10 text-center sm:text-left max-w-4xl sm:whitespace-nowrap">
-            TradeMinutes lets you help others and get help in return — no money involved, just your time.
+            TradeMinutes lets you help others and get help in return — no money involved, just your time. Plus, discover AI agents to automate your tasks.
           </p>
                      {/* SEARCH BAR */}
            <div className="w-full max-w-2xl mb-10 relative z-20 px-4 sm:px-0">
@@ -450,6 +450,10 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
              <div className="text-center min-w-[80px] sm:min-w-[100px]">
                <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">200+</div>
                <div className="text-gray-200 text-xs sm:text-sm mt-1">Cities Covered</div>
+             </div>
+             <div className="text-center min-w-[80px] sm:min-w-[100px]">
+               <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">500+</div>
+               <div className="text-gray-200 text-xs sm:text-sm mt-1">AI Agents</div>
              </div>
            </div>
         </div>
