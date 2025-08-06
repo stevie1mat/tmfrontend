@@ -911,7 +911,12 @@ export default function ProfileDashboardPage() {
                             <p className="text-sm font-semibold text-gray-900 truncate">{activity.title}</p>
                             <span className="text-xs text-gray-500 flex-shrink-0 ml-2">{getTimeAgo(activity.timestamp)}</span>
                           </div>
-                          <p className="text-xs text-gray-600 mb-2 line-clamp-2">{activity.description}</p>
+                          <p className="text-xs text-gray-600 mb-2 line-clamp-2">
+                            {activity.serviceName ? 
+                              activity.description.replace('your service', `"${activity.serviceName}"`) :
+                              activity.description
+                            }
+                          </p>
                           {activity.credits && (
                             <div className="flex items-center gap-1">
                               <FaCoins className="w-3 h-3 text-emerald-500" />
