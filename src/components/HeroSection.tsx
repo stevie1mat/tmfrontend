@@ -59,8 +59,8 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
     {
       main: "https://demoapus1.com/freeio/wp-content/uploads/2022/09/bg-video-410x410.png",
       overlapping: "https://demoapus1.com/freeio/wp-content/uploads/2022/11/service2.jpg",
-      popupTitle: "Trusted Community",
-      popupSubtitle: "Real people, real skills",
+      popupTitle: "AI Agent Dashboard",
+      popupSubtitle: "Task automation & chat interface",
       popupIcon: FaUsers,
       popupIconColor: "text-blue-500",
       popupBgColor: "bg-blue-100"
@@ -380,10 +380,10 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
         
         <div className="flex flex-col items-start sm:items-start">
           <h1 className="text-white font-bold leading-tight mb-3 text-center sm:text-left" style={{ fontSize: '40px' }}>
-            Exchange Skills. Earn Time Credits.
+            Exchange Skills. Earn Time Credits
           </h1>
           <p className="text-gray-200 text-sm md:text-base mb-10 text-center sm:text-left max-w-4xl sm:whitespace-nowrap">
-            TradeMinutes lets you help others and get help in return — no money involved, just your time. Plus, discover AI agents to automate your tasks.
+            Connect with skilled humans or powerful AI agents. No money needed.
           </p>
                      {/* SEARCH BAR */}
            <div className="w-full max-w-2xl mb-10 relative z-20 px-4 sm:px-0">
@@ -444,10 +444,6 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
                <div className="text-gray-200 text-xs sm:text-sm mt-1">Successful Trades</div>
              </div>
              <div className="text-center min-w-[80px] sm:min-w-[100px]">
-               <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">4.8</div>
-               <div className="text-gray-200 text-xs sm:text-sm mt-1">Average Rating</div>
-             </div>
-             <div className="text-center min-w-[80px] sm:min-w-[100px]">
                <div className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl">200+</div>
                <div className="text-gray-200 text-xs sm:text-sm mt-1">Cities Covered</div>
              </div>
@@ -461,62 +457,272 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
         <div className="hidden sm:flex absolute right-0 top-1/2 transform -translate-y-1/2 items-center justify-center min-h-[500px] z-10">
           {/* IMAGE CARDS */}
           <div className="relative w-[370px] h-[480px]">
-            {/* Main image */}
-            <img
-              src={heroImages[currentImageIndex].main}
-              alt="service"
-              className={`absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl transition-all duration-1200 ease-in-out ${
-                isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-              }`}
-              style={{zIndex: 0}}
-            />
-            {/* Overlapping image */}
-            <img
-              src={heroImages[currentImageIndex].overlapping}
-              alt="service"
-              className={`absolute left-32 top-24 w-[400px] h-[300px] object-cover rounded-2xl shadow-lg transition-all duration-1200 ease-in-out ${
-                isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-              }`}
-              style={{zIndex: 1}}
-            />
-                               {/* Proof of quality popup */}
-                   <div className={`absolute left-26 -top-14 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[280px] animate-slide-in-left transition-all duration-1200 ease-in-out ${
-                     isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-                   }`} style={{zIndex: 3}}>
-                     <span className={`${heroImages[currentImageIndex].popupBgColor} rounded-full p-2`}>
-                       {React.createElement(heroImages[currentImageIndex].popupIcon, {
-                         className: `${heroImages[currentImageIndex].popupIconColor} w-6 h-6`
-                       })}
-                     </span>
-                     <div>
-                       <div className="font-semibold text-gray-900">{heroImages[currentImageIndex].popupTitle}</div>
-                       <div className="text-gray-500 text-sm">{heroImages[currentImageIndex].popupSubtitle}</div>
-                     </div>
-                   </div>
-            {/* Safe and secure popup */}
-            {/* <div className="absolute right-10 bottom-8 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[220px]" style={{zIndex: 3}}>
-              <span className="bg-green-100 rounded-full p-2">
-                <FaCheckCircle className="text-green-500 w-6 h-6" />
+            {currentImageIndex === 0 || currentImageIndex === 1 ? (
+              // AI Agent Dashboard for slides 1 and 2
+              <>
+                {currentImageIndex === 0 ? (
+                  // Slide 1: Original image + AI Agent Marketplace widget
+                  <>
+                    {/* Main image - Keep original */}
+                    <img
+                      src={heroImages[currentImageIndex].main}
+                      alt="service"
+                      className={`absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl transition-all duration-1200 ease-in-out ${
+                        isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                      }`}
+                      style={{zIndex: 0}}
+                    />
+                    
+                    {/* Overlapping AI Agent Marketplace - Replace second image */}
+                    <div className={`absolute left-32 top-24 w-[400px] h-[300px] bg-white rounded-2xl shadow-2xl transition-all duration-1200 ease-in-out ${
+                      isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                    }`} style={{zIndex: 1}}>
+                      <div className="p-6">
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <span className="text-sm font-semibold text-gray-800">AI Agent Marketplace</span>
+                          </div>
+                          <div className="text-xs text-emerald-600 font-medium">500+ Agents</div>
+                        </div>
+                        
+                        {/* Agent Categories */}
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <div className="relative">
+                                <img 
+                                  src="https://images.stockcake.com/public/4/1/6/41687207-ae33-4e0a-93e2-7abea5433d93_large/autumn-cabin-retreat-stockcake.jpg" 
+                                  alt="Scheduling Assistant"
+                                  className="w-8 h-8 rounded-lg object-cover border-2 border-emerald-200"
+                                />
+                                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border border-white"></div>
+                              </div>
+                              <div>
+                                <div className="text-xs font-medium text-gray-800">Scheduling Assistant</div>
+                                <div className="text-xs text-gray-500">Automate calendar management</div>
+                              </div>
+                            </div>
+                            <div className="text-xs text-emerald-600 font-medium">Active</div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <div className="relative">
+                                <img 
+                                  src="https://images.stockcake.com/public/3/b/8/3b8e562e-ebde-4582-b629-9ffff40099de_large/mystic-astral-gateway-stockcake.jpg" 
+                                  alt="Data Analyzer"
+                                  className="w-8 h-8 rounded-lg object-cover border-2 border-blue-200"
+                                />
+                                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border border-white"></div>
+                              </div>
+                              <div>
+                                <div className="text-xs font-medium text-gray-800">Data Analyzer</div>
+                                <div className="text-xs text-gray-500">Process and analyze data</div>
+                              </div>
+                            </div>
+                            <div className="text-xs text-blue-600 font-medium">Active</div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <div className="relative">
+                                <img 
+                                  src="https://images.stockcake.com/public/7/b/8/7b87c790-b431-4a41-8442-12a226b4c231_large/neon-urban-reflections-stockcake.jpg" 
+                                  alt="Content Creator"
+                                  className="w-8 h-8 rounded-lg object-cover border-2 border-purple-200"
+                                />
+                                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-purple-500 rounded-full border border-white"></div>
+                              </div>
+                              <div>
+                                <div className="text-xs font-medium text-gray-800">Content Creator</div>
+                                <div className="text-xs text-gray-500">Generate creative content</div>
+                              </div>
+                            </div>
+                            <div className="text-xs text-purple-600 font-medium">Active</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  // Slide 2: AI Agent Dashboard (existing code)
+                  <>
+                    {/* Main AI Agent Dashboard - Detailed */}
+                    <div className={`absolute -left-30 -top-20 w-[270px] h-[380px] bg-white rounded-2xl shadow-2xl transition-all duration-1200 ease-in-out ${
+                      isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                    }`} style={{zIndex: 0}}>
+                      <div className="p-6">
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                            <span className="text-sm font-semibold text-gray-800">AI Agent Dashboard</span>
+                          </div>
+                          <div className="text-xs text-gray-400">LIVE</div>
+                        </div>
+                        
+                        {/* Stats Grid */}
+                        <div className="grid grid-cols-2 gap-3 mb-4">
+                          <div className="bg-emerald-50 rounded-lg p-3">
+                            <div className="text-xs text-gray-500 mb-1">Response Time</div>
+                            <div className="text-lg font-bold text-emerald-600">1.2s</div>
+                          </div>
+                          <div className="bg-blue-50 rounded-lg p-3">
+                            <div className="text-xs text-gray-500 mb-1">Success Rate</div>
+                            <div className="text-lg font-bold text-blue-600">98.5%</div>
+                          </div>
+                          <div className="bg-purple-50 rounded-lg p-3">
+                            <div className="text-xs text-gray-500 mb-1">Tasks Completed</div>
+                            <div className="text-lg font-bold text-purple-600">1,247</div>
+                          </div>
+                          <div className="bg-orange-50 rounded-lg p-3">
+                            <div className="text-xs text-gray-500 mb-1">Active Users</div>
+                            <div className="text-lg font-bold text-orange-600">2.3K</div>
+                          </div>
+                        </div>
+                        
+                        {/* Performance Chart */}
+                        <div className="mb-4">
+                          <div className="text-xs text-gray-500 mb-2">Performance Trend</div>
+                          <svg width="100%" height="60" viewBox="0 0 200 60" fill="none">
+                            <polyline points="0,50 30,30 60,20 90,35 120,25 150,15 180,10 200,5" fill="none" stroke="#22c55e" strokeWidth="2" />
+                            <circle cx="180" cy="10" r="3" fill="#22c55e" />
+                            <circle cx="200" cy="5" r="3" fill="#22c55e" />
+                          </svg>
+                          <div className="flex justify-between text-xs text-gray-400 mt-1">
+                            <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span>
+                          </div>
+                        </div>
+                        
+
+                      </div>
+                    </div>
+                    
+                    {/* Overlapping AI Chat Interface - Detailed */}
+                    <div className={`absolute left-32 top-24 w-[400px] h-[300px] bg-white rounded-2xl shadow-2xl transition-all duration-1200 ease-in-out ${
+                      isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                    }`} style={{zIndex: 1}}>
+                      <div className="p-6">
+                        {/* Chat Header */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <span className="text-sm font-semibold text-gray-800">AI Chat Interface</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                            <span className="text-xs text-emerald-600">Online</span>
+                          </div>
+                        </div>
+                        
+                        {/* Chat Messages */}
+                        <div className="space-y-3 mb-4">
+                          <div className="flex items-start gap-2">
+                            <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                              </svg>
+                            </div>
+                            <div className="bg-emerald-50 rounded-lg p-3 max-w-[80%]">
+                              <div className="text-xs text-emerald-600 font-medium mb-1">AI Agent</div>
+                              <div className="text-xs text-gray-700">How can I help you today?</div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start gap-2 justify-end">
+                            <div className="bg-blue-50 rounded-lg p-3 max-w-[80%]">
+                              <div className="text-xs text-blue-600 font-medium mb-1">User</div>
+                              <div className="text-xs text-gray-700">Need help with scheduling</div>
+                            </div>
+                            <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                              </svg>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start gap-2">
+                            <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                              </svg>
+                            </div>
+                            <div className="bg-emerald-50 rounded-lg p-3 max-w-[80%]">
+                              <div className="text-xs text-emerald-600 font-medium mb-1">AI Agent</div>
+                              <div className="text-xs text-gray-700">I'll help you schedule that!</div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Typing Indicator */}
+                        <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                          <div className="flex gap-1">
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                          </div>
+                          <span className="text-xs text-gray-500">AI Agent is typing...</span>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              // Original images for other slides
+              <>
+                {/* Main image */}
+                <img
+                  src={heroImages[currentImageIndex].main}
+                  alt="service"
+                  className={`absolute -left-30 -top-20 w-[270px] h-[380px] object-cover rounded-2xl shadow-xl transition-all duration-1200 ease-in-out ${
+                    isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                  }`}
+                  style={{zIndex: 0}}
+                />
+                {/* Overlapping image */}
+                <img
+                  src={heroImages[currentImageIndex].overlapping}
+                  alt="service"
+                  className={`absolute left-32 top-24 w-[400px] h-[300px] object-cover rounded-2xl shadow-lg transition-all duration-1200 ease-in-out ${
+                    isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                  }`}
+                  style={{zIndex: 1}}
+                />
+              </>
+            )}
+            
+            {/* Proof of quality popup */}
+            <div className={`absolute left-26 -top-14 bg-white rounded-xl shadow-lg px-6 py-4 flex items-center gap-3 min-w-[280px] animate-slide-in-left transition-all duration-1200 ease-in-out ${
+              isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+            }`} style={{zIndex: 3}}>
+              <span className={`${heroImages[currentImageIndex].popupBgColor} rounded-full p-2`}>
+                {React.createElement(heroImages[currentImageIndex].popupIcon, {
+                  className: `${heroImages[currentImageIndex].popupIconColor} w-6 h-6`
+                })}
               </span>
               <div>
-                <div className="font-semibold text-gray-900">Safe and secure</div>
-                <div className="text-gray-500 text-sm">Lorem Ipsum Dolar Amet</div>
+                <div className="font-semibold text-gray-900">{heroImages[currentImageIndex].popupTitle}</div>
+                <div className="text-gray-500 text-sm">{heroImages[currentImageIndex].popupSubtitle}</div>
               </div>
-            </div> */}
-                               {/* Professionals bar */}
-                   <div className="absolute left-0 -bottom-6 flex items-center bg-white rounded-full shadow-lg px-6 py-3 min-w-[270px] gap-4 animate-slide-in-right" style={{zIndex: 4}}>
-                     <span className="font-semibold text-gray-800">58M+ Professionals</span>
-                     <div className="flex -space-x-2">
-                       {AVATARS.map((src, i) => (
-                         <img
-                           key={i}
-                           src={src}
-                           alt="avatar"
-                           className="w-10 h-10 rounded-full border-2 border-white object-cover"
-                         />
-                       ))}
-                     </div>
-                   </div>
+            </div>
+            
+            {/* Professionals bar */}
+            <div className="absolute left-0 -bottom-6 flex items-center bg-white rounded-full shadow-lg px-6 py-3 min-w-[270px] gap-4 animate-slide-in-right" style={{zIndex: 4}}>
+              <span className="font-semibold text-gray-800">58M+ Professionals</span>
+              <div className="flex -space-x-2">
+                {AVATARS.map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt="avatar"
+                    className="w-10 h-10 rounded-full border-2 border-white object-cover"
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
