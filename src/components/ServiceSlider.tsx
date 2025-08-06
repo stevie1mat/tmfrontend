@@ -239,7 +239,7 @@ export default function ServiceSlider({
                 </div>
 
                 {/* Content Area */}
-                <div className="p-4 flex flex-col min-h-[180px]">
+                <div className="p-4 flex flex-col min-h-[140px]">
                   {/* Category and Credits in one line */}
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-gray-500 text-sm">
@@ -257,14 +257,11 @@ export default function ServiceSlider({
                   </h4>
                   
                   {/* Rating */}
-                  <div className="flex items-center gap-1 mb-4">
+                  <div className="flex items-center gap-1">
                     <FaStar className="w-4 h-4 text-yellow-400" />
                     <span className="text-sm font-semibold text-gray-900">{rating}</span>
                     <span className="text-xs text-gray-500">({reviews} Review)</span>
                   </div>
-                  
-                  {/* Spacer to push content to bottom */}
-                  <div className="flex-1"></div>
                 </div>
               </div>
             );
