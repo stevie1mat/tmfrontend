@@ -137,6 +137,10 @@ export default function ServiceViewPage() {
   // Check if user has already booked this service
   const checkIfUserHasBooked = async () => {
     if (!user || !service || !token) {
+      console.log('🔍 checkIfUserHasBooked: Missing user, service, or token');
+      console.log('User:', user);
+      console.log('Service:', service);
+      console.log('Token:', token ? 'Present' : 'Missing');
       setHasBooked(false);
       return;
     }
@@ -146,67 +150,47 @@ export default function ServiceViewPage() {
       const serviceId = service.ID || service.id;
       const userId = user.ID || user.id;
 
-      console.log('=== CHECKING IF USER HAS BOOKED ===');
+      console.log('🔍 checkIfUserHasBooked: Checking booking status');
       console.log('Service ID:', serviceId);
       console.log('User ID:', userId);
-      console.log('API URL:', `${API_BASE_URL}/api/bookings?role=booker&id=${userId}`);
+      console.log('API URL:', `${API_BASE_URL}/api/bookings/user/${userId}/service/${serviceId}`);
 
-      // Use the same endpoint as other booking pages
-      const res = await fetch(`${API_BASE_URL}/api/bookings?role=booker&id=${userId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/bookings/user/${userId}/service/${serviceId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      console.log('Response status:', res.status);
-      console.log('Response ok:', res.ok);
+      console.log('📡 Booking check response status:', res.status);
 
       if (res.ok) {
-        const data = await res.json();
-        console.log('Raw bookings response:', data);
+        const bookings = await res.json();
+        console.log('📋 All bookings for user:', bookings);
         
-        // Handle different response structures safely
-        let bookingsArray = [];
-        if (data && typeof data === 'object') {
-          if (Array.isArray(data)) {
-            bookingsArray = data;
-          } else if (data.data && Array.isArray(data.data)) {
-            bookingsArray = data.data;
-          } else if (data.bookings && Array.isArray(data.bookings)) {
-            bookingsArray = data.bookings;
-          } else {
-            console.warn("Unexpected data structure:", data);
-            bookingsArray = [];
-          }
-        }
-        
-        console.log('Processed bookings array:', bookingsArray);
-        
-        const hasExistingBooking = bookingsArray.some((booking: any) => {
-          const bookingTaskId = booking.taskId || booking.task_id;
-          const bookingStatus = booking.status?.toLowerCase();
-          const isMatchingService = bookingTaskId === serviceId;
-          const isValidStatus = ['pending', 'confirmed', 'completed'].includes(bookingStatus);
-          
-          console.log('Checking booking:', {
-            bookingTaskId,
-            serviceId,
-            bookingStatus,
+        const hasExistingBooking = bookings.some((booking: any) => {
+          const isMatchingService = booking.taskId === serviceId;
+          const isValidStatus = ['pending', 'confirmed', 'completed'].includes(booking.status?.toLowerCase());
+          console.log('🔍 Booking check:', {
+            bookingId: booking.id || booking.ID,
+            taskId: booking.taskId,
+            serviceId: serviceId,
+            status: booking.status,
             isMatchingService,
-            isValidStatus
+            isValidStatus,
+            matches: isMatchingService && isValidStatus
           });
-          
           return isMatchingService && isValidStatus;
         });
         
-        console.log('Has existing booking:', hasExistingBooking);
+        console.log('✅ Has existing booking:', hasExistingBooking);
         setHasBooked(hasExistingBooking);
       } else {
-        console.log('Response not ok, setting hasBooked to false');
+        const errorText = await res.text();
+        console.error('❌ Booking check failed:', res.status, errorText);
         setHasBooked(false);
       }
     } catch (error) {
-      console.error('Error checking if user has booked:', error);
+      console.error('❌ Error checking if user has booked:', error);
       setHasBooked(false);
     }
   };
@@ -445,22 +429,23 @@ export default function ServiceViewPage() {
     }
   }, [params?.id]);
 
-  // Re-check booking status when user or service changes
+  // Check booking status when user or token changes
   useEffect(() => {
-    if (user && service && token && !loading) {
+    if (user && service && token) {
+      console.log('🔄 User/token changed, re-checking booking status');
       checkIfUserHasBooked();
     }
-  }, [user, service, token, loading]);
+  }, [user, service, token]);
 
   const handleOrder = () => {
-    console.log('=== HANDLE ORDER CALLED ===');
+    console.log('🎯 handleOrder called');
+    console.log('Token:', token ? 'Present' : 'Missing');
     console.log('hasBooked:', hasBooked);
     console.log('isOwnService:', isOwnService());
-    console.log('token:', token ? 'Present' : 'Missing');
     
     // Prevent booking if it's own service (highest priority)
     if (isOwnService()) {
-      console.log('User is the service provider, preventing booking');
+      console.log('Cannot book your own service');
       alert('You cannot book your own service.');
       return;
     }
@@ -473,9 +458,11 @@ export default function ServiceViewPage() {
     }
     
     if (!token) {
+      console.log('No token, opening auth modal');
       setPendingAction('book');
       setIsAuthModalOpen(true);
     } else {
+      console.log('Token present, opening booking modal');
       setIsBookingModalOpen(true);
     }
   };
@@ -1191,17 +1178,23 @@ export default function ServiceViewPage() {
                   </div>
                 )}
 
+                {/* Debug Section */}
+                {process.env.NODE_ENV === 'development' && (
+                  <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <h4 className="font-medium text-yellow-800 mb-2">Debug Info:</h4>
+                    <div className="text-sm text-yellow-700 space-y-1">
+                      <div>hasBooked: {hasBooked.toString()}</div>
+                      <div>isOwnService: {isOwnService().toString()}</div>
+                      <div>UserID: {user?.ID || user?.id || 'Not logged in'}</div>
+                      <div>ServiceAuthorID: {service?.Author?.ID || service?.Author?.id || service?.author?.id || 'Unknown'}</div>
+                      <div>ServiceID: {service?.ID || service?.id || 'Unknown'}</div>
+                      <div>Token: {token ? 'Present' : 'Missing'}</div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="space-y-3 mt-6">
-                  {/* Debug info - remove in production */}
-                  {process.env.NODE_ENV === 'development' && (
-                    <div className="text-xs text-gray-500 bg-gray-100 p-2 rounded">
-                      Debug: hasBooked={hasBooked.toString()}, isOwnService={isOwnService().toString()}, 
-                      UserID={user?.ID || user?.id || 'none'}, 
-                      ServiceAuthorID={service?.Author?.ID || service?.Author?.id || service?.author?.id || 'none'}
-                    </div>
-                  )}
-                  
                   {isOwnService() ? (
                     <div className="text-center py-8">
                       <p className="text-gray-500">You are the service provider. You cannot book or contact yourself.</p>
@@ -1340,22 +1333,13 @@ export default function ServiceViewPage() {
       {/* Booking Modal */}
       <BookingModal
         isOpen={isBookingModalOpen}
-        onClose={() => {
-          setIsBookingModalOpen(false);
-          // Re-check booking status when modal closes
-          if (user && service && token) {
-            setTimeout(() => {
-              checkIfUserHasBooked();
-            }, 1000); // Small delay to ensure booking is processed
-          }
-        }}
+        onClose={() => setIsBookingModalOpen(false)}
         service={service}
         selectedTier={selectedTier}
         onBookingSuccess={() => {
-          // Update booking status immediately
+          // Update booking status instead of reloading
           setHasBooked(true);
           setIsBookingModalOpen(false);
-          console.log('Booking successful, hasBooked set to true');
         }}
       />
 
@@ -1380,12 +1364,6 @@ export default function ServiceViewPage() {
             setIsChatBoxOpen(true);
             fetchConversationHistory();
           } else if (pendingAction === 'book') {
-            // Double-check: don't allow booking if it's own service
-            if (isOwnService()) {
-              console.log('Cannot book your own service after login - service owner');
-              setPendingAction(null);
-              return;
-            }
             setIsBookingModalOpen(true);
           }
           
