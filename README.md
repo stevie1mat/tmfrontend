@@ -211,7 +211,7 @@ TradeMinutes follows a **microservices architecture** pattern for scalability an
 ## 📸 Screenshots
 
 ### 🏠 Homepage
-![Homepage](screenshots/homepage.png)
+![Homepage](screenshots/homepage_new.png)
 
 *Beautiful hero section with search functionality and category browsing*
 
