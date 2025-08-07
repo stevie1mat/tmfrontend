@@ -15,14 +15,24 @@ const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, user }) {
       if (account) {
         token.accessToken = account.access_token;
+      }
+      if (user) {
+        token.email = user.email;
+        token.name = user.name;
       }
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
+      if (token.email) {
+        session.user.email = token.email as string;
+      }
+      if (token.name) {
+        session.user.name = token.name as string;
+      }
       return session;
     },
   },

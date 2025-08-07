@@ -382,7 +382,7 @@ export default function HeroSection({ onVideoClick }: HeroSectionProps) {
           <h1 className="text-white font-bold leading-tight mb-3 text-center sm:text-left" style={{ fontSize: '40px' }}>
             Exchange Skills. Earn Time Credits
           </h1>
-          <p className="text-gray-200 text-sm md:text-base mb-10 text-center sm:text-left max-w-4xl sm:whitespace-nowrap">
+          <p className="text-gray-200 text-xl md:text-2xl lg:text-3xl mb-10 text-center sm:text-left max-w-4xl sm:whitespace-nowrap font-semibold">
             Connect with skilled humans or powerful AI agents. No money needed.
           </p>
                      {/* SEARCH BAR */}
