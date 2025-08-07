@@ -1381,6 +1381,21 @@ export default function ServiceViewPage() {
             setIsChatBoxOpen(true);
             fetchConversationHistory();
           } else if (pendingAction === 'book') {
+            // Double-check: don't allow booking if it's own service
+            if (isOwnService()) {
+              console.log('Cannot book your own service after login - service owner');
+              setPendingAction(null);
+              return;
+            }
+            
+            // Double-check: don't allow booking if already booked
+            if (hasBooked) {
+              console.log('User has already booked this service after login, preventing booking');
+              alert('You have already booked this service.');
+              setPendingAction(null);
+              return;
+            }
+            
             setIsBookingModalOpen(true);
           }
           
