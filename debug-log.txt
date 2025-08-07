@@ -33144,3 +33144,125 @@ Data: {
   }
 }
 
+[2025-08-07T17:19:16.868Z] TIERS PARSING START
+Data: {
+  "originalTiersData": [
+    {
+      "name": "Basic",
+      "title": "I will help with shopping",
+      "description": "I will help with shopping",
+      "credits": 30,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will help with shopping",
+      "description": "I will help with shopping",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will help with shopping",
+      "description": "I will help with shopping",
+      "credits": 90,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "originalType": "object"
+}
+
+[2025-08-07T17:19:16.814Z] TIERS DEBUG START
+Data: {
+  "tiersProperty": [
+    {
+      "name": "Basic",
+      "title": "I will help with shopping",
+      "description": "I will help with shopping",
+      "credits": 30,
+      "features": [],
+      "availableTimeSlot": "9:00 AM - 5:00 PM",
+      "maxDays": 7
+    },
+    {
+      "name": "Standard",
+      "title": "I will help with shopping",
+      "description": "I will help with shopping",
+      "credits": 60,
+      "features": [],
+      "availableTimeSlot": "8:00 AM - 6:00 PM",
+      "maxDays": 14
+    },
+    {
+      "name": "Premium",
+      "title": "I will help with shopping",
+      "description": "I will help with shopping",
+      "credits": 90,
+      "features": [],
+      "availableTimeSlot": "24/7 Available",
+      "maxDays": 30
+    }
+  ],
+  "tiersType": "object",
+  "tiersTypeLowercase": "undefined",
+  "tiersIsArray": true,
+  "tiersIsArrayLowercase": false,
+  "tiersLength": 3,
+  "firstTier": {
+    "name": "Basic",
+    "title": "I will help with shopping",
+    "description": "I will help with shopping",
+    "credits": 30,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  }
+}
+
+[2025-08-07T17:19:16.868Z] FINAL TIERS DATA SET
+Data: [
+  {
+    "name": "Basic",
+    "title": "I will help with shopping",
+    "description": "I will help with shopping",
+    "credits": 30,
+    "features": [],
+    "availableTimeSlot": "9:00 AM - 5:00 PM",
+    "maxDays": 7
+  },
+  {
+    "name": "Standard",
+    "title": "I will help with shopping",
+    "description": "I will help with shopping",
+    "credits": 60,
+    "features": [],
+    "availableTimeSlot": "8:00 AM - 6:00 PM",
+    "maxDays": 14
+  },
+  {
+    "name": "Premium",
+    "title": "I will help with shopping",
+    "description": "I will help with shopping",
+    "credits": 90,
+    "features": [],
+    "availableTimeSlot": "24/7 Available",
+    "maxDays": 30
+  }
+]
+
+[2025-08-07T17:19:16.868Z] SET INITIAL SELECTED TIER
+Data: {
+  "selectedTier": "Basic",
+  "availableTiers": [
+    "Basic",
+    "Standard",
+    "Premium"
+  ]
+}
+
