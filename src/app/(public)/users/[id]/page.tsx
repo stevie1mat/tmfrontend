@@ -268,7 +268,7 @@ export default function UserProfilePage() {
       let totalTasks = 0;
       let respondedTasks = 0;
       let totalReviews = 0;
-      let memberSince = '2024';
+      let memberSince = '2025';
       
       // Fetch user's tasks with error handling
       try {
@@ -350,7 +350,7 @@ export default function UserProfilePage() {
         totalReviews: 0,
         responseRate: 0,
         avgResponseTime: 2,
-        memberSince: '2024'
+        memberSince: '2025'
       });
     } finally {
       setStatsLoading(false);

@@ -157,12 +157,12 @@ export default function ServiceAnalyticsPage() {
           },
           availability: [
             {
-              date: "2024-12-15",
+              date: "2025-12-15",
               timeFrom: "09:00",
               timeTo: "17:00"
             },
             {
-              date: "2024-12-16",
+              date: "2025-12-16",
               timeFrom: "10:00",
               timeTo: "18:00"
             }

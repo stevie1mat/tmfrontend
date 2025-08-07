@@ -102,7 +102,7 @@ export default function EarningsDashboardPage() {
       totalClients: 31,
       repeatClients: 12,
       averageServicePrice: 67.80,
-      topEarningMonth: "December 2024",
+              topEarningMonth: "December 2025",
       topEarningDay: "Wednesday",
       conversionRate: 89.4,
       responseTime: 2.3,
@@ -115,7 +115,7 @@ export default function EarningsDashboardPage() {
         title: "Web Development Consultation",
         category: "Technology",
         earnings: 150.00,
-        date: "2024-12-15",
+        date: "2025-12-15",
         client: "Sarah Johnson",
         rating: 5,
         status: "completed"
@@ -125,7 +125,7 @@ export default function EarningsDashboardPage() {
         title: "Logo Design Package",
         category: "Design",
         earnings: 85.00,
-        date: "2024-12-14",
+        date: "2025-12-14",
         client: "Mike Chen",
         rating: 4,
         status: "completed"
@@ -135,7 +135,7 @@ export default function EarningsDashboardPage() {
         title: "Content Writing - Blog Posts",
         category: "Writing",
         earnings: 120.00,
-        date: "2024-12-13",
+        date: "2025-12-13",
         client: "Emily Davis",
         rating: 5,
         status: "completed"
@@ -145,7 +145,7 @@ export default function EarningsDashboardPage() {
         title: "Social Media Management",
         category: "Marketing",
         earnings: 95.00,
-        date: "2024-12-12",
+        date: "2025-12-12",
         client: "David Wilson",
         rating: 4,
         status: "pending"
@@ -155,7 +155,7 @@ export default function EarningsDashboardPage() {
         title: "Photography Session",
         category: "Photography",
         earnings: 200.00,
-        date: "2024-12-11",
+        date: "2025-12-11",
         client: "Lisa Brown",
         rating: 5,
         status: "completed"

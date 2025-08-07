@@ -133,7 +133,7 @@ export default function ResetPasswordClient() {
             </button>
           </p>
         </div>
-        <div className="absolute bottom-4 left-0 w-full text-center text-xs text-gray-400">©2024 TradeMinutes. All rights reserved.</div>
+        <div className="absolute bottom-4 left-0 w-full text-center text-xs text-gray-400">©2025 TradeMinutes. All rights reserved.</div>
       </div>
       {/* Right: Illustration & Message */}
       <div className={`hidden md:flex flex-1 items-stretch min-h-screen bg-gradient-to-br from-[#22c55e] via-[#16a34a] to-[#134e2f] relative overflow-hidden transition-all duration-200 ${loading || success ? 'blur-sm pointer-events-none select-none' : ''}`}>

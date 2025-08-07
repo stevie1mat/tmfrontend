@@ -449,7 +449,7 @@ function CreditsPage() {
               category: "Technology",
               date: Date.now() - 86400000 * 2,
               status: 'completed',
-              reference: "TXN-2024-001",
+              reference: "TXN-2025-001",
               serviceId: "service1",
               clientName: "Sarah Johnson",
               tags: ['consultation', 'web-development', 'completed']
@@ -462,7 +462,7 @@ function CreditsPage() {
               category: "Design",
               date: Date.now() - 86400000 * 5,
               status: 'completed',
-              reference: "TXN-2024-002",
+              reference: "TXN-2025-002",
               serviceId: "service2",
               clientName: "Mike Chen",
               tags: ['design', 'ui-ux', 'completed']
@@ -488,11 +488,11 @@ function CreditsPage() {
             { category: "Mobile App Development", amount: 230, percentage: 23 }
           ],
           recentActivity: [
-            { date: "Dec 15, 2024", earned: 150, spent: 0, bonus: 0, description: "Provided: Web Development Service", type: "earned" },
-            { date: "Dec 14, 2024", earned: 0, spent: 75, bonus: 0, description: "Booked: Graphic Design Service", type: "spent" },
-            { date: "Dec 12, 2024", earned: 300, spent: 0, bonus: 0, description: "Provided: Mobile App Development", type: "earned" },
-            { date: "Dec 10, 2024", earned: 0, spent: 120, bonus: 0, description: "Booked: SEO Consultation", type: "spent" },
-            { date: "Dec 8, 2024", earned: 200, spent: 0, bonus: 0, description: "Provided: UI/UX Design", type: "earned" }
+                    { date: "Dec 15, 2025", earned: 150, spent: 0, bonus: 0, description: "Provided: Web Development Service", type: "earned" },
+        { date: "Dec 14, 2025", earned: 0, spent: 75, bonus: 0, description: "Booked: Graphic Design Service", type: "spent" },
+        { date: "Dec 12, 2025", earned: 300, spent: 0, bonus: 0, description: "Provided: Mobile App Development", type: "earned" },
+        { date: "Dec 10, 2025", earned: 0, spent: 120, bonus: 0, description: "Booked: SEO Consultation", type: "spent" },
+        { date: "Dec 8, 2025", earned: 200, spent: 0, bonus: 0, description: "Provided: UI/UX Design", type: "earned" }
           ],
           achievements: [
             { title: "First Earnings", description: "Earned your first credits", icon: "FaStar", unlocked: true },
