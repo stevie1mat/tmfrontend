@@ -703,11 +703,24 @@ function SidebarNodeEditForm({ node, onSave, onCancel, runWorkflow, runLoading, 
         });
       });
     } else if (fileType === 'xlsx') {
-      import('xlsx').then(XLSX => {
-        const ws = XLSX.utils.aoa_to_sheet([[form.title || 'Generated Output'], [form.value]]);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, (form.title || 'output') + '.xlsx');
+      import('exceljs').then(ExcelJS => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Sheet1');
+        
+        // Add data to worksheet
+        worksheet.addRow([form.title || 'Generated Output']);
+        worksheet.addRow([form.value]);
+        
+        // Generate and download file
+        workbook.xlsx.writeBuffer().then((buffer: any) => {
+          const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = (form.title || 'output') + '.xlsx';
+          a.click();
+          URL.revokeObjectURL(url);
+        });
       });
     } else {
       alert('Unsupported file type: ' + fileType);
