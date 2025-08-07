@@ -401,7 +401,13 @@ export default function ServiceViewPage() {
         
         // Fetch real reviews for this service
         if (data.Author?.ID || data.Author?.id) {
-          fetchReviews(data.Author.ID || data.Author.id);
+          try {
+            await fetchReviews(data.Author.ID || data.Author.id);
+          } catch (error) {
+            console.error("Error fetching reviews:", error);
+            // Don't fail the entire service load if reviews fail
+            setReviews([]);
+          }
         }
 
         // Check if user has already booked this service
@@ -475,19 +481,30 @@ export default function ServiceViewPage() {
   const fetchReviews = async (authorId: string) => {
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086';
+      console.log('🔍 Fetching reviews for author:', authorId);
+      console.log('🔍 Review API URL:', `${API_BASE_URL}/api/reviews?revieweeId=${authorId}`);
+      
       const response = await fetch(`${API_BASE_URL}/api/reviews?revieweeId=${authorId}`);
+      
+      console.log('📡 Review response status:', response.status);
       
       if (response.ok) {
         const data = await response.json();
         const reviewsData = Array.isArray(data) ? data : data.data || [];
         setReviews(reviewsData);
-        console.log("Fetched reviews:", reviewsData);
+        console.log("✅ Fetched reviews:", reviewsData);
       } else {
-        console.log("No reviews found or error fetching reviews");
+        const errorText = await response.text();
+        console.log("❌ Review API error:", response.status, errorText);
         setReviews([]);
       }
     } catch (error) {
-      console.error("Error fetching reviews:", error);
+      console.error("❌ Error fetching reviews:", error);
+      console.error("Error details:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        authorId: authorId
+      });
       setReviews([]);
     }
   };
