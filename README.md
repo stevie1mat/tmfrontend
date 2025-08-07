@@ -12,7 +12,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue?style=flat-square&logo=typescript)](https://typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0+-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 
-[Live Demo](#) • [Documentation](#) • [Contributing](#contributing) • [License](#license)
+[🌐 Live Demo](https://trademinutes.app) • [Documentation](#) • [Contributing](#contributing) • [License](#license)
 
 </div>
 
@@ -22,6 +22,7 @@
 
 - [Overview](#-overview)
 - [Key Features](#-key-features)
+- [🤖 AI Agent Features](#-ai-agent-features)
 - [Architecture](#-architecture)
 - [Screenshots](#-screenshots)
 - [Tech Stack](#-tech-stack)
@@ -51,6 +52,7 @@ Instead of traditional monetary transactions, TradeMinutes operates on a simple 
 - **🎯 Skill Diversity**: From tutoring to home repairs, gardening to tech support
 - **📍 Local Focus**: Find help and offer services in your neighborhood
 - **⭐ Quality Assurance**: Review system ensures reliable service
+- **🤖 AI-Powered**: Advanced AI agents to enhance your experience
 
 ---
 
@@ -86,6 +88,63 @@ Instead of traditional monetary transactions, TradeMinutes operates on a simple 
 - **Interactive maps** for location-based services
 - **Real-time notifications**
 - **Beautiful animations** with Framer Motion
+
+---
+
+## 🤖 AI Agent Features
+
+### 🧠 Intelligent AI Agents
+TradeMinutes features advanced AI agents that enhance your experience and productivity:
+
+#### **🤖 AI Agent Marketplace**
+- **Browse AI Agents**: Discover specialized AI agents for various tasks
+- **Agent Categories**: Content creation, data analysis, scheduling, and more
+- **Agent Ratings**: Community-rated AI agents with performance metrics
+- **Custom Agents**: Create and deploy your own AI agents
+
+#### **⚡ AI Agent Workflows**
+- **Visual Workflow Builder**: Drag-and-drop interface for creating AI workflows
+- **Node-Based System**: Input, Action, and Output nodes for complex workflows
+- **Real-time Execution**: Run workflows instantly with live results
+- **Export Capabilities**: Export results as PDF, DOCX, or Excel files
+
+#### **🎯 Specialized AI Agents**
+
+##### **📝 Content Creation Agent**
+- **Blog Writing**: Generate engaging blog posts and articles
+- **Social Media**: Create posts for various platforms
+- **Email Marketing**: Craft compelling email campaigns
+- **Copywriting**: Professional copy for ads and websites
+
+##### **📊 Data Analysis Agent**
+- **Spreadsheet Analysis**: Process and analyze Excel/CSV data
+- **Chart Generation**: Create visualizations and graphs
+- **Report Creation**: Generate comprehensive data reports
+- **Trend Analysis**: Identify patterns and insights
+
+##### **📅 Scheduling Assistant**
+- **Calendar Management**: Intelligent scheduling and planning
+- **Meeting Coordination**: Automated meeting scheduling
+- **Task Prioritization**: Smart task organization
+- **Time Optimization**: Efficient time management suggestions
+
+##### **🎨 Creative Design Agent**
+- **Logo Design**: Generate brand logos and graphics
+- **Color Schemes**: Professional color palette suggestions
+- **Layout Design**: Website and document layouts
+- **Brand Identity**: Complete brand development
+
+#### **🔄 AI Agent Integration**
+- **Seamless Integration**: AI agents work alongside human services
+- **Hybrid Solutions**: Combine AI and human expertise
+- **Quality Assurance**: AI-enhanced service verification
+- **Learning System**: Agents improve with community feedback
+
+#### **📈 AI Agent Analytics**
+- **Performance Tracking**: Monitor agent effectiveness
+- **Usage Analytics**: Understand agent popularity and usage
+- **Improvement Suggestions**: AI-driven optimization recommendations
+- **Community Insights**: Learn from collective usage patterns
 
 ---
 
@@ -125,6 +184,11 @@ TradeMinutes follows a **microservices architecture** pattern for scalability an
                     └───────────────────────────┘
                                   │
                     ┌─────────────▼─────────────┐
+                    │    AI Agent Service       │
+                    │   (Python + FastAPI)      │
+                    └───────────────────────────┘
+                                  │
+                    ┌─────────────▼─────────────┐
                     │      MongoDB Atlas        │
                     │    (Primary Database)     │
                     └───────────────────────────┘
@@ -140,25 +204,26 @@ TradeMinutes follows a **microservices architecture** pattern for scalability an
 | **Profile Service** | Go + MongoDB | User profile management | 8081 |
 | **Messaging** | Go + WebSockets | Real-time communication | 8085 |
 | **Review Service** | Go + MongoDB | Reviews and ratings | 8086 |
+| **AI Agent Service** | Python + FastAPI | AI agent management and execution | 8002 |
 
 ---
 
 ## 📸 Screenshots
 
 ### 🏠 Homepage
-![Homepage](../develop/screenshots/homepage.png)
+![Homepage](screenshots/homepage.png)
 
 *Beautiful hero section with search functionality and category browsing*
 
-### 🔍 Service Discovery
-![Service Discovery](../develop/screenshots/services.png)
+### 🤖 AI Agent Marketplace
+![AI Agents](../develop/screenshots/ai-agents.png)
 
-*Browse services by category with filtering and search options*
+*Browse and interact with specialized AI agents*
 
-### 👤 User Dashboard
-![Dashboard](../develop/screenshots/dashboard.png)
+### ⚡ AI Workflow Builder
+![Workflow Builder](../develop/screenshots/workflow-builder.png)
 
-*Personal dashboard showing credits, bookings, and activity*
+*Visual workflow builder for creating complex AI workflows*
 
 ---
 
@@ -173,20 +238,27 @@ TradeMinutes follows a **microservices architecture** pattern for scalability an
 - **Maps**: [React Leaflet](https://react-leaflet.js.org/)
 - **Calendar**: [FullCalendar](https://fullcalendar.io/)
 - **Icons**: [Lucide React](https://lucide.dev/) & [React Icons](https://react-icons.github.io/react-icons/)
+- **AI Integration**: [Mistral AI API](https://mistral.ai/) for AI agents
 
 ### Backend Services
-- **Language**: [Go 1.21+](https://golang.org/)
-- **Framework**: Standard library + [Gorilla Mux](https://github.com/gorilla/mux)
+- **Language**: [Go 1.21+](https://golang.org/) & [Python 3.9+](https://python.org/)
+- **Framework**: Standard library + [Gorilla Mux](https://github.com/gorilla/mux) (Go), [FastAPI](https://fastapi.tiangolo.com/) (Python)
 - **Database**: [MongoDB 6.0+](https://mongodb.com/)
 - **Authentication**: [JWT](https://jwt.io/)
 - **Real-time**: [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
 - **Environment**: [Godotenv](https://github.com/joho/godotenv)
 
+### AI & ML
+- **AI Models**: [Mistral AI](https://mistral.ai/) for text generation
+- **Workflow Engine**: Custom Python-based workflow execution
+- **File Processing**: [ExcelJS](https://github.com/exceljs/exceljs) for Excel operations
+- **Document Generation**: [Docx](https://python-docx.readthedocs.io/) for Word documents
+
 ### DevOps & Tools
 - **Containerization**: [Docker](https://www.docker.com/)
 - **Version Control**: [Git](https://git-scm.com/)
-- **Package Manager**: [npm](https://www.npmjs.com/) (Frontend), [Go Modules](https://go.dev/blog/using-go-modules) (Backend)
-- **Linting**: [ESLint](https://eslint.org/) (Frontend), [golangci-lint](https://golangci-lint.run/) (Backend)
+- **Package Manager**: [npm](https://www.npmjs.com/) (Frontend), [Go Modules](https://go.dev/blog/using-go-modules) (Backend), [pip](https://pip.pypa.io/) (Python)
+- **Linting**: [ESLint](https://eslint.org/) (Frontend), [golangci-lint](https://golangci-lint.run/) (Backend), [flake8](https://flake8.pycqa.org/) (Python)
 
 ---
 
@@ -196,6 +268,7 @@ TradeMinutes follows a **microservices architecture** pattern for scalability an
 
 - **Node.js** 18.0+ and **npm** 8.0+
 - **Go** 1.21+
+- **Python** 3.9+
 - **MongoDB** 6.0+ (or MongoDB Atlas account)
 - **Git**
 
@@ -203,61 +276,34 @@ TradeMinutes follows a **microservices architecture** pattern for scalability an
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/trademinutes.git
-   cd trademinutes
+   git clone https://github.com/ElioCloud/trademinutes-frontend.git
+   cd trademinutes-frontend
    ```
 
 2. **Set up environment variables**
    ```bash
-   # Create .env files for each service
-   cp trademinutes-auth/.env.example trademinutes-auth/.env
-   cp trademinutes-task-core/.env.example trademinutes-task-core/.env
-   cp trademinutes-profile/.env.example trademinutes-profile/.env
-   cp trademinutes-messaging/.env.example trademinutes-messaging/.env
-   cp trademinutes-review/.env.example trademinutes-review/.env
+   # Create .env file
+   cp .env.example .env
    ```
 
 3. **Configure environment variables**
    ```bash
    # Example .env configuration
-   MONGO_URI=mongodb://localhost:27017
-   DB_NAME=trademinutes
-   JWT_SECRET=your_super_secret_jwt_key_here
-   PORT=8080
+   NEXT_PUBLIC_USER_API_URL=https://tm-userservice-ddb4axfjb0bxf0ck.canadacentral-01.azurewebsites.net
+   NEXT_PUBLIC_TASK_API_URL=http://localhost:8084
+   NEXT_PUBLIC_MESSAGING_API_URL=http://localhost:8085
+   NEXT_PUBLIC_REVIEW_API_URL=http://localhost:8086
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:8002
+   MISTRAL_API_KEY=your_mistral_api_key_here
    ```
 
-4. **Start the backend services**
+4. **Install dependencies**
    ```bash
-   # Start Auth Service
-   cd trademinutes-auth
-   go mod tidy
-   go run main.go
-
-   # Start Task Core Service (in new terminal)
-   cd trademinutes-task-core
-   go mod tidy
-   go run main.go
-
-   # Start Profile Service (in new terminal)
-   cd trademinutes-profile
-   go mod tidy
-   go run main.go
-
-   # Start Messaging Service (in new terminal)
-   cd trademinutes-messaging
-   go mod tidy
-   go run main.go
-
-   # Start Review Service (in new terminal)
-   cd trademinutes-review
-   go mod tidy
-   go run main.go
-   ```
-
-5. **Start the frontend**
-   ```bash
-   cd trademinutes-frontend
    npm install
+   ```
+
+5. **Start the development server**
+   ```bash
    npm run dev
    ```
 
@@ -281,6 +327,7 @@ docker-compose up --build
 |--------|----------|-------------|
 | `POST` | `/api/auth/register` | Register new user |
 | `POST` | `/api/auth/login` | User login |
+| `POST` | `/api/auth/github` | GitHub OAuth login |
 | `POST` | `/api/auth/forgot-password` | Request password reset |
 | `POST` | `/api/auth/reset-password` | Reset password |
 | `GET` | `/api/auth/profile` | Get user profile |
@@ -295,6 +342,17 @@ docker-compose up --build
 | `PUT` | `/api/tasks/{id}` | Update task |
 | `DELETE` | `/api/tasks/{id}` | Delete task |
 | `GET` | `/api/tasks/categories` | Get task categories |
+
+### AI Agent Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/agents` | Get all AI agents |
+| `POST` | `/api/agents` | Create new AI agent |
+| `GET` | `/api/agents/{id}` | Get specific AI agent |
+| `POST` | `/api/workflows` | Create AI workflow |
+| `POST` | `/api/workflows/{id}/execute` | Execute AI workflow |
+| `GET` | `/api/workflows/{id}/results` | Get workflow results |
 
 ### Booking Endpoints
 
@@ -340,6 +398,7 @@ docker build -t trademinutes-task-core ./trademinutes-task-core
 docker build -t trademinutes-profile ./trademinutes-profile
 docker build -t trademinutes-messaging ./trademinutes-messaging
 docker build -t trademinutes-review ./trademinutes-review
+docker build -t trademinutes-ai ./trademinutes-ai
 
 # Run with Docker Compose
 docker-compose -f docker-compose.prod.yml up -d
@@ -354,12 +413,15 @@ JWT_SECRET=your_production_jwt_secret
 NODE_ENV=production
 
 # Frontend specific
-NEXTAUTH_URL=https://yourdomain.com
+NEXTAUTH_URL=https://trademinutes.app
 NEXTAUTH_SECRET=your_nextauth_secret
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_client_secret
+
+# AI Service specific
+MISTRAL_API_KEY=your_mistral_api_key
 ```
 
 ---
@@ -391,6 +453,7 @@ We welcome contributions from the community! Here's how you can help:
 
 - **Frontend**: Follow ESLint configuration and Prettier formatting
 - **Backend**: Use `gofmt` and follow Go best practices
+- **Python**: Follow PEP 8 and use `black` for formatting
 - **Commits**: Use conventional commit messages
 - **Tests**: Maintain good test coverage
 
@@ -398,6 +461,7 @@ We welcome contributions from the community! Here's how you can help:
 
 - 🐛 **Bug fixes**
 - ✨ **New features**
+- 🤖 **AI agent improvements**
 - 📚 **Documentation improvements**
 - 🎨 **UI/UX enhancements**
 - 🚀 **Performance optimizations**
@@ -415,6 +479,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Community**: Thanks to all contributors and users
 - **Open Source**: Built with amazing open-source tools
+- **AI Integration**: Powered by [Mistral AI](https://mistral.ai/)
 - **Design Inspiration**: Inspired by modern marketplace platforms
 - **Icons**: [Lucide](https://lucide.dev/) and [React Icons](https://react-icons.github.io/react-icons/)
 
@@ -422,10 +487,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Documentation**: [docs.trademinutes.com](#)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/trademinutes/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/trademinutes/discussions)
-- **Email**: support@trademinutes.com
+- **🌐 Live Demo**: [https://trademinutes.app](https://trademinutes.app)
+- **Documentation**: [docs.trademinutes.app](#)
+- **Issues**: [GitHub Issues](https://github.com/ElioCloud/trademinutes-frontend/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ElioCloud/trademinutes-frontend/discussions)
+- **Email**: support@trademinutes.app
 
 ---
 
@@ -433,8 +499,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ by the TradeMinutes Team**
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/trademinutes?style=social)](https://github.com/yourusername/trademinutes)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/trademinutes?style=social)](https://github.com/yourusername/trademinutes)
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/trademinutes)](https://github.com/yourusername/trademinutes/issues)
+[![GitHub stars](https://img.shields.io/github/stars/ElioCloud/trademinutes-frontend?style=social)](https://github.com/ElioCloud/trademinutes-frontend)
+[![GitHub forks](https://img.shields.io/github/forks/ElioCloud/trademinutes-frontend?style=social)](https://github.com/ElioCloud/trademinutes-frontend)
+[![GitHub issues](https://img.shields.io/github/issues/ElioCloud/trademinutes-frontend)](https://github.com/ElioCloud/trademinutes-frontend/issues)
 
 </div> 
