@@ -627,6 +627,15 @@ export default function CreateAgentWorkflowPage() {
                   // Use Cloudinary URL if available
                   const imageToSave = coverImageUrl;
                   
+                  console.log("💾 Saving workflow with image:", {
+                    title,
+                    description,
+                    credits,
+                    coverImageUrl: imageToSave,
+                    coverImageType: typeof imageToSave,
+                    hasImage: !!imageToSave
+                  });
+                  
                   // Update the handleSaveWorkflow to include the Cloudinary URL
                   handleSaveWorkflowWithCloudinary(title, imageToSave, description, credits);
                   setShowSaveModal(false);
