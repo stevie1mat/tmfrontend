@@ -91,7 +91,11 @@ export default function CoverImageUpload({
       }
 
       const data = await response.json();
-      onImageUpload(data.imageUrl);
+      console.log("📡 API Response:", data);
+      
+      // Check for different possible response structures
+      const imageUrl = data.imageUrl || data.url || data.coverImageUrl || data.image;
+      onImageUpload(imageUrl);
       
       // Show success message
       console.log("✅ Cover image updated successfully!");
