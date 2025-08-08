@@ -413,10 +413,13 @@ export default function CreateAgentWorkflowPage() {
       const loaded = localStorage.getItem('tm-loaded-workflow');
       if (loaded) {
         try {
-          const { nodes: loadedNodes, edges: loadedEdges, id } = JSON.parse(loaded);
+          const { nodes: loadedNodes, edges: loadedEdges, id, name, description, credits, coverImage } = JSON.parse(loaded);
           setNodes(loadedNodes || []);
           setEdges(loadedEdges || []);
           if (id) setWorkflowId(id);
+          if (name) setSaveName(name);
+          if (description) setSaveDescription(description);
+          if (credits) setSaveCredits(credits.toString());
           localStorage.removeItem('tm-loaded-workflow');
         } catch (e) {
           // Ignore parse errors

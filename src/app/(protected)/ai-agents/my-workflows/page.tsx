@@ -49,7 +49,15 @@ export default function MyWorkflowsPage() {
 
   function handleLoadWorkflow(wf: any) {
     // Save to localStorage for the create-workflow page to pick up
-    localStorage.setItem('tm-loaded-workflow', JSON.stringify({ nodes: wf.nodes, edges: wf.edges, id: wf.id }));
+    localStorage.setItem('tm-loaded-workflow', JSON.stringify({ 
+      nodes: wf.nodes, 
+      edges: wf.edges, 
+      id: wf.id,
+      name: wf.name,
+      description: wf.description,
+      credits: wf.credits,
+      coverImage: wf.coverImage
+    }));
     router.push('/ai-agents/create-workflow');
   }
 
