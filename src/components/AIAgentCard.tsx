@@ -33,8 +33,8 @@ export default function AIAgentCard({ agent, onFavorite, onDemo, onPurchase, onD
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-1 border border-gray-100">
       <div className="h-32 relative">
-        {/* If agent.image is a URL, render as image, else emoji/char */}
-        {agent.image && agent.image.startsWith('http') ? (
+        {/* If agent.image is a URL or base64, render as image, else emoji/char */}
+        {agent.image && (agent.image.startsWith('http') || agent.image.startsWith('data:image')) ? (
           <img src={agent.image} alt={agent.name} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-5xl bg-gradient-to-br from-blue-100 to-blue-300">{agent.image}</div>
