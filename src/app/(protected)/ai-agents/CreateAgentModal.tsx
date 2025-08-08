@@ -113,7 +113,7 @@ export default function CreateAgentModal({ isOpen, onClose, onSave }: CreateAgen
               <button
                 type="submit"
                 className="bg-purple-600 text-white px-6 py-2 rounded font-bold hover:bg-purple-700 flex-1"
-                disabled={!coverImage || !title || !description}
+                disabled={(!coverImage && !coverImageUrl) || !title || !description}
               >
                 Next
               </button>
