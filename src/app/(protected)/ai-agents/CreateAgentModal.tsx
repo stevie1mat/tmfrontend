@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { FaUpload, FaTimes } from "react-icons/fa";
+import CoverImageUpload from "@/components/CoverImageUpload";
 
 interface CreateAgentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: { coverImage: File | null; title: string; description: string; credits: string }) => void;
+  onSave: (data: { coverImage: File | null; title: string; description: string; credits: string; coverImageUrl?: string }) => void;
 }
 
 export default function CreateAgentModal({ isOpen, onClose, onSave }: CreateAgentModalProps) {
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [coverImagePreview, setCoverImagePreview] = useState<string>("");
+  const [coverImageUrl, setCoverImageUrl] = useState<string>("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [credits, setCredits] = useState("");
@@ -41,7 +43,7 @@ export default function CreateAgentModal({ isOpen, onClose, onSave }: CreateAgen
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!coverImage || !title || !description) return;
+    if ((!coverImage && !coverImageUrl) || !title || !description) return;
     setCurrentStep(2);
   };
 
@@ -51,7 +53,7 @@ export default function CreateAgentModal({ isOpen, onClose, onSave }: CreateAgen
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({ coverImage, title, description, credits });
+    onSave({ coverImage, title, description, credits, coverImageUrl });
   };
 
   return (
@@ -70,36 +72,20 @@ export default function CreateAgentModal({ isOpen, onClose, onSave }: CreateAgen
         <h2 className="text-xl font-bold mb-4">Save Workflow</h2>
         {currentStep === 1 && (
           <form className="space-y-5" onSubmit={handleNext}>
-            {/* Cover Image Upload */}
+            {/* Cover Image Upload using existing component */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Cover Image *</label>
-              {coverImagePreview ? (
-                <div className="relative">
-                  <img
-                    src={coverImagePreview}
-                    alt="Cover preview"
-                    className="w-full h-32 object-cover rounded-lg border"
-                  />
-                  <button
-                    type="button"
-                    onClick={removeCoverImage}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                  >
-                    <FaTimes className="w-3 h-3" />
-                  </button>
-                </div>
-              ) : (
-                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition">
-                  <FaUpload className="w-8 h-8 text-gray-400 mb-2" />
-                  <span className="text-sm text-gray-500">Upload cover image</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleCoverImageChange}
-                    className="hidden"
-                  />
-                </label>
-              )}
+              <CoverImageUpload
+                currentImageUrl={coverImageUrl || coverImagePreview}
+                onImageUpload={(imageUrl) => {
+                  setCoverImageUrl(imageUrl);
+                  setCoverImagePreview(imageUrl);
+                }}
+                onImageRemove={() => {
+                  setCoverImageUrl("");
+                  setCoverImagePreview("");
+                  setCoverImage(null);
+                }}
+              />
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">Agent Title *</label>
