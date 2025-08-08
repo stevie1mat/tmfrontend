@@ -94,7 +94,8 @@ export default function CoverImageUpload({
       console.log("📡 API Response:", data);
       
       // Check for different possible response structures
-      const imageUrl = data.imageUrl || data.url || data.coverImageUrl || data.image;
+      const imageUrl = data.url || data.imageUrl || data.coverImageUrl || data.image;
+      console.log("🖼️ Extracted image URL:", imageUrl);
       onImageUpload(imageUrl);
       
       // Show success message
