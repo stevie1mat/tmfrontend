@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { StarIcon, HeartIcon } from '@heroicons/react/24/solid';
-import { HeartIcon as HeartOutlineIcon } from '@heroicons/react/24/outline';
+import { StarIcon } from '@heroicons/react/24/solid';
 import { FaCoins } from 'react-icons/fa';
 import { FiTrash2 } from 'react-icons/fi';
 
@@ -40,20 +39,6 @@ export default function AIAgentCard({ agent, onFavorite, onDemo, onPurchase, onD
           <div className="w-full h-full flex items-center justify-center text-5xl bg-gradient-to-br from-blue-100 to-blue-300">{agent.image}</div>
         )}
         <div className="absolute top-3 right-3 flex gap-2">
-          <button
-            onClick={e => {
-              e.stopPropagation();
-              onFavorite?.(agent.id);
-            }}
-            className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition"
-            title="Favorite"
-          >
-            {agent.isFavorite ? (
-              <HeartIcon className="w-5 h-5 text-red-500" />
-            ) : (
-              <HeartOutlineIcon className="w-5 h-5 text-gray-400" />
-            )}
-          </button>
           {onDelete && (
             <button
               onClick={e => {
