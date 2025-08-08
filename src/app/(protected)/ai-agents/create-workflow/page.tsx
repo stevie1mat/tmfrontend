@@ -661,7 +661,10 @@ export default function CreateAgentWorkflowPage() {
                 onConnect={onConnect}
                 fitView
                 nodeTypes={nodeTypes}
-                onNodeClick={(_, node) => setSelectedNode(node)}
+                onNodeClick={(_, node) => {
+                  setSelectedNode(node);
+                  setSidebarCollapsed(false);
+                }}
                 className="rounded-xl"
               >
                 {/* <MiniMap /> */}
