@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import AIAgentCard from '@/components/AIAgentCard';
 import { useAuth } from '@/contexts/AuthContext';
 import { FiX } from 'react-icons/fi';
+import { getOptimizedImageUrl } from '@/lib/cloudinary';
 
 function encodeWorkflow(nodes: any, edges: any) {
   return btoa(unescape(encodeURIComponent(JSON.stringify({ nodes, edges }))));
@@ -122,16 +123,27 @@ export default function MyWorkflowsPage() {
       {!loading && workflows.length === 0 && <div>No workflows found.</div>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {workflows.map(wf => {
+          // Debug: Log workflow data to see what we're getting
+          console.log('🔍 Workflow data:', {
+            id: wf.id,
+            name: wf.name,
+            coverImage: wf.coverImage,
+            coverImageType: typeof wf.coverImage,
+            hasImage: !!wf.coverImage
+          });
+
           // Map workflow to AIAgentCard props
           const agent = {
             id: wf.id,
             name: wf.name,
-            description: wf.nodes?.map((n: any) => n.data?.description).find((desc: string) => desc && desc.trim()) || 'No description',
+            description: wf.description || wf.nodes?.map((n: any) => n.data?.description).find((desc: string) => desc && desc.trim()) || 'No description',
             category: 'Workflow',
-            price: 0,
+            price: wf.credits || 0,
             rating: 5,
             reviews: 0,
-            image: wf.coverImage || 'https://images.stockcake.com/public/1/1/f/11fc6018-f8a9-4eb4-bf60-0700a6a8f677_large/pathway-to-possibility-stockcake.jpg',
+            image: wf.coverImage && wf.coverImage.trim() !== '' && wf.coverImage !== 'undefined'
+              ? getOptimizedImageUrl(wf.coverImage, { width: 400, height: 300, quality: 80 })
+              : 'https://images.stockcake.com/public/1/1/f/11fc6018-f8a9-4eb4-bf60-0700a6a8f677_large/pathway-to-possibility-stockcake.jpg',
             features: wf.nodes?.map((n: any) => n.data?.label).filter(Boolean) || [],
             isFavorite: false,
           };
