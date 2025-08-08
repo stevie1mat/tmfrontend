@@ -141,11 +141,7 @@ export default function CoverImageUpload({
                 <FiX className="w-4 h-4" />
               </button>
             </div>
-            {previewUrl && !currentImageUrl && (
-              <p className="text-xs text-gray-500 text-center mt-2">
-                Preview - Click save to confirm
-              </p>
-            )}
+
             {/* Show upload button when image is present */}
             <button
               type="button"
