@@ -274,8 +274,6 @@ export default function CreateAgentWorkflowPage() {
   const [saveName, setSaveName] = useState('');
 
   // Add state for new fields at the top of the component
-  const [coverPhoto, setCoverPhoto] = useState<File | null>(null);
-  const [coverPhotoPreview, setCoverPhotoPreview] = useState<string | null>(null);
   const [saveDescription, setSaveDescription] = useState('');
   const [saveCredits, setSaveCredits] = useState('');
 
@@ -491,7 +489,7 @@ export default function CreateAgentWorkflowPage() {
           'Content-Type': 'application/json',
           'user-id': userId,
         },
-        body: JSON.stringify({ name, nodes, edges, coverImage: coverPhotoPreview }),
+        body: JSON.stringify({ name, nodes, edges }),
       });
       if (!res.ok) {
         const errText = await res.text();
@@ -521,16 +519,69 @@ export default function CreateAgentWorkflowPage() {
     }
   }
 
-  // Add effect to update cover photo preview
-  useEffect(() => {
-    if (coverPhoto) {
-      const reader = new FileReader();
-      reader.onloadend = () => setCoverPhotoPreview(reader.result as string);
-      reader.readAsDataURL(coverPhoto);
-    } else {
-      setCoverPhotoPreview(null);
+  // Enhanced save function with Cloudinary support
+  async function handleSaveWorkflowWithCloudinary(
+    name: string, 
+    coverImage: string | null, 
+    description: string, 
+    credits: string
+  ) {
+    setSaveStatus(null);
+    try {
+      const method = workflowId ? 'PUT' : 'POST';
+      const url = workflowId ? `${WORKFLOW_API_URL}/${workflowId}` : WORKFLOW_API_URL;
+      
+      const workflowData = {
+        name,
+        description,
+        credits: parseInt(credits) || 0,
+        nodes,
+        edges,
+        coverImage, // This will be the Cloudinary URL
+      };
+
+      console.log('🚀 Saving workflow with Cloudinary image:', workflowData);
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'user-id': userId,
+        },
+        body: JSON.stringify(workflowData),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        setSaveStatus('Failed to save workflow: ' + errText);
+        setDialogMessage('Failed to save workflow: ' + errText);
+        setShowDialog(true);
+        if (dialogTimeoutRef.current) clearTimeout(dialogTimeoutRef.current);
+        dialogTimeoutRef.current = setTimeout(() => setShowDialog(false), 2500);
+        return;
+      }
+
+      setSaveStatus('Workflow saved with Cloudinary image!');
+      setDialogMessage('Workflow saved successfully!');
+      setShowDialog(true);
+      if (dialogTimeoutRef.current) clearTimeout(dialogTimeoutRef.current);
+      dialogTimeoutRef.current = setTimeout(() => setShowDialog(false), 2000);
+      
+      setTimeout(() => {
+        setShowSaveModal(false);
+        setSaveStatus(null);
+        setSaveName('');
+      }, 1200);
+    } catch (err: any) {
+      setSaveStatus('Failed to save workflow: ' + (err.message || err));
+      setDialogMessage('Failed to save workflow: ' + (err.message || err));
+      setShowDialog(true);
+      if (dialogTimeoutRef.current) clearTimeout(dialogTimeoutRef.current);
+      dialogTimeoutRef.current = setTimeout(() => setShowDialog(false), 2500);
     }
-  }, [coverPhoto]);
+  }
+
+
 
   return (
     <ProtectedLayout hideTopBar>
@@ -572,11 +623,14 @@ export default function CreateAgentWorkflowPage() {
             <CreateAgentModal
               isOpen={showSaveModal}
               onClose={() => setShowSaveModal(false)}
-              onSave={({ coverImage, title, description, credits }) => {
-                // You can add your save logic here, e.g., call handleSaveWorkflow or a new handler
-                handleSaveWorkflow(title); // You may want to update this to save all fields
-                setShowSaveModal(false);
-              }}
+                              onSave={({ coverImage, title, description, credits, coverImageUrl }) => {
+                  // Use Cloudinary URL if available
+                  const imageToSave = coverImageUrl;
+                  
+                  // Update the handleSaveWorkflow to include the Cloudinary URL
+                  handleSaveWorkflowWithCloudinary(title, imageToSave, description, credits);
+                  setShowSaveModal(false);
+                }}
             />
             
             {runError && (
