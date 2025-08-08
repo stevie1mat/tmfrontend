@@ -43,6 +43,13 @@ export default function CreateAgentModal({ isOpen, onClose, onSave }: CreateAgen
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("🔍 Validation check:", {
+      coverImage: !!coverImage,
+      coverImageUrl: !!coverImageUrl,
+      title: !!title,
+      description: !!description,
+      coverImageUrlValue: coverImageUrl
+    });
     if ((!coverImage && !coverImageUrl) || !title || !description) return;
     setCurrentStep(2);
   };
@@ -77,10 +84,12 @@ export default function CreateAgentModal({ isOpen, onClose, onSave }: CreateAgen
               <CoverImageUpload
                 currentImageUrl={coverImageUrl || coverImagePreview}
                 onImageUpload={(imageUrl) => {
+                  console.log("🖼️ Image uploaded:", imageUrl);
                   setCoverImageUrl(imageUrl);
                   setCoverImagePreview(imageUrl);
                 }}
                 onImageRemove={() => {
+                  console.log("🗑️ Image removed");
                   setCoverImageUrl("");
                   setCoverImagePreview("");
                   setCoverImage(null);
