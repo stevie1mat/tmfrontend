@@ -30,7 +30,8 @@ const useTaskImages = (taskId: string) => {
       setError(null);
       try {
         // Use very low quality thumbnails for faster loading: 30% quality, 200px max width
-        const response = await fetch(`http://localhost:8084/api/tasks/images?taskId=${taskId}&quality=30&width=200`);
+        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
+        const response = await fetch(`${API_BASE_URL}/api/tasks/images?taskId=${taskId}&quality=30&width=200`);
         if (!response.ok) {
           throw new Error('Failed to load images');
         }
@@ -74,7 +75,8 @@ const useAuthorAvatar = (authorId: string) => {
       setError(null);
       try {
         // Use maximum compression for avatars: 50% quality, 64px max width
-        const response = await fetch(`http://localhost:8084/api/tasks/avatar?authorId=${authorId}&quality=50&width=64`);
+        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
+        const response = await fetch(`${API_BASE_URL}/api/tasks/avatar?authorId=${authorId}&quality=50&width=64`);
         if (!response.ok) {
           throw new Error('Failed to load avatar');
         }
