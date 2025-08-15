@@ -15,9 +15,8 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import ProtectedLayout from '@/components/Layout/ProtectedLayout';
-import { FaRobot, FaMagic, FaFeather, FaBrain, FaGoogle } from "react-icons/fa";
-import { MdOutlineWeb, MdCode, MdMemory, MdAttachFile, MdCalculate } from "react-icons/md";
-import { FiTrash2, FiPlus, FiMail, FiFileText, FiZap, FiChevronDown, FiArrowLeft, FiEdit2 } from 'react-icons/fi';
+import { MdWeb, MdCode, MdMemory, MdAttachFile } from "react-icons/md";
+import { FiTrash2, FiPlus, FiMail, FiFileText, FiZap, FiChevronDown, FiArrowLeft, FiEdit2, FiCpu, FiZap as FiZapIcon } from 'react-icons/fi';
 import jsPDF from 'jspdf';
 import CreateAgentModal from "../CreateAgentModal";
 import { useAuth } from '@/contexts/AuthContext';
@@ -51,19 +50,19 @@ const initialEdges: Edge[] = [
 ];
 
 const AI_MODELS = [
-  { label: "OpenAI GPT-4", value: "openai-gpt4", icon: <FaRobot className="inline mr-2 text-emerald-600" /> },
-  { label: "Mistral", value: "mistral", icon: <FaMagic className="inline mr-2 text-indigo-500" /> },
-  { label: "Ollama", value: "ollama", icon: <FaFeather className="inline mr-2 text-orange-500" /> },
-  { label: "Anthropic Claude", value: "claude", icon: <FaBrain className="inline mr-2 text-purple-500" /> },
-  { label: "Google Gemini", value: "gemini", icon: <FaGoogle className="inline mr-2 text-blue-500" /> },
+  { label: "OpenAI GPT-4", value: "openai-gpt4", icon: <span className="inline mr-2 text-emerald-600">🤖</span> },
+  { label: "Mistral", value: "mistral", icon: <span className="inline mr-2 text-indigo-500">✨</span> },
+  { label: "Ollama", value: "ollama", icon: <span className="inline mr-2 text-orange-500">🦙</span> },
+  { label: "Anthropic Claude", value: "claude", icon: <span className="inline mr-2 text-purple-500">🧠</span> },
+  { label: "Google Gemini", value: "gemini", icon: <span className="inline mr-2 text-blue-500">🔍</span> },
 ];
 
 const AGENT_TOOLS = [
-  { label: "Web Search", value: "web-search", icon: <MdOutlineWeb className="inline text-blue-500 mr-1" /> },
+  { label: "Web Search", value: "web-search", icon: <MdWeb className="inline text-blue-500 mr-1" /> },
   { label: "Code Interpreter", value: "code-interpreter", icon: <MdCode className="inline text-green-600 mr-1" /> },
   { label: "Memory", value: "memory", icon: <MdMemory className="inline text-purple-500 mr-1" /> },
   { label: "File Upload", value: "file-upload", icon: <MdAttachFile className="inline text-gray-500 mr-1" /> },
-  { label: "Math", value: "math", icon: <MdCalculate className="inline text-yellow-500 mr-1" /> },
+  { label: "Math", value: "math", icon: <span className="inline text-yellow-500 mr-1">🧮</span> },
 ];
 
 // Custom Node Components
@@ -847,7 +846,7 @@ export default function CreateAgentWorkflowPage() {
                 onConnect={onConnect}
                 fitView
                 nodeTypes={nodeTypes}
-                connectionMode="loose"
+
                 onNodeClick={(_, node) => {
                   setSelectedNode(node);
                   setSidebarCollapsed(false);

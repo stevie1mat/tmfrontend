@@ -39,7 +39,7 @@ export default function WorkflowChatPage() {
   const userId = user?.ID || user?.id;
   
   // Determine if this is a public marketplace chat
-  const isPublicMarketplace = searchParams.get('public') === 'true';
+  const isPublicMarketplace = searchParams?.get('public') === 'true';
   const [input, setInput] = useState("");
   
   // Determine greeting based on local time

@@ -157,7 +157,7 @@ export default function CreateAgentModal({ isOpen, onClose, onSave }: CreateAgen
                   💳 Users will pay {credits} credits each time they run this workflow
                 </div>
               )}
-              {(credits === "0" || credits === 0 || (credits && parseInt(credits) === 0)) && (
+              {(credits === "0" || (credits && parseInt(credits) === 0)) && (
                 <div className="text-xs text-green-600 bg-green-50 p-2 rounded-lg">
                   🆓 This workflow will be free to execute
                 </div>
