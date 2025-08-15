@@ -104,7 +104,7 @@ export default function ReviewsPage() {
         }
 
         // Get current user ID from auth service
-        const authResponse = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8081'}/api/auth/profile`, {
+        const authResponse = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 

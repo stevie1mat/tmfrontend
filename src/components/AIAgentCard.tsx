@@ -25,9 +25,10 @@ interface AIAgentCardProps {
   onDemo?: (id: string) => void;
   onPurchase?: (id: string) => void;
   onDelete?: (id: string) => void;
+  isPublicMarketplace?: boolean;
 }
 
-export default function AIAgentCard({ agent, onFavorite, onDemo, onPurchase, onDelete }: AIAgentCardProps) {
+export default function AIAgentCard({ agent, onFavorite, onDemo, onPurchase, onDelete, isPublicMarketplace = false }: AIAgentCardProps) {
   // Card style matches task list item
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-1 border border-gray-100">
@@ -60,7 +61,7 @@ export default function AIAgentCard({ agent, onFavorite, onDemo, onPurchase, onD
           </span>
           <div className="flex items-center gap-1 text-sm font-bold text-green-600">
             <FaCoins className="w-4 h-4" />
-            <span>{agent.price}</span>
+            <span>{agent.price === 0 ? 'Free' : `${agent.price} credits`}</span>
           </div>
         </div>
         <h4 className="font-semibold text-gray-900 mb-3">
@@ -76,14 +77,16 @@ export default function AIAgentCard({ agent, onFavorite, onDemo, onPurchase, onD
             onClick={() => onDemo?.(agent.id)}
             className="px-4 py-2 text-sm font-medium bg-white text-emerald-700 border border-emerald-700 rounded-full hover:bg-emerald-50 transition"
           >
-            Try It Now
+            {isPublicMarketplace ? 'Chat Now' : 'Try It Now'}
           </button>
-          <button
-            onClick={() => onPurchase?.(agent.id)}
-            className="px-4 py-2 text-sm font-medium bg-emerald-700 text-white rounded-full hover:bg-emerald-800 transition"
-          >
-            Edit workflow
-          </button>
+          {!isPublicMarketplace && onPurchase && (
+            <button
+              onClick={() => onPurchase(agent.id)}
+              className="px-4 py-2 text-sm font-medium bg-emerald-700 text-white rounded-full hover:bg-emerald-800 transition"
+            >
+              Edit workflow
+            </button>
+          )}
         </div>
       </div>
     </div>

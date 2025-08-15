@@ -150,7 +150,7 @@ function CreditsPage() {
         }
 
         console.log('🔍 Fetching user profile for credits...');
-        const authUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
+        const authUrl = process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com';
         console.log('🌐 Auth API URL:', authUrl);
         
         // Get user profile to get user ID and current credits
@@ -284,7 +284,7 @@ function CreditsPage() {
         }
 
         // Fetch credit purchase transactions
-        const creditTransactionsRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8081'}/api/auth/credit-transactions/${userId}`, {
+        const creditTransactionsRes = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/credit-transactions/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -648,7 +648,7 @@ function CreditsPage() {
       }
 
       // Get user profile to get email
-      const authUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
+      const authUrl = process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com';
       console.log('🔍 Fetching user profile for credit purchase...');
       console.log('🌐 Auth API URL:', authUrl);
       

@@ -21,6 +21,8 @@ import { FiTrash2, FiPlus, FiMail, FiFileText, FiZap, FiChevronDown, FiArrowLeft
 import jsPDF from 'jspdf';
 import CreateAgentModal from "../CreateAgentModal";
 import { useAuth } from '@/contexts/AuthContext';
+import { WorkflowRustDSLBridge } from '@/lib/workflow-rust-dsl-bridge';
+import { NaturalLanguageDSLParser } from '@/lib/natural-language-dsl-parser';
 
 const initialNodes: Node[] = [
   {
@@ -285,6 +287,27 @@ export default function CreateAgentWorkflowPage() {
   const [dialogMessage, setDialogMessage] = useState('');
   const dialogTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Add state for Rust DSL integration
+  const [rustDSL, setRustDSL] = useState('');
+  const [humanSteps, setHumanSteps] = useState<string[]>([]);
+  const [showDSLPanel, setShowDSLPanel] = useState(false);
+  const [workflowValidation, setWorkflowValidation] = useState<{
+    isValid: boolean;
+    errors: string[];
+    warnings: string[];
+  }>({ isValid: true, errors: [], warnings: [] });
+  const [executionPlan, setExecutionPlan] = useState<{
+    totalSteps: number;
+    estimatedTime: string;
+    complexity: 'Simple' | 'Medium' | 'Complex';
+    description: string;
+  }>({ totalSteps: 0, estimatedTime: '< 1 minute', complexity: 'Simple', description: '' });
+
+  // Natural language parsing state
+  const [naturalLanguageInput, setNaturalLanguageInput] = useState('');
+  const [showNLPanel, setShowNLPanel] = useState(false);
+  const [nlParseResult, setNlParseResult] = useState<any>(null);
+
   // Save/Deploy handler
   const handleSaveDeploy = () => {
     const agentConfig = {
@@ -431,6 +454,144 @@ export default function CreateAgentWorkflowPage() {
 
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 
+  // Update Rust DSL when nodes change
+  useEffect(() => {
+    if (nodes.length > 0) {
+      const bridge = new WorkflowRustDSLBridge();
+      const dsl = bridge.convertToDSL(nodes as any, edges as any);
+      const steps = bridge.generateHumanSteps(dsl);
+      const validation = bridge.validateWorkflow(nodes as any, edges as any);
+      const plan = bridge.generateExecutionPlan(nodes as any);
+      
+      setRustDSL(dsl);
+      setHumanSteps(steps);
+      setWorkflowValidation(validation);
+      setExecutionPlan(plan);
+    } else {
+      setRustDSL('');
+      setHumanSteps([]);
+      setWorkflowValidation({ isValid: true, errors: [], warnings: [] });
+      setExecutionPlan({ totalSteps: 0, estimatedTime: '< 1 minute', complexity: 'Simple', description: '' });
+    }
+  }, [nodes, edges]);
+
+  // Handle natural language parsing with AI
+  const handleNaturalLanguageParse = async () => {
+    if (!naturalLanguageInput.trim()) return;
+
+    try {
+      const nlParser = new NaturalLanguageDSLParser();
+      
+      // Try AI-powered parsing first
+      console.log('[DEBUG] Using Mistral AI for parsing...');
+      const result = await nlParser.parseMessageWithAI(naturalLanguageInput);
+      
+      console.log('[DEBUG] AI Parse result:', result);
+      console.log('[DEBUG] Steps:', result.steps);
+      
+      setNlParseResult(result);
+      setRustDSL(result.dsl);
+      setHumanSteps(result.steps.map(step => `Step ${step.id}: ${step.description}`));
+    
+    // Clear existing nodes and edges first
+    console.log('[DEBUG] Clearing existing nodes and edges...');
+    setNodes([]);
+    setEdges([]);
+    
+    // Create new nodes based on parsed steps
+    const newNodes: any[] = [];
+    const newEdges: any[] = [];
+    
+    result.steps.forEach((step, index) => {
+      // Use index-based IDs to ensure sequential connection
+      const nodeId = `nl-step-${index}`;
+      let nodeType = 'actionNode';
+      let nodeData: any = {
+        deleteNode: handleDeleteNode
+      };
+      
+      if (step.command === 'input') {
+        nodeType = 'inputNode';
+        nodeData = {
+          ...nodeData,
+          label: step.args[0]?.replace(/"/g, '') || 'User Input',
+          inputType: step.args[1]?.replace(/"/g, '') || 'text',
+          placeholder: step.args[2]?.replace(/"/g, '') || 'Enter value',
+          variable: step.args[0]?.replace(/"/g, '') || 'user_input',
+          title: step.description,
+          description: step.description
+        };
+      } else if (step.command === 'output') {
+        nodeType = 'outputNode';
+        nodeData = {
+          ...nodeData,
+          label: 'Generated Output',
+          fileType: step.args[1]?.replace(/"/g, '') || 'text',
+          title: step.args[2]?.replace(/"/g, '') || 'Output',
+          description: step.description
+        };
+      } else {
+        // Action node
+        nodeData = {
+          ...nodeData,
+          label: step.description,
+          title: step.description,
+          prompt: step.command === 'generate' ? step.args[0]?.replace(/"/g, '') : undefined,
+          model: step.command === 'generate' ? step.args[1]?.replace(/"/g, '') : undefined,
+          temperature: step.command === 'generate' ? parseFloat(step.args[2]?.replace(/"/g, '') || '0.7') : undefined,
+          command: step.command
+        };
+      }
+      
+      newNodes.push({
+        id: nodeId,
+        type: nodeType,
+        position: { x: 100 + index * 350, y: 100 },
+        data: nodeData
+      });
+      
+      // Connect nodes sequentially using index-based IDs
+      if (index > 0) {
+        const sourceNodeId = `nl-step-${index - 1}`;
+        const targetNodeId = nodeId;
+        
+        console.log(`[DEBUG] Connecting: ${sourceNodeId} -> ${targetNodeId} (step ${index})`);
+        
+        newEdges.push({
+          id: `nl-edge-${index}`,
+          source: sourceNodeId,
+          target: targetNodeId,
+          animated: true
+        });
+      }
+    });
+    
+    console.log('[DEBUG] Generated nodes:', newNodes);
+    console.log('[DEBUG] Generated edges:', newEdges);
+    console.log('[DEBUG] Step IDs from AI:', result.steps.map(s => s.id));
+    
+    // Update nodes and edges with a small delay to ensure proper rendering
+    setTimeout(() => {
+      console.log('[DEBUG] Setting nodes:', newNodes.map(n => ({id: n.id, type: n.type})));
+      console.log('[DEBUG] Setting edges:', newEdges.map(e => ({id: e.id, source: e.source, target: e.target})));
+      
+      setNodes(newNodes);
+      setEdges(newEdges);
+      
+      // Force ReactFlow to re-render connections
+      setTimeout(() => {
+        console.log('[DEBUG] Current nodes after set:', nodes.map(n => ({id: n.id, type: n.type})));
+        console.log('[DEBUG] Current edges after set:', edges.map(e => ({id: e.id, source: e.source, target: e.target})));
+      }, 50);
+    }, 100);
+    
+    } catch (error) {
+      console.error('[ERROR] Failed to parse with AI:', error);
+      // Show user-friendly error message
+      alert('Failed to parse your request. Please try again or use simpler language.');
+    }
+  };
+
   // Handler for updating node data from sidebar form
   function handleSidebarNodeUpdate(form: any) {
     if (!selectedNode) return;
@@ -479,7 +640,7 @@ export default function CreateAgentWorkflowPage() {
   const { user } = useAuth();
   const userId = String(user?.id || user?.ID || '');
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8002';
+  const API_BASE_URL = process.env.NEXT_PUBLIC_AGENTIC_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8002';
   const WORKFLOW_API_URL = `${API_BASE_URL}/api/workflows`;
   async function handleSaveWorkflow(name: string) {
     setSaveStatus(null);
@@ -542,6 +703,9 @@ export default function CreateAgentWorkflowPage() {
         edges,
         coverImage, // This will be the Cloudinary URL
       };
+
+      console.log('💰 Credits being saved:', credits, 'Parsed as:', parseInt(credits) || 0);
+      console.log('📊 Full workflow data being sent:', JSON.stringify(workflowData, null, 2));
 
       console.log('🚀 Saving workflow with Cloudinary image:', workflowData);
 
@@ -619,6 +783,28 @@ export default function CreateAgentWorkflowPage() {
                   <FiPlus className="w-5 h-5" />
                   <span className="text-sm">Output</span>
                 </button>
+                <button 
+                  onClick={() => setShowNLPanel(!showNLPanel)} 
+                  className={`flex items-center gap-3 px-6 py-3 rounded-lg font-bold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 ${
+                    showNLPanel 
+                      ? 'bg-purple-500 hover:bg-purple-600 text-white' 
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  <span className="text-lg">🤖</span>
+                  <span className="text-sm">AI Parse</span>
+                </button>
+                <button 
+                  onClick={() => setShowDSLPanel(!showDSLPanel)} 
+                  className={`flex items-center gap-3 px-6 py-3 rounded-lg font-bold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 ${
+                    showDSLPanel 
+                      ? 'bg-orange-500 hover:bg-orange-600 text-white' 
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  <span className="text-lg">🦀</span>
+                  <span className="text-sm">Rust DSL</span>
+                </button>
               </div>
             </div>
             
@@ -640,7 +826,7 @@ export default function CreateAgentWorkflowPage() {
                   });
                   
                   // Update the handleSaveWorkflow to include the Cloudinary URL
-                  handleSaveWorkflowWithCloudinary(title, imageToSave, description, credits);
+                  handleSaveWorkflowWithCloudinary(title, imageToSave || null, description, credits);
                   setShowSaveModal(false);
                 }}
             />
@@ -661,6 +847,7 @@ export default function CreateAgentWorkflowPage() {
                 onConnect={onConnect}
                 fitView
                 nodeTypes={nodeTypes}
+                connectionMode="loose"
                 onNodeClick={(_, node) => {
                   setSelectedNode(node);
                   setSidebarCollapsed(false);
@@ -672,6 +859,202 @@ export default function CreateAgentWorkflowPage() {
                 <Background className="bg-gray-50" />
               </ReactFlow>
             </div>
+            
+            {/* Natural Language Input Panel */}
+            {showNLPanel && (
+              <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 mt-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🤖</span>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">AI Workflow Parser</h3>
+                      <p className="text-gray-600 text-sm">Describe your workflow in natural language</p>
+                    </div>
+                  </div>
+                  {nlParseResult && (
+                    <div className="flex items-center gap-2">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        nlParseResult.confidence > 0.7 ? 'bg-green-100 text-green-700' :
+                        nlParseResult.confidence > 0.4 ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-red-100 text-red-700'
+                      }`}>
+                        {Math.round(nlParseResult.confidence * 100)}% confidence
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {nlParseResult.intent.type.replace('_', ' ')}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Describe your workflow:
+                    </label>
+                    <textarea
+                      value={naturalLanguageInput}
+                      onChange={(e) => setNaturalLanguageInput(e.target.value)}
+                      placeholder="e.g., Generate a blog post about AI and save it as a PDF, then send it to admin@company.com"
+                      className="w-full h-32 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none"
+                    />
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <button
+                      onClick={handleNaturalLanguageParse}
+                      disabled={!naturalLanguageInput.trim()}
+                      className="flex-1 bg-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      🤖 AI Parse to Workflow
+                    </button>
+                    <button
+                      onClick={() => {
+                        const examples = new NaturalLanguageDSLParser().getExampleMessages();
+                        const randomExample = examples[Math.floor(Math.random() * examples.length)];
+                        setNaturalLanguageInput(randomExample.message);
+                      }}
+                      className="px-6 py-3 border border-purple-300 text-purple-600 rounded-xl font-semibold hover:bg-purple-50 transition-colors"
+                    >
+                      🎲 Random Example
+                    </button>
+                  </div>
+
+                  {nlParseResult && (
+                    <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-xl">
+                      <h4 className="font-semibold text-purple-900 mb-2">Parsed Intent:</h4>
+                      <div className="text-sm text-purple-700">
+                        <p><strong>Type:</strong> {nlParseResult.intent.type.replace('_', ' ')}</p>
+                        <p><strong>Confidence:</strong> {Math.round(nlParseResult.confidence * 100)}%</p>
+                        {nlParseResult.intent.entities.inputs && nlParseResult.intent.entities.inputs.length > 0 && (
+                          <p><strong>Inputs:</strong> {nlParseResult.intent.entities.inputs.join(', ')}</p>
+                        )}
+                        {nlParseResult.intent.entities.outputs && nlParseResult.intent.entities.outputs.length > 0 && (
+                          <p><strong>Outputs:</strong> {nlParseResult.intent.entities.outputs.join(', ')}</p>
+                        )}
+                        {nlParseResult.intent.entities.data_sources && nlParseResult.intent.entities.data_sources.length > 0 && (
+                          <p><strong>Data Sources:</strong> {nlParseResult.intent.entities.data_sources.join(', ')}</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {/* Rust DSL Panel */}
+            {showDSLPanel && (
+              <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 mt-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🦀</span>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">Rust DSL Workflow</h3>
+                      <p className="text-gray-600 text-sm">Generated tmflow-DSL code and execution plan</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      executionPlan.complexity === 'Simple' ? 'bg-green-100 text-green-700' :
+                      executionPlan.complexity === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-red-100 text-red-700'
+                    }`}>
+                      {executionPlan.complexity}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      {executionPlan.totalSteps} steps • {executionPlan.estimatedTime}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Validation Messages */}
+                {(workflowValidation.errors.length > 0 || workflowValidation.warnings.length > 0) && (
+                  <div className="mb-6 space-y-2">
+                    {workflowValidation.errors.map((error, index) => (
+                      <div key={`error-${index}`} className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <span className="text-red-500">❌</span>
+                        <span className="text-red-700 text-sm">{error}</span>
+                      </div>
+                    ))}
+                    {workflowValidation.warnings.map((warning, index) => (
+                      <div key={`warning-${index}`} className="flex items-center gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <span className="text-yellow-500">⚠️</span>
+                        <span className="text-yellow-700 text-sm">{warning}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Human-readable steps */}
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <span>📋</span>
+                      Execution Steps
+                    </h4>
+                    {humanSteps.length > 0 ? (
+                      <div className="space-y-3">
+                        {humanSteps.map((step, index) => (
+                          <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                            <span className="w-6 h-6 bg-blue-500 text-white rounded-full text-sm flex items-center justify-center flex-shrink-0 mt-0.5">
+                              {index + 1}
+                            </span>
+                            <span className="text-gray-700 text-sm leading-relaxed">{step.replace(/^Step \d+: /, '')}</span>
+                          </div>
+                        ))}
+                        {executionPlan.description && (
+                          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <p className="text-blue-700 text-sm">{executionPlan.description}</p>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        <span className="text-4xl mb-2 block">🤖</span>
+                        <p>Add nodes to generate workflow steps</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Rust DSL code */}
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <span>🦀</span>
+                      Rust DSL Code
+                    </h4>
+                    <div className="bg-gray-900 rounded-lg p-4 text-sm font-mono overflow-x-auto">
+                      <pre className="text-gray-100 whitespace-pre-wrap">
+                        {rustDSL || '// Add nodes to generate DSL code\nworkflow "Empty Workflow" {\n    // No steps defined\n}'}
+                      </pre>
+                    </div>
+                    {rustDSL && (
+                      <div className="mt-4 flex gap-2">
+                        <button 
+                          onClick={() => navigator.clipboard.writeText(rustDSL)}
+                          className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700 transition-colors"
+                        >
+                          📋 Copy DSL
+                        </button>
+                        <button 
+                          onClick={() => {
+                            const blob = new Blob([rustDSL], { type: 'text/plain' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'workflow.dsl';
+                            a.click();
+                            URL.revokeObjectURL(url);
+                          }}
+                          className="px-4 py-2 bg-orange-600 text-white rounded-lg text-sm hover:bg-orange-700 transition-colors"
+                        >
+                          💾 Download DSL
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           {/* Right Sidebar - Always visible but collapsed by default */}
           <div className="relative transition-all duration-300" style={{ width: sidebarCollapsed ? '80px' : '400px' }}>

@@ -63,7 +63,7 @@ export default function BookedByMePage() {
         const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
         let userId = null;
         if (token) {
-          const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/profile`, {
+          const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           if (profileRes.ok) {
@@ -244,7 +244,7 @@ export default function BookedByMePage() {
       const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
       let userId = null;
       if (token) {
-        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/profile`, {
+        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (profileRes.ok) {

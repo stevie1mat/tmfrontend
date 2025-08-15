@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       // Use unified user service
-      const USER_API_URL = process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080';
+      const USER_API_URL = process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com';
       console.log("🔍 Fetching profile from:", `${USER_API_URL}/api/profile/get`);
       console.log("🔍 Token:", authToken ? authToken.substring(0, 50) + "..." : "missing");
       

@@ -68,7 +68,7 @@ export default function AuthModal({
     setLoading(true);
 
     try {
-      const API_BASE_URL = process.env.NEXT_PUBLIC_AUTH_API_URL || "http://localhost:8080";
+      const API_BASE_URL = process.env.NEXT_PUBLIC_USER_API_URL || "https://tmuserservice.onrender.com";
       const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/register";
       
       const requestData = mode === "login" 
@@ -113,7 +113,7 @@ export default function AuthModal({
 
   const handleSocialAuth = (provider: "google" | "github") => {
     // Redirect to social auth endpoints
-    const API_BASE_URL = process.env.NEXT_PUBLIC_AUTH_API_URL || "http://localhost:8080";
+    const API_BASE_URL = process.env.NEXT_PUBLIC_USER_API_URL || "https://tmuserservice.onrender.com";
     window.location.href = `${API_BASE_URL}/api/auth/${provider}`;
   };
 

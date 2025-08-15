@@ -59,6 +59,7 @@ export default function HomepageNavbar() {
           <nav className="flex gap-4 xl:gap-6 text-sm xl:text-base font-medium items-center">
            
             <Link href="/services/all" className="hover:text-green-300 text-white whitespace-nowrap">Browse Services</Link>
+            <Link href="/ai-agents/all" className="hover:text-green-300 text-white whitespace-nowrap">AI Agents</Link>
             <Dropdown
               label="Users"
               items={[
@@ -107,6 +108,7 @@ export default function HomepageNavbar() {
         <div className="lg:hidden bg-emerald-800 px-4 py-4 space-y-3 shadow-md text-base border-t border-emerald-700">
           <div className="space-y-2">
             <Link href="/services/all" className="block text-white hover:text-green-300 py-2 transition-colors">Browse Services</Link>
+            <Link href="/ai-agents/all" className="block text-white hover:text-green-300 py-2 transition-colors">AI Agents</Link>
             <Link href="/users/top" className="block text-white hover:text-green-300 py-2 transition-colors">Top Rated Users</Link>
             <Link href="/users/nearby" className="block text-white hover:text-green-300 py-2 transition-colors">Nearby Users</Link>
             <Link href="/seller" className="block text-white hover:text-green-300 py-2 transition-colors">Become a Seller</Link>

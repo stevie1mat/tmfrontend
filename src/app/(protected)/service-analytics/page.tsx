@@ -224,7 +224,7 @@ export default function ServiceAnalyticsPage() {
         }
 
         // Get user profile to get user ID
-        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/profile`, {
+        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         

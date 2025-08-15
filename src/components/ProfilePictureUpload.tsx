@@ -78,7 +78,7 @@ export default function ProfilePictureUpload({
       formData.append('image', file);
 
       const token = localStorage.getItem('token');
-      const API_BASE = process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080';
+      const API_BASE = process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com';
       
       const response = await fetch(`${API_BASE}/api/profile/upload-image`, {
         method: 'POST',

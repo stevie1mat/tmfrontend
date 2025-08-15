@@ -28,7 +28,7 @@ export default function UserGrid() {
 
   // Realtime polling for top users
   useEffect(() => {
-    const API_BASE = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
+    const API_BASE = process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com';
     const fetchUsers = async () => {
       try {
         setLoading(true);

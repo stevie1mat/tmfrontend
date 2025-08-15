@@ -190,7 +190,7 @@ export default function AdminPage() {
   const fetchUsers = useCallback(async (reset: boolean = true) => {
     try {
       setUserLoading(true);
-      const API_BASE_URL = process.env.NEXT_PUBLIC_USER_API_URL || "http://localhost:8080";
+      const API_BASE_URL = process.env.NEXT_PUBLIC_USER_API_URL || "https://tmuserservice.onrender.com";
       const params = buildUserApiParams();
       const url = `${API_BASE_URL}/api/admin/test-users?${params}`;
       console.log('🔗 Fetching users from:', url);
@@ -273,7 +273,7 @@ export default function AdminPage() {
         setTasks(prev => prev.filter(task => (task.ID || task.id) !== itemToDelete.id));
         setTaskTotalCount(prev => prev - 1);
       } else {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_USER_API_URL || "http://localhost:8080";
+        const API_BASE_URL = process.env.NEXT_PUBLIC_USER_API_URL || "https://tmuserservice.onrender.com";
         const response = await fetch(`${API_BASE_URL}/api/admin/delete/${itemToDelete.id}`, {
           method: 'DELETE',
         });

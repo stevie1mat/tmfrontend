@@ -129,7 +129,7 @@ export default function ClientDirectoryPage() {
         }
 
         // Get user ID first
-        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/profile`, {
+        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -168,7 +168,7 @@ export default function ClientDirectoryPage() {
           // Get booker details from auth service
           let bookerDetails = null;
           try {
-            const bookerRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/user/${bookerId}`, {
+            const bookerRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/user/${bookerId}`, {
               headers: { Authorization: `Bearer ${token}` },
             });
             

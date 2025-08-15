@@ -184,7 +184,7 @@ export default function UserProfilePage() {
       setProfileStatsLoading(true);
       const TASK_API_BASE = process.env.NEXT_PUBLIC_TASK_API_URL || 'http://localhost:8084';
       const REVIEW_API_BASE = process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086';
-      const AUTH_API_BASE = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
+      const AUTH_API_BASE = process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com';
       
       // Initialize default values
       let tasksCompleted = 0;
@@ -262,7 +262,7 @@ export default function UserProfilePage() {
       setStatsLoading(true);
       const TASK_API_BASE = process.env.NEXT_PUBLIC_TASK_API_URL || 'http://localhost:8084';
       const REVIEW_API_BASE = process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086';
-      const AUTH_API_BASE = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
+      const AUTH_API_BASE = process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com';
       
       // Initialize default values
       let totalTasks = 0;

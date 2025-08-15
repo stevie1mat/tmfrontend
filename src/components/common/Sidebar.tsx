@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { MdDashboard, MdTask, MdExplore, MdMessage } from "react-icons/md";
 import { FiLogOut, FiSettings, FiHome, FiSearch, FiList, FiCalendar, FiMessageCircle, FiBell, FiUser, FiDollarSign, FiTrendingUp, FiUsers, FiHelpCircle, FiFileText, FiAward, FiBookOpen, FiPlus, FiShield, FiHeart, FiCpu } from "react-icons/fi";
+import { FaCoins } from "react-icons/fa";
 import { BiBrain } from "react-icons/bi";
 import { FaBrain } from "react-icons/fa";
 import { FaRegCalendarAlt, FaUserAlt } from "react-icons/fa";
@@ -349,7 +350,8 @@ export function NotificationBell({ userId }: { userId?: string }) {
 export default function Sidebar({ isCollapsed = false, onToggle }: { isCollapsed?: boolean; onToggle?: () => void }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
+  const credits = user?.Credits ?? user?.credits ?? null;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -365,6 +367,19 @@ export default function Sidebar({ isCollapsed = false, onToggle }: { isCollapsed
         <div className={`${isCollapsed ? 'px-2' : 'px-6'} py-8 flex flex-col items-center gap-4 border-b border-gray-100 relative`}>
           {!isCollapsed && <h1 className="text-2xl font-extrabold tracking-tight text-gray-800">TradeMinutes.</h1>}
           {isCollapsed && <h1 className="text-xl font-extrabold tracking-tight text-gray-800">TM</h1>}
+          
+          {/* Credits Display */}
+          {credits !== null && (
+            <div className={`flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200 ${
+              isCollapsed ? 'justify-center' : 'w-full'
+            }`}>
+              <FaCoins className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              {!isCollapsed && (
+                <span className="text-sm font-medium text-emerald-700">{credits} credits</span>
+              )}
+            </div>
+          )}
+          
           {onToggle && (
             <button
               onClick={onToggle}

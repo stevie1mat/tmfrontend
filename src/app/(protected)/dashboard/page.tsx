@@ -653,15 +653,12 @@ export default function ProfileDashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-[#FAF6ED] rounded-xl p-6 text-gray-900">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">Monthly Earnings</span>
-                    {/* Replace icon with TM */}
-                    <span className="text-xs font-bold text-emerald-700 align-super">TM</span>
+                    <span className="text-sm text-gray-600">Current Credits</span>
+                    <FaCoins className="w-5 h-5 text-emerald-700" />
                   </div>
-                  <div className="text-3xl font-bold text-gray-900">
-                    <span className="text-xs font-normal align-super">TM</span>{profile?.totalEarnings || serviceStats.earnings || 0}
-                  </div>
+                  <div className="text-3xl font-bold text-gray-900">{profile?.Credits || 0}</div>
                   <div className="text-sm text-gray-600">
-                    {profile?.totalEarnings && profile.totalEarnings > 0 ? '+12% from last month' : 'Start earning today'}
+                    Available for booking services
                   </div>
                 </div>
                 

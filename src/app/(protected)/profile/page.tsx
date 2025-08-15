@@ -111,12 +111,12 @@ export default function ProfilePage() {
       addDebugLog(`🔍 Fetching profile with headers: ${JSON.stringify(headers)}`);
       addDebugLog(`🔍 Token from headers: ${headers.Authorization ? headers.Authorization.substring(0, 50) + "..." : "No token"}`);
       addDebugLog(`🔍 Token exists: ${!!headers.Authorization}`);
-      addDebugLog(`🔍 API URL: ${process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}/api/profile/get`);
+      addDebugLog(`🔍 API URL: ${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/profile/get`);
       
       const startTime = Date.now();
       addDebugLog("📡 Making fetch request...");
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}/api/profile/get`,
+        `${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/profile/get`,
         { headers }
       );
       const endTime = Date.now();
@@ -174,7 +174,7 @@ export default function ProfilePage() {
       setSaving(true);
       const headers = getAuthHeaders();
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}/api/profile/update-info`,
+        `${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/profile/update-info`,
         {
           method: "POST",
           headers,
@@ -256,7 +256,7 @@ export default function ProfilePage() {
               <p><strong>Token:</strong> {token ? "✅ Exists" : "❌ Missing"}</p>
               <p><strong>Loading State:</strong> {loading ? "⏳ Loading" : "✅ Complete"}</p>
               <p><strong>Profile Data:</strong> {profile ? "✅ Loaded" : "❌ Not loaded"}</p>
-              <p><strong>API URL:</strong> {process.env.NEXT_PUBLIC_USER_API_URL || 'http://localhost:8080'}</p>
+              <p><strong>API URL:</strong> {process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}</p>
               <p><strong>Environment:</strong> {process.env.NODE_ENV}</p>
               <p><strong>Token Length:</strong> {token ? token.length : 0}</p>
               <p><strong>Token Preview:</strong> {token ? token.substring(0, 20) + "..." : "None"}</p>

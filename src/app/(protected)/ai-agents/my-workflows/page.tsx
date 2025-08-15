@@ -22,7 +22,7 @@ export default function MyWorkflowsPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://tmagenticai.onrender.com';
+  const API_BASE_URL = process.env.NEXT_PUBLIC_AGENTIC_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8002';
   const WORKFLOW_API_URL = `${API_BASE_URL}/api/workflows`;
 
   useEffect(() => {
@@ -59,6 +59,15 @@ export default function MyWorkflowsPage() {
       coverImage: wf.coverImage
     }));
     router.push('/ai-agents/create-workflow');
+  }
+
+  function handleDemoWorkflow(wf: any) {
+    // Show credit warning if workflow has a cost
+    if (wf.credits && wf.credits > 0) {
+      const confirmed = confirm(`This workflow costs ${wf.credits} credits to execute. Do you want to continue?`);
+      if (!confirmed) return;
+    }
+    router.push(`/ai-agents/workflow-chat/${wf.id}`);
   }
 
   function handleDeleteClick(workflow: any) {
@@ -159,7 +168,7 @@ export default function MyWorkflowsPage() {
             <div key={wf.id}>
               <AIAgentCard
                 agent={agent}
-                onDemo={() => router.push(`/ai-agents/workflow-chat/${wf.id}`)}
+                onDemo={() => handleDemoWorkflow(wf)}
                 onPurchase={() => handleLoadWorkflow(wf)}
                 onDelete={() => handleDeleteClick(wf)}
               />

@@ -517,7 +517,7 @@ export default function ServiceViewPage() {
       
       // Get current user profile with caching
       const profileData = await fetchProfileWithCache('current-user', async () => {
-        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/profile`, {
+        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
           headers: getAuthHeaders(),
         });
         
@@ -538,7 +538,7 @@ export default function ServiceViewPage() {
       }
 
       const providerProfileData = await fetchProfileWithCache(serviceProviderId, async () => {
-        const providerProfileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/user/${serviceProviderId}`, {
+        const providerProfileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/user/${serviceProviderId}`, {
           headers: getAuthHeaders(),
         });
         
@@ -612,7 +612,7 @@ export default function ServiceViewPage() {
     setSendingChatMessage(true);
     try {
       // Get current user profile
-      const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/profile`, {
+      const profileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
@@ -644,7 +644,7 @@ export default function ServiceViewPage() {
       }
 
       // Fetch service provider's profile to get their email
-      const providerProfileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080'}/api/auth/user/${serviceProviderId}`, {
+      const providerProfileRes = await fetch(`${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/user/${serviceProviderId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
@@ -1195,20 +1195,7 @@ export default function ServiceViewPage() {
                   </div>
                 )}
 
-                {/* Debug Section */}
-                {process.env.NODE_ENV === 'development' && (
-                  <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <h4 className="font-medium text-yellow-800 mb-2">Debug Info:</h4>
-                    <div className="text-sm text-yellow-700 space-y-1">
-                      <div>hasBooked: {hasBooked.toString()}</div>
-                      <div>isOwnService: {isOwnService().toString()}</div>
-                      <div>UserID: {user?.ID || user?.id || 'Not logged in'}</div>
-                      <div>ServiceAuthorID: {service?.Author?.ID || service?.Author?.id || service?.author?.id || 'Unknown'}</div>
-                      <div>ServiceID: {service?.ID || service?.id || 'Unknown'}</div>
-                      <div>Token: {token ? 'Present' : 'Missing'}</div>
-                    </div>
-                  </div>
-                )}
+
 
                 {/* Action Buttons */}
                 <div className="space-y-3 mt-6">

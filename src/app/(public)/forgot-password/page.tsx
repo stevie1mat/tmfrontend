@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
     setSuccess(false);
     setLoading(true);
     try {
-      const authUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8080';
+      const authUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com';
       const res = await fetch(
         `${authUrl}/api/auth/forgot-password`,
         {

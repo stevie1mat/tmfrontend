@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaCoins } from "react-icons/fa";
 import { Menu } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useAuth } from "../contexts/AuthContext";
@@ -64,6 +64,7 @@ export default function Navbar() {
           <nav className="flex gap-4 xl:gap-6 text-sm xl:text-base font-medium items-center">
            
             <Link href="/services/all" className={`${isHomepage ? "hover:text-green-300" : "hover:text-green-600"} whitespace-nowrap`}>Browse Services</Link>
+            <Link href="/ai-agents/all" className={`${isHomepage ? "hover:text-green-300" : "hover:text-green-600"} whitespace-nowrap`}>AI Agents</Link>
             <Dropdown
               label="Users"
               items={[
@@ -80,6 +81,17 @@ export default function Navbar() {
           
           {user ? (
             <div className="flex items-center space-x-3 xl:space-x-4">
+              {/* Credits Display */}
+              {credits !== null && (
+                <div className={`flex items-center space-x-2 px-3 py-2 rounded-lg border ${
+                  isHomepage 
+                    ? 'bg-white/10 text-white border-white/20' 
+                    : 'bg-gray-50 text-gray-700 border-gray-200'
+                }`}>
+                  <FaCoins className="w-4 h-4 text-emerald-500" />
+                  <span className="text-sm font-medium">{credits} credits</span>
+                </div>
+              )}
               <Link href="/dashboard">
                 <button className={`bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white text-sm xl:text-base px-3 xl:px-4 py-2 rounded transition-all duration-200 whitespace-nowrap`}>
                   Dashboard
@@ -113,6 +125,7 @@ export default function Navbar() {
         <div className={`lg:hidden px-4 py-4 space-y-3 shadow-md text-sm ${isHomepage ? "bg-emerald-900/90 backdrop-blur-sm border-t border-emerald-800" : "bg-white border-t border-gray-200"}`}>
           <div className="space-y-2">
             <Link href="/services/all" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>Browse Services</Link>
+            <Link href="/ai-agents/all" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>AI Agents</Link>
             <Link href="/users/top" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>Top Rated Users</Link>
             <Link href="/users/nearby" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>Nearby Users</Link>
             <Link href="/seller" className={`block ${isHomepage ? "text-white hover:text-green-300" : "text-black hover:text-green-600"} py-2 transition-colors`}>Become a Seller</Link>
@@ -121,6 +134,17 @@ export default function Navbar() {
           <div className="pt-2 border-t border-gray-300">
             {user ? (
               <div className="space-y-2">
+                {/* Credits Display - Mobile */}
+                {credits !== null && (
+                  <div className={`flex items-center justify-center space-x-2 px-3 py-2 rounded-lg border ${
+                    isHomepage 
+                      ? 'bg-white/10 text-white border-white/20' 
+                      : 'bg-gray-50 text-gray-700 border-gray-200'
+                  }`}>
+                    <FaCoins className="w-4 h-4 text-emerald-500" />
+                    <span className="text-sm font-medium">{credits} credits</span>
+                  </div>
+                )}
                 <Link href="/dashboard">
                   <button className={`w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white py-3 rounded transition-all duration-200 font-medium`}>
                     Dashboard

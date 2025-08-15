@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     const db = await getDb();
     const body = await req.json();
     const userId = req.headers.get('user-id') || 'demo-user'; // Replace with real auth
-    const { name, nodes, edges } = body;
+    const { name, nodes, edges, description, credits, coverImage } = body;
     if (!name || !nodes || !edges) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
     }
@@ -29,6 +29,9 @@ export async function POST(req: NextRequest) {
       name,
       nodes,
       edges,
+      description: description || '',
+      credits: parseInt(credits) || 0,
+      coverImage: coverImage || null,
       createdAt: new Date(),
     };
     const result = await db.collection('workflows').insertOne(workflow);
@@ -54,6 +57,7 @@ export async function GET(req: NextRequest) {
       createdAt: wf.createdAt,
       published: wf.published || false,
       description: wf.description,
+      credits: wf.credits || 0,
       category: wf.category,
       price: wf.price,
       rating: wf.rating,
@@ -73,7 +77,7 @@ export async function PATCH(req: NextRequest) {
     const db = await getDb();
     const userId = req.headers.get('user-id') || 'demo-user';
     const body = await req.json();
-    const { id, published, description, category, price, coverImage, features, authorName, authorAvatar } = body;
+    const { id, published, description, credits, category, price, coverImage, features, authorName, authorAvatar } = body;
     
     if (!id) {
       return NextResponse.json({ error: 'Missing workflow ID' }, { status: 400 });
@@ -82,6 +86,7 @@ export async function PATCH(req: NextRequest) {
     const updateData: any = {};
     if (published !== undefined) updateData.published = published;
     if (description !== undefined) updateData.description = description;
+    if (credits !== undefined) updateData.credits = parseInt(credits) || 0;
     if (category !== undefined) updateData.category = category;
     if (price !== undefined) updateData.price = price;
     if (coverImage !== undefined) updateData.coverImage = coverImage;
