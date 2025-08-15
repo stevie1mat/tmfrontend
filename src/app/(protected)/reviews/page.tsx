@@ -530,7 +530,7 @@ export default function ReviewsPage() {
   }
 
   return (
-      <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
         {/* Header */}
         <div className="bg-white p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
@@ -829,7 +829,7 @@ export default function ReviewsPage() {
                   <div className="space-y-4">
                     {sortedReviews.map((review) => (
                       <div key={review.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                      <div className="flex items-start gap-4">
+                        <div className="flex items-start gap-4">
                         {/* Reviewer Avatar */}
                         <div className="flex-shrink-0">
                           {review.reviewerAvatar ? (
