@@ -45,7 +45,7 @@ interface Booking {
 }
 
 export default function BookedByMePage() {
-  const { user, refreshUser } = useAuth();
+  const { user, refreshUser, loading: authLoading } = useAuth();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -749,11 +749,27 @@ export default function BookedByMePage() {
                   }
                   
                   console.log("🔵 Getting user ID from AuthContext...");
-                  let userId = user?.ID || user?.id;
+                  console.log("🔵 Auth loading state:", authLoading);
                   console.log("🔵 User from AuthContext:", user);
+                  
+                  let userId = user?.ID || user?.id;
                   console.log("🔵 Extracted userId from context:", userId);
                   
-                  // Fallback to API call if user ID not found in context
+                  // If user data is not loaded yet, try to refresh it
+                  if (!userId && !authLoading) {
+                    console.log("🔵 User data not loaded, refreshing...");
+                    try {
+                      await refreshUser();
+                      // Wait a moment for the refresh to complete
+                      await new Promise(resolve => setTimeout(resolve, 1000));
+                      userId = user?.ID || user?.id;
+                      console.log("🔵 After refresh - userId:", userId);
+                    } catch (error) {
+                      console.error("❌ Failed to refresh user:", error);
+                    }
+                  }
+                  
+                  // Fallback to API call if user ID still not found
                   if (!userId) {
                     console.log("🔵 User ID not found in context, trying API...");
                     const token = localStorage.getItem("token");
