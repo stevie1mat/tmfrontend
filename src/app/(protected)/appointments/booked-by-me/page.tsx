@@ -45,7 +45,7 @@ interface Booking {
 }
 
 export default function BookedByMePage() {
-  const { refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -748,34 +748,41 @@ export default function BookedByMePage() {
                     return;
                   }
                   
-                  console.log("🔵 Getting token from localStorage...");
-                  const token = localStorage.getItem("token");
-                  console.log("🔵 Token:", token ? "Found" : "Not found");
+                  console.log("🔵 Getting user ID from AuthContext...");
+                  let userId = user?.ID || user?.id;
+                  console.log("🔵 User from AuthContext:", user);
+                  console.log("🔵 Extracted userId from context:", userId);
                   
-                  let userId = null;
-                  if (token) {
-                    console.log("🔵 Fetching user profile from auth API...");
-                    const authUrl = `${process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:8081'}/api/auth/profile`;
-                    console.log("🔵 Auth URL:", authUrl);
+                  // Fallback to API call if user ID not found in context
+                  if (!userId) {
+                    console.log("🔵 User ID not found in context, trying API...");
+                    const token = localStorage.getItem("token");
+                    console.log("🔵 Token:", token ? "Found" : "Not found");
                     
-                    try {
-                      const profileRes = await fetch(authUrl, {
-                        headers: { Authorization: `Bearer ${token}` },
-                      });
-                      console.log("🔵 Profile response status:", profileRes.status);
-                      console.log("🔵 Profile response ok:", profileRes.ok);
+                    if (token) {
+                      console.log("🔵 Fetching user profile from auth API...");
+                      const authUrl = `${process.env.NEXT_PUBLIC_AUTH_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`;
+                      console.log("🔵 Auth URL:", authUrl);
                       
-                      if (profileRes.ok) {
-                        const profileData = await profileRes.json();
-                        console.log("🔵 Profile data:", profileData);
-                        userId = profileData.ID || profileData.id;
-                        console.log("🔵 Extracted userId:", userId);
-                      } else {
-                        const errorText = await profileRes.text();
-                        console.error("❌ Profile fetch failed:", errorText);
+                      try {
+                        const profileRes = await fetch(authUrl, {
+                          headers: { Authorization: `Bearer ${token}` },
+                        });
+                        console.log("🔵 Profile response status:", profileRes.status);
+                        console.log("🔵 Profile response ok:", profileRes.ok);
+                        
+                        if (profileRes.ok) {
+                          const profileData = await profileRes.json();
+                          console.log("🔵 Profile data:", profileData);
+                          userId = profileData.ID || profileData.id;
+                          console.log("🔵 Extracted userId from API:", userId);
+                        } else {
+                          const errorText = await profileRes.text();
+                          console.error("❌ Profile fetch failed:", errorText);
+                        }
+                      } catch (error) {
+                        console.error("❌ Profile fetch error:", error);
                       }
-                    } catch (error) {
-                      console.error("❌ Profile fetch error:", error);
                     }
                   }
                   
