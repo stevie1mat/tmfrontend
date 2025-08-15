@@ -133,22 +133,53 @@ export default function ReviewsPage() {
           }
         }
 
+        const REVIEW_API_URL = process.env.NEXT_PUBLIC_REVIEW_API_URL || 'https://trademinutes-review.onrender.com';
+        console.log("🔵 Review API URL:", REVIEW_API_URL);
+        console.log("🔵 User ID for reviews:", userId);
+        
         // Fetch reviews for the current user (as reviewee - reviews received)
-        const reviewsReceivedResponse = await fetch(`${process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086'}/api/reviews?userId=${userId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        console.log("🔵 Fetching reviews received...");
+        let reviewsReceivedResponse;
+        try {
+          reviewsReceivedResponse = await fetch(`${REVIEW_API_URL}/api/reviews?userId=${userId}`, {
+            headers: { 
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+        } catch (error) {
+          console.error("❌ Network error fetching reviews received:", error);
+          throw new Error(`Network error fetching reviews received: ${error}`);
+        }
 
         // Fetch reviews given by the current user (as reviewer - reviews given)
-        const reviewsGivenResponse = await fetch(`${process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086'}/api/reviews?reviewerId=${userId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        console.log("🔵 Fetching reviews given...");
+        let reviewsGivenResponse;
+        try {
+          reviewsGivenResponse = await fetch(`${REVIEW_API_URL}/api/reviews?reviewerId=${userId}`, {
+            headers: { 
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+        } catch (error) {
+          console.error("❌ Network error fetching reviews given:", error);
+          throw new Error(`Network error fetching reviews given: ${error}`);
+        }
 
+        console.log("🔵 Reviews received response status:", reviewsReceivedResponse.status);
+        console.log("🔵 Reviews given response status:", reviewsGivenResponse.status);
+        
         if (!reviewsReceivedResponse.ok) {
-          throw new Error("Failed to fetch reviews received");
+          const errorText = await reviewsReceivedResponse.text();
+          console.error("❌ Failed to fetch reviews received:", reviewsReceivedResponse.status, errorText);
+          throw new Error(`Failed to fetch reviews received: ${reviewsReceivedResponse.status} - ${errorText}`);
         }
 
         if (!reviewsGivenResponse.ok) {
-          throw new Error("Failed to fetch reviews given");
+          const errorText = await reviewsGivenResponse.text();
+          console.error("❌ Failed to fetch reviews given:", reviewsGivenResponse.status, errorText);
+          throw new Error(`Failed to fetch reviews given: ${reviewsGivenResponse.status} - ${errorText}`);
         }
 
         const reviewsReceivedData = await reviewsReceivedResponse.json();
