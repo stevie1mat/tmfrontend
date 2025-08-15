@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useAuth } from '@/contexts/AuthContext';
 
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { 
@@ -81,6 +82,7 @@ interface TaskReviewGroup {
 }
 
 export default function ReviewsPage() {
+  const { user, loading: authLoading } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [taskGroups, setTaskGroups] = useState<TaskReviewGroup[]>([]);
   const [stats, setStats] = useState<ReviewStats | null>(null);
@@ -94,6 +96,10 @@ export default function ReviewsPage() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
+    // Wait for auth loading to complete
+    if (authLoading) {
+      return;
+    }
 
     const fetchReviews = async () => {
       setLoading(true);
@@ -103,20 +109,28 @@ export default function ReviewsPage() {
           throw new Error("No authentication token found");
         }
 
-        // Get current user ID from auth service
-        const authResponse = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        // Get current user ID from AuthContext
+        let userId = user?.ID || user?.id;
+        console.log("🔵 User from AuthContext:", user);
+        console.log("🔵 Extracted userId from context:", userId);
 
-        if (!authResponse.ok) {
-          throw new Error("Failed to get user profile");
-        }
-
-        const userProfile = await authResponse.json();
-        const userId = userProfile.ID || userProfile.id;
-
+        // Fallback to API call if user ID not found in context
         if (!userId) {
-          throw new Error("User ID not found");
+          console.log("🔵 User ID not found in context, trying API...");
+          const authResponse = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          if (!authResponse.ok) {
+            throw new Error("Failed to get user profile");
+          }
+
+          const userProfile = await authResponse.json();
+          userId = userProfile.ID || userProfile.id;
+
+          if (!userId) {
+            throw new Error("User ID not found");
+          }
         }
 
         // Fetch reviews for the current user (as reviewee - reviews received)
@@ -376,7 +390,7 @@ export default function ReviewsPage() {
     };
 
     fetchReviews();
-  }, []);
+  }, [selectedView, selectedRating, selectedCategory, searchTerm, sortBy, sortOrder, authLoading, user]);
 
   const formatCurrency = (amount: number) => {
     return `TM ${amount.toFixed(2)}`;
