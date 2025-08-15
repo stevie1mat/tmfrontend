@@ -31,7 +31,8 @@ const useTaskImages = (taskId: string) => {
       setError(null);
       try {
         // Use low quality thumbnails for better performance: 40% quality, 300px max width
-        const response = await fetch(`http://localhost:8084/api/tasks/images?taskId=${taskId}&quality=40&width=300`);
+        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
+        const response = await fetch(`${API_BASE_URL}/api/tasks/images?taskId=${taskId}&quality=40&width=300`);
         if (!response.ok) {
           throw new Error('Failed to load images');
         }
