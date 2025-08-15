@@ -133,9 +133,39 @@ export default function ReviewsPage() {
           }
         }
 
-        const REVIEW_API_URL = process.env.NEXT_PUBLIC_REVIEW_API_URL || 'https://trademinutes-review.onrender.com';
+        const REVIEW_API_URL = process.env.NEXT_PUBLIC_REVIEW_API_URL;
+        if (!REVIEW_API_URL) {
+          console.error("❌ NEXT_PUBLIC_REVIEW_API_URL environment variable is not set");
+          setError("Review service configuration is missing. Please contact support.");
+          setLoading(false);
+          return;
+        }
         console.log("🔵 Review API URL:", REVIEW_API_URL);
         console.log("🔵 User ID for reviews:", userId);
+        
+        // Check if ReviewService is accessible
+        try {
+          const healthCheck = await fetch(`${REVIEW_API_URL}/api/reviews?userId=${userId}`, {
+            method: 'HEAD',
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          console.log("🔵 ReviewService health check status:", healthCheck.status);
+        } catch (error) {
+          console.warn("⚠️ ReviewService not accessible, showing empty state:", error);
+          setReviews([]);
+          setTaskGroups([]);
+          setStats({
+            totalReviews: 0,
+            averageRating: 0,
+            ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+            totalRating: 0,
+            recentReviews: 0,
+            topRatedServices: [],
+            categoryBreakdown: []
+          });
+          setLoading(false);
+          return;
+        }
         
         // Fetch reviews for the current user (as reviewee - reviews received)
         console.log("🔵 Fetching reviews received...");
@@ -774,9 +804,31 @@ export default function ReviewsPage() {
           ) : (
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
               <div className="p-6">
-                <div className="space-y-4">
-                  {sortedReviews.map((review) => (
-                    <div key={review.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                {sortedReviews.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                      <FaStar className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No Reviews Found</h3>
+                    <p className="text-gray-500 mb-4">
+                      {error ? 
+                        "Unable to load reviews at the moment. The review service may be temporarily unavailable." :
+                        "You haven't received or given any reviews yet. Reviews will appear here once you start using our services."
+                      }
+                    </p>
+                    {error && (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <p className="text-sm text-yellow-800">
+                          <strong>Technical Note:</strong> The review service is currently unavailable. 
+                          This may be due to maintenance or network issues. Please try again later.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {sortedReviews.map((review) => (
+                      <div key={review.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                       <div className="flex items-start gap-4">
                         {/* Reviewer Avatar */}
                         <div className="flex-shrink-0">
@@ -864,5 +916,5 @@ export default function ReviewsPage() {
           )}
         </div>
       </div>
-  );
-} 
+    );
+  } 
