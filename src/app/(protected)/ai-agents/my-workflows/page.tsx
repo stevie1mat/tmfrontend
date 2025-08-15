@@ -62,11 +62,7 @@ export default function MyWorkflowsPage() {
   }
 
   function handleDemoWorkflow(wf: any) {
-    // Show credit warning if workflow has a cost
-    if (wf.credits && wf.credits > 0) {
-      const confirmed = confirm(`This workflow costs ${wf.credits} credits to execute. Do you want to continue?`);
-      if (!confirmed) return;
-    }
+    // No credit warning needed for user's own workflows - they own them!
     router.push(`/ai-agents/workflow-chat/${wf.id}`);
   }
 
