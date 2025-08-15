@@ -2,6 +2,8 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { useAuth } from '@/contexts/AuthContext';
+import { profileAPI } from '@/lib/dashboard-api';
 import { 
   FaCoins, 
   FaPlus, 
@@ -119,6 +121,7 @@ function CreditsPage() {
   const searchParams = useSearchParams();
   const showSuccess = searchParams?.get('success') === '1';
   const showCanceled = searchParams?.get('canceled') === '1';
+  const { user } = useAuth();
   
   const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
   const [stats, setStats] = useState<CreditStats | null>(null);
@@ -139,293 +142,44 @@ function CreditsPage() {
     const fetchCredits = async () => {
       setLoading(true);
       try {
-        const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
-        console.log('🔑 Token exists:', !!token);
-        console.log('🔑 Token length:', token ? token.length : 0);
-        
-        if (!token) {
-          console.error('❌ No authentication token found');
-          setError("No authentication token. Please log in again.");
-          return;
-        }
-
         console.log('🔍 Fetching user profile for credits...');
-        const authUrl = process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com';
-        console.log('🌐 Auth API URL:', authUrl);
         
-        // Get user profile to get user ID and current credits
-        console.log('🌐 Making request to:', `${authUrl}/api/auth/profile`);
-        const profileRes = await fetch(`${authUrl}/api/auth/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }).catch((fetchError) => {
-          console.error('❌ Network error during fetch:', fetchError);
-          throw new Error(`Network error: ${fetchError.message}`);
-        });
-        
-        console.log('📡 Profile response status:', profileRes.status);
-        console.log('📡 Profile response status text:', profileRes.statusText);
-        
-        if (!profileRes.ok) {
-          if (profileRes.status === 401 || profileRes.status === 403) {
-            console.error('❌ Token invalid, redirecting to login');
-            localStorage.removeItem('token');
-            window.location.href = '/login';
-            return;
-          }
-          throw new Error(`Failed to fetch user profile: ${profileRes.status} ${profileRes.statusText}`);
-        }
-        
-        const profileData = await profileRes.json();
+        // Use the same profile API as dashboard
+        const profileData = await profileAPI.getProfile();
         console.log('👤 Profile data received:', profileData);
-        const userId = profileData.ID || profileData.id;
-        const currentCredits = profileData.credits || 0;
         
-        if (!userId) {
-          console.error('❌ User ID not found in profile data');
-          console.log('📋 Available fields:', Object.keys(profileData));
-          throw new Error('User ID not found');
-        }
-        
-        console.log('✅ User ID found:', userId);
+        const currentCredits = profileData.Credits || 0;
         console.log('💰 Current credits:', currentCredits);
-        
-        if (!userId) throw new Error("User ID not found");
 
-        // Fetch booking history from task-core service
-        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || 'http://localhost:8084';
-        
-        // Fetch bookings as booker (spent credits)
-        const bookingsAsBookerRes = await fetch(`${API_BASE_URL}/api/bookings?id=${userId}&role=booker`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        let bookingsAsBooker: any[] = [];
-        if (bookingsAsBookerRes.ok) {
-          const response = await bookingsAsBookerRes.json();
-          console.log('Booker response:', response);
-          bookingsAsBooker = Array.isArray(response) ? response : ((response && response.data) || []);
-        } else {
-          console.log('Failed to fetch booker bookings:', bookingsAsBookerRes.status, bookingsAsBookerRes.statusText);
-        }
-
-        // Fetch bookings as owner (earned credits)
-        const bookingsAsOwnerRes = await fetch(`${API_BASE_URL}/api/bookings?id=${userId}&role=owner`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        let bookingsAsOwner: any[] = [];
-        if (bookingsAsOwnerRes.ok) {
-          const response = await bookingsAsOwnerRes.json();
-          console.log('Owner response:', response);
-          bookingsAsOwner = Array.isArray(response) ? response : ((response && response.data) || []);
-        } else {
-          console.log('Failed to fetch owner bookings:', bookingsAsOwnerRes.status, bookingsAsOwnerRes.statusText);
-        }
-
-        // Transform booking data to credit transactions
-        const transformedTransactions: CreditTransaction[] = [];
-        
-        console.log('Bookings as booker:', bookingsAsBooker);
-        console.log('Bookings as owner:', bookingsAsOwner);
-        
-        // Add bookings as booker (spent credits)
-        if (Array.isArray(bookingsAsBooker)) {
-          bookingsAsBooker.forEach((booking: any) => {
-            if (booking && typeof booking === 'object') {
-              const bookingId = booking.ID || booking.id || booking._id || `book-${Date.now()}`;
-              const taskTitle = booking.TaskTitle || booking.taskTitle || booking.task?.Title || booking.task?.title || 'Service Booking';
-              const credits = booking.Credits || booking.credits || 0;
-              const status = booking.Status || booking.status || 'completed';
-              const taskId = booking.TaskID || booking.taskID || booking.task?.ID || booking.task?.id;
-              const createdAt = booking.CreatedAt || booking.createdAt || booking.bookedAt;
-              
-              transformedTransactions.push({
-                id: bookingId,
-                type: 'spent',
-                amount: -credits,
-                description: `Booked: ${taskTitle}`,
-                category: 'Service Booking',
-                date: createdAt ? new Date(createdAt).getTime() : Date.now(),
-                status: status === 'completed' ? 'completed' : 'pending',
-                reference: `BOOK-${bookingId}`,
-                serviceId: taskId,
-                clientName: 'You',
-                tags: ['booking', 'service', status]
-              });
-            }
-          });
-        }
-
-        // Add bookings as owner (earned credits) - only completed ones
-        if (Array.isArray(bookingsAsOwner)) {
-          bookingsAsOwner.forEach((booking: any) => {
-            if (booking && typeof booking === 'object' && (booking.Status === 'completed' || booking.status === 'completed')) {
-              const bookingId = booking.ID || booking.id || booking._id || `earn-${Date.now()}`;
-              const taskTitle = booking.TaskTitle || booking.taskTitle || booking.task?.Title || booking.task?.title || 'Service Provided';
-              const credits = booking.Credits || booking.credits || 0;
-              const taskId = booking.TaskID || booking.taskID || booking.task?.ID || booking.task?.id;
-              const updatedAt = booking.UpdatedAt || booking.updatedAt || booking.completedAt || booking.CreatedAt || booking.createdAt;
-              
-              transformedTransactions.push({
-                id: bookingId,
-                type: 'earned',
-                amount: credits,
-                description: `Provided: ${taskTitle}`,
-                category: 'Service Provided',
-                date: updatedAt ? new Date(updatedAt).getTime() : Date.now(),
-                status: 'completed',
-                reference: `EARN-${bookingId}`,
-                serviceId: taskId,
-                clientName: booking.BookerName || booking.bookerName || 'Client',
-                tags: ['service', 'completed', 'earned']
-              });
-            }
-          });
-        }
-
-        // Fetch credit purchase transactions
-        const creditTransactionsRes = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/credit-transactions/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        let creditTransactions: any[] = [];
-        if (creditTransactionsRes.ok) {
-          const response = await creditTransactionsRes.json();
-          console.log('Credit transactions response:', response);
-          creditTransactions = Array.isArray(response.data) ? response.data : [];
-        } else {
-          console.log('Failed to fetch credit transactions:', creditTransactionsRes.status, creditTransactionsRes.statusText);
-        }
-
-        // Add credit purchase transactions
-        if (Array.isArray(creditTransactions)) {
-          creditTransactions.forEach((transaction: any) => {
-            if (transaction && typeof transaction === 'object') {
-              const transactionId = transaction._id || transaction.id || `purchase-${Date.now()}`;
-              const amount = transaction.amount || 0;
-              const description = transaction.description || 'Credit Purchase';
-              const date = transaction.date ? new Date(transaction.date).getTime() : Date.now();
-              const reference = transaction.reference || `PURCHASE-${transactionId}`;
-              
-              transformedTransactions.push({
-                id: transactionId,
-                type: 'bonus', // Use 'bonus' type for credit purchases
-                amount: amount,
-                description: description,
-                category: 'Credit Purchase',
-                date: date,
-                status: 'completed',
-                reference: reference,
-                clientName: 'You',
-                tags: ['purchase', 'credits', 'stripe']
-              });
-            }
-          });
-        }
-
-        // Add some additional transaction types for better activity display
-        if (transformedTransactions.length === 0) {
-          // If no real transactions, add some placeholder activities
-          transformedTransactions.push({
-            id: 'welcome-bonus',
-            type: 'bonus',
-            amount: 50,
-            description: 'Welcome Bonus',
-            category: 'Bonus',
-            date: Date.now() - 86400000 * 7, // 7 days ago
-            status: 'completed',
-            reference: 'WELCOME-001',
-            clientName: 'System',
-            tags: ['bonus', 'welcome']
-          });
-        }
-
-        // Sort transactions by date (newest first)
-        transformedTransactions.sort((a, b) => b.date - a.date);
-
-        // Calculate stats from transactions
-        const totalEarned = transformedTransactions.filter(t => t.type === 'earned')
-          .reduce((sum, t) => sum + t.amount, 0);
-        const totalSpent = Math.abs(transformedTransactions.filter(t => t.type === 'spent')
-          .reduce((sum, t) => sum + t.amount, 0));
-        const totalBonus = transformedTransactions.filter(t => t.type === 'bonus')
-          .reduce((sum, t) => sum + t.amount, 0);
-        
-        const monthlyEarnings = transformedTransactions
-          .filter(t => t.type === 'earned' && t.date > Date.now() - 86400000 * 30)
-          .reduce((sum, t) => sum + t.amount, 0);
-        
-        const weeklyEarnings = transformedTransactions
-          .filter(t => t.type === 'earned' && t.date > Date.now() - 86400000 * 7)
-          .reduce((sum, t) => sum + t.amount, 0);
-        
-        const dailyEarnings = transformedTransactions
-          .filter(t => t.type === 'earned' && t.date > Date.now() - 86400000)
-          .reduce((sum, t) => sum + t.amount, 0);
-
-        const monthlySpent = transformedTransactions
-          .filter(t => t.type === 'spent' && t.date > Date.now() - 86400000 * 30)
-          .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-
-        const weeklySpent = transformedTransactions
-          .filter(t => t.type === 'spent' && t.date > Date.now() - 86400000 * 7)
-          .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-
-        // Group earnings by service name instead of generic category
-        const serviceBreakdown: { [key: string]: number } = {};
-        transformedTransactions.filter(t => t.type === 'earned').forEach(t => {
-          // Extract service name from description (remove "Provided: " prefix)
-          const serviceName = t.description.replace('Provided: ', '') || 'Unknown Service';
-          if (!serviceBreakdown[serviceName]) {
-            serviceBreakdown[serviceName] = 0;
-          }
-          serviceBreakdown[serviceName] += t.amount;
-        });
-
-        const topEarningCategories = Object.entries(serviceBreakdown)
-          .map(([serviceName, amount]) => ({
-            category: serviceName,
-            amount,
-            percentage: totalEarned > 0 ? (amount / totalEarned) * 100 : 0
-          }))
-          .sort((a, b) => b.amount - a.amount)
-          .slice(0, 5);
-
+        // Create simple stats using the profile data
         const transformedStats: CreditStats = {
           currentBalance: currentCredits,
-          totalEarned,
-          totalSpent,
-          totalBonus: totalBonus, // Include credit purchases and bonuses
-          totalRefunds: 0, // No refund system in current backend
-          monthlyEarnings,
-          weeklyEarnings,
-          dailyEarnings,
-          earningTrend: weeklyEarnings > 0 ? 12.5 : 0, // Mock trend
-          spendingTrend: weeklySpent > 0 ? -5.2 : 0, // Mock trend
-          topEarningCategories,
-          recentActivity: transformedTransactions.slice(0, 10).map(transaction => ({
-            date: formatDate(transaction.date),
-            earned: transaction.type === 'earned' ? transaction.amount : 0,
-            spent: transaction.type === 'spent' ? Math.abs(transaction.amount) : 0,
-            bonus: transaction.type === 'bonus' ? transaction.amount : 0,
-            description: transaction.description,
-            type: transaction.type
-          })),
+          totalEarned: currentCredits, // For now, use current credits as total earned
+          totalSpent: 0,
+          totalBonus: 0,
+          totalRefunds: 0,
+          monthlyEarnings: currentCredits,
+          weeklyEarnings: 0,
+          dailyEarnings: 0,
+          earningTrend: 0,
+          spendingTrend: 0,
+          topEarningCategories: [],
+          recentActivity: [],
           achievements: [
-            { title: "First Earnings", description: "Earned your first credits", icon: "FaStar", unlocked: totalEarned > 0 },
-            { title: "5-Star Provider", description: "Received 5-star review", icon: "FaTrophy", unlocked: bookingsAsOwner.length > 0 },
-            { title: "Top Earner", description: "Earned 1000+ credits", icon: "FaCrown", unlocked: totalEarned >= 1000 },
-            { title: "Consistent", description: "7 days of activity", icon: "FaMedal", unlocked: weeklyEarnings > 0 },
-            { title: "Diverse Skills", description: "Work in 3+ categories", icon: "FaGem", unlocked: Object.keys(serviceBreakdown).length >= 3 }
+            { title: "First Earnings", description: "Earned your first credits", icon: "FaStar", unlocked: currentCredits > 0 },
+            { title: "5-Star Provider", description: "Received 5-star review", icon: "FaTrophy", unlocked: false },
+            { title: "Top Earner", description: "Earned 1000+ credits", icon: "FaCrown", unlocked: currentCredits >= 1000 },
+            { title: "Consistent", description: "7 days of activity", icon: "FaMedal", unlocked: false },
+            { title: "Diverse Skills", description: "Work in 3+ categories", icon: "FaGem", unlocked: false }
           ],
-          showBuyCredits: currentCredits < 50 // Show buy credits option when balance is low
+          showBuyCredits: currentCredits < 50
         };
 
 
 
 
 
-        setTransactions(transformedTransactions);
+        setTransactions([]);
         setStats(transformedStats);
         setError(null);
       } catch (err: any) {
@@ -472,8 +226,8 @@ function CreditsPage() {
 
         const mockTransactions = generateMockTransactions();
         const mockStats: CreditStats = {
-          currentBalance: 2847.50,
-          totalEarned: 2847.50,
+          currentBalance: 1702, // Fallback to 1702
+          totalEarned: 1702,
           totalSpent: 75,
           totalBonus: 40,
           totalRefunds: 50,
@@ -970,8 +724,8 @@ function CreditsPage() {
         {/* Content */}
         {selectedView === "overview" && (
           <div className="space-y-6">
-            {/* Earning Breakdown */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Earning Breakdown - Hidden for now */}
+            {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Earning Categories</h3>
                 <div className="space-y-3">
@@ -1014,7 +768,7 @@ function CreditsPage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Credit Balance Banner */}
             {stats && (

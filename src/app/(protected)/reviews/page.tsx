@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from '@/contexts/AuthContext';
 
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { 
@@ -82,7 +81,6 @@ interface TaskReviewGroup {
 }
 
 export default function ReviewsPage() {
-  const { user, loading: authLoading } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [taskGroups, setTaskGroups] = useState<TaskReviewGroup[]>([]);
   const [stats, setStats] = useState<ReviewStats | null>(null);
@@ -96,10 +94,6 @@ export default function ReviewsPage() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
-    // Wait for auth loading to complete
-    if (authLoading) {
-      return;
-    }
 
     const fetchReviews = async () => {
       setLoading(true);
@@ -109,107 +103,38 @@ export default function ReviewsPage() {
           throw new Error("No authentication token found");
         }
 
-        // Get current user ID from AuthContext
-        let userId = user?.ID || user?.id;
-        console.log("🔵 User from AuthContext:", user);
-        console.log("🔵 Extracted userId from context:", userId);
+        // Get current user ID from auth service
+        const authResponse = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-        // Fallback to API call if user ID not found in context
+        if (!authResponse.ok) {
+          throw new Error("Failed to get user profile");
+        }
+
+        const userProfile = await authResponse.json();
+        const userId = userProfile.ID || userProfile.id;
+
         if (!userId) {
-          console.log("🔵 User ID not found in context, trying API...");
-          const authResponse = await fetch(`${process.env.NEXT_PUBLIC_USER_API_URL || 'https://tmuserservice.onrender.com'}/api/auth/profile`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-
-          if (!authResponse.ok) {
-            throw new Error("Failed to get user profile");
-          }
-
-          const userProfile = await authResponse.json();
-          userId = userProfile.ID || userProfile.id;
-
-          if (!userId) {
-            throw new Error("User ID not found");
-          }
+          throw new Error("User ID not found");
         }
 
-        const REVIEW_API_URL = process.env.NEXT_PUBLIC_REVIEW_API_URL;
-        if (!REVIEW_API_URL) {
-          console.error("❌ NEXT_PUBLIC_REVIEW_API_URL environment variable is not set");
-          setError("Review service configuration is missing. Please contact support.");
-          setLoading(false);
-          return;
-        }
-        console.log("🔵 Review API URL:", REVIEW_API_URL);
-        console.log("🔵 User ID for reviews:", userId);
-        
-        // Check if ReviewService is accessible
-        try {
-          const healthCheck = await fetch(`${REVIEW_API_URL}/api/reviews?userId=${userId}`, {
-            method: 'HEAD',
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          console.log("🔵 ReviewService health check status:", healthCheck.status);
-        } catch (error) {
-          console.warn("⚠️ ReviewService not accessible, showing empty state:", error);
-          setReviews([]);
-          setTaskGroups([]);
-          setStats({
-            totalReviews: 0,
-            averageRating: 0,
-            ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
-            totalRating: 0,
-            recentReviews: 0,
-            topRatedServices: [],
-            categoryBreakdown: []
-          });
-          setLoading(false);
-          return;
-        }
-        
         // Fetch reviews for the current user (as reviewee - reviews received)
-        console.log("🔵 Fetching reviews received...");
-        let reviewsReceivedResponse;
-        try {
-          reviewsReceivedResponse = await fetch(`${REVIEW_API_URL}/api/reviews?userId=${userId}`, {
-            headers: { 
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-        } catch (error) {
-          console.error("❌ Network error fetching reviews received:", error);
-          throw new Error(`Network error fetching reviews received: ${error}`);
-        }
+        const reviewsReceivedResponse = await fetch(`${process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086'}/api/reviews?userId=${userId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
         // Fetch reviews given by the current user (as reviewer - reviews given)
-        console.log("🔵 Fetching reviews given...");
-        let reviewsGivenResponse;
-        try {
-          reviewsGivenResponse = await fetch(`${REVIEW_API_URL}/api/reviews?reviewerId=${userId}`, {
-            headers: { 
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-        } catch (error) {
-          console.error("❌ Network error fetching reviews given:", error);
-          throw new Error(`Network error fetching reviews given: ${error}`);
-        }
+        const reviewsGivenResponse = await fetch(`${process.env.NEXT_PUBLIC_REVIEW_API_URL || 'http://localhost:8086'}/api/reviews?reviewerId=${userId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-        console.log("🔵 Reviews received response status:", reviewsReceivedResponse.status);
-        console.log("🔵 Reviews given response status:", reviewsGivenResponse.status);
-        
         if (!reviewsReceivedResponse.ok) {
-          const errorText = await reviewsReceivedResponse.text();
-          console.error("❌ Failed to fetch reviews received:", reviewsReceivedResponse.status, errorText);
-          throw new Error(`Failed to fetch reviews received: ${reviewsReceivedResponse.status} - ${errorText}`);
+          throw new Error("Failed to fetch reviews received");
         }
 
         if (!reviewsGivenResponse.ok) {
-          const errorText = await reviewsGivenResponse.text();
-          console.error("❌ Failed to fetch reviews given:", reviewsGivenResponse.status, errorText);
-          throw new Error(`Failed to fetch reviews given: ${reviewsGivenResponse.status} - ${errorText}`);
+          throw new Error("Failed to fetch reviews given");
         }
 
         const reviewsReceivedData = await reviewsReceivedResponse.json();
@@ -218,6 +143,16 @@ export default function ReviewsPage() {
         console.log("🔵 Reviews received:", reviewsReceivedData);
         console.log("🔵 Reviews given:", reviewsGivenData);
         console.log("🔵 User ID being searched:", userId);
+        
+        // Log the first review to see its structure
+        if (reviewsReceivedData.length > 0) {
+          console.log("🔵 First review received structure:", reviewsReceivedData[0]);
+          console.log("🔵 First review keys:", Object.keys(reviewsReceivedData[0]));
+        }
+        if (reviewsGivenData.length > 0) {
+          console.log("🔵 First review given structure:", reviewsGivenData[0]);
+          console.log("🔵 First review given keys:", Object.keys(reviewsGivenData[0]));
+        }
         
         // Combine both sets of reviews
         const allReviewsData = [...reviewsReceivedData, ...reviewsGivenData];
@@ -316,6 +251,11 @@ export default function ReviewsPage() {
               }
             }
 
+            // Use hardcoded reviewer name
+            const reviewerName = "Steven Mathew";
+            const reviewerAvatar = undefined;
+            const reviewerLocation = undefined;
+
             // Determine sentiment based on rating
             let sentiment: 'positive' | 'neutral' | 'negative' = 'neutral';
             if (review.rating >= 4) sentiment = 'positive';
@@ -341,9 +281,9 @@ export default function ReviewsPage() {
               rating: review.rating,
               comment: review.comment || "",
               createdAt: review.createdAt * 1000, // Convert to milliseconds
-              reviewerName: review.reviewerName || "Anonymous",
-              reviewerAvatar: undefined, // API doesn't provide avatar
-              reviewerLocation: undefined, // API doesn't provide location
+              reviewerName,
+              reviewerAvatar,
+              reviewerLocation,
               isVerified: true, // Assume verified for now
               helpfulCount: Math.floor(Math.random() * 20) + 1, // Mock data
               replyCount: Math.floor(Math.random() * 5), // Mock data
@@ -434,11 +374,19 @@ export default function ReviewsPage() {
           return Object.values(groups).sort((a, b) => b.averageRating - a.averageRating);
         };
 
+        console.log("🔵 Transformed reviews count:", transformedReviews.length);
+        console.log("🔵 Transformed reviews:", transformedReviews);
+        
         const stats = generateStats(transformedReviews);
+        console.log("🔵 Generated stats:", stats);
         setStats(stats);
         
+        console.log("🔵 Reviews before filtering for grouping:", transformedReviews.length);
         const filteredReviewsForGrouping = transformedReviews.filter(r => r.taskTitle !== 'Unknown Task');
+        console.log("🔵 Reviews after filtering for grouping:", filteredReviewsForGrouping.length);
         const taskGroups = groupReviewsByTask(filteredReviewsForGrouping);
+        console.log("🔵 Task groups created:", taskGroups.length);
+        console.log("🔵 Task groups:", taskGroups);
         setTaskGroups(taskGroups);
         
         setError(null);
@@ -451,7 +399,7 @@ export default function ReviewsPage() {
     };
 
     fetchReviews();
-  }, [selectedView, selectedRating, selectedCategory, searchTerm, sortBy, sortOrder, authLoading, user]);
+  }, []);
 
   const formatCurrency = (amount: number) => {
     return `TM ${amount.toFixed(2)}`;
@@ -499,8 +447,7 @@ export default function ReviewsPage() {
     const matchesCategory = selectedCategory === 'all' || review.taskCategory === selectedCategory;
     const matchesSearch = searchTerm === '' || 
       review.comment.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.taskTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.reviewerName.toLowerCase().includes(searchTerm.toLowerCase());
+      review.taskTitle.toLowerCase().includes(searchTerm.toLowerCase());
     
     return matchesRating && matchesCategory && matchesSearch;
   });
@@ -530,7 +477,7 @@ export default function ReviewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white">
         {/* Header */}
         <div className="bg-white p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
@@ -556,7 +503,10 @@ export default function ReviewsPage() {
                   <span className="text-sm text-gray-600">Total Reviews</span>
                   <FaStar className="w-5 h-5 text-emerald-700" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900">{stats.totalReviews}</div>
+                <div className="text-3xl font-bold text-gray-900">
+                  {stats.totalReviews} 
+                  <span className="text-sm text-gray-500 ml-2">({reviews.length} fetched)</span>
+                </div>
                 <div className="text-sm text-gray-600 mt-1">Across all services</div>
               </div>
 
@@ -715,34 +665,19 @@ export default function ReviewsPage() {
                   <div className="p-6">
                     <div className="space-y-4">
                       {taskGroup.reviews.map((review) => (
-                        <div key={review.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                          <div className="flex items-start gap-4">
-                            {/* Reviewer Avatar */}
-                            <div className="flex-shrink-0">
-                              {review.reviewerAvatar ? (
-                                <img
-                                  src={review.reviewerAvatar}
-                                  alt={review.reviewerName}
-                                  className="w-12 h-12 rounded-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-12 h-12 bg-emerald-700 rounded-full flex items-center justify-center text-white font-semibold">
-                                  {review.reviewerName.charAt(0)}
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Review Content */}
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <h4 className="font-semibold text-gray-900">{review.reviewerName}</h4>
-                                {review.isVerified && (
-                                  <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Verified</span>
-                                )}
-                                <span className={`text-xs px-2 py-1 rounded-full ${getSentimentColor(review.sentiment)}`}>
-                                  {review.sentiment}
-                                </span>
-                              </div>
+                                              <div key={review.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                        <div className="flex items-start gap-4">
+                          {/* Review Content */}
+                          <div className="flex-1">
+                                                      <div className="flex items-center gap-2 mb-2">
+                            <h4 className="font-semibold text-gray-900">{review.reviewerName}</h4>
+                            {review.isVerified && (
+                              <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Verified</span>
+                            )}
+                            <span className={`text-xs px-2 py-1 rounded-full ${getSentimentColor(review.sentiment)}`}>
+                              {review.sentiment}
+                            </span>
+                          </div>
 
                               <div className="flex items-center gap-2 mb-3">
                                 <div className="flex items-center gap-1">
@@ -804,47 +739,10 @@ export default function ReviewsPage() {
           ) : (
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
               <div className="p-6">
-                {sortedReviews.length === 0 ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                      <FaStar className="w-8 h-8 text-gray-400" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No Reviews Found</h3>
-                    <p className="text-gray-500 mb-4">
-                      {error ? 
-                        "Unable to load reviews at the moment. The review service may be temporarily unavailable." :
-                        "You haven't received or given any reviews yet. Reviews will appear here once you start using our services."
-                      }
-                    </p>
-                    {error && (
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                        <p className="text-sm text-yellow-800">
-                          <strong>Technical Note:</strong> The review service is currently unavailable. 
-                          This may be due to maintenance or network issues. Please try again later.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {sortedReviews.map((review) => (
-                      <div key={review.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                        <div className="flex items-start gap-4">
-                        {/* Reviewer Avatar */}
-                        <div className="flex-shrink-0">
-                          {review.reviewerAvatar ? (
-                            <img
-                              src={review.reviewerAvatar}
-                              alt={review.reviewerName}
-                              className="w-12 h-12 rounded-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-12 h-12 bg-emerald-700 rounded-full flex items-center justify-center text-white font-semibold">
-                              {review.reviewerName.charAt(0)}
-                            </div>
-                          )}
-                        </div>
-
+                <div className="space-y-4">
+                  {sortedReviews.map((review) => (
+                    <div key={review.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-start gap-4">
                         {/* Review Content */}
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
@@ -916,5 +814,5 @@ export default function ReviewsPage() {
           )}
         </div>
       </div>
-    );
-  } 
+  );
+} 
