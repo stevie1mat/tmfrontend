@@ -30,10 +30,18 @@ const useTaskImages = (taskId: string) => {
       setError(null);
       try {
         // Use very low quality thumbnails for faster loading: 30% quality, 200px max width
-        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
-        const response = await fetch(`${API_BASE_URL}/api/tasks/images?taskId=${taskId}&quality=30&width=200`);
+        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "https://trademinutes-task-core.onrender.com";
+        console.log('Loading images from:', `${API_BASE_URL}/api/tasks/images?taskId=${taskId}&quality=30&width=200`);
+        
+        const response = await fetch(`${API_BASE_URL}/api/tasks/images?taskId=${taskId}&quality=30&width=200`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
         if (!response.ok) {
-          throw new Error('Failed to load images');
+          throw new Error(`Failed to load images: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
         const imageArray = data.images || [];
@@ -41,8 +49,10 @@ const useTaskImages = (taskId: string) => {
         // Cache the result
         setImageCache(prev => ({ ...prev, [taskId]: imageArray }));
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load images');
         console.error('Error loading images:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load images');
+        // Set empty array as fallback
+        setImages([]);
       } finally {
         setLoading(false);
       }
@@ -75,10 +85,18 @@ const useAuthorAvatar = (authorId: string) => {
       setError(null);
       try {
         // Use maximum compression for avatars: 50% quality, 64px max width
-        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
-        const response = await fetch(`${API_BASE_URL}/api/tasks/avatar?authorId=${authorId}&quality=50&width=64`);
+        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "https://trademinutes-task-core.onrender.com";
+        console.log('Loading avatar from:', `${API_BASE_URL}/api/tasks/avatar?authorId=${authorId}&quality=50&width=64`);
+        
+        const response = await fetch(`${API_BASE_URL}/api/tasks/avatar?authorId=${authorId}&quality=50&width=64`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
         if (!response.ok) {
-          throw new Error('Failed to load avatar');
+          throw new Error(`Failed to load avatar: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
         const avatarUrl = data.avatar || '';
@@ -86,8 +104,10 @@ const useAuthorAvatar = (authorId: string) => {
         // Cache the result
         setAvatarCache(prev => ({ ...prev, [authorId]: avatarUrl }));
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load avatar');
         console.error('Error loading avatar:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load avatar');
+        // Set empty string as fallback
+        setAvatar('');
       } finally {
         setLoading(false);
       }
@@ -117,13 +137,22 @@ const useBatchImages = (services: Service[]) => {
 
         if (!taskIds) return;
 
-        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "http://localhost:8084";
+        const API_BASE_URL = process.env.NEXT_PUBLIC_TASK_API_URL || "https://trademinutes-task-core.onrender.com";
+        console.log('Loading batch images from:', `${API_BASE_URL}/api/tasks/images/batch?taskIds=${taskIds}&quality=30&width=200`);
+        
         // Use very low quality thumbnails for faster loading: 30% quality, 200px max width
-        const response = await fetch(`${API_BASE_URL}/api/tasks/images/batch?taskIds=${taskIds}&quality=30&width=200`);
+        const response = await fetch(`${API_BASE_URL}/api/tasks/images/batch?taskIds=${taskIds}&quality=30&width=200`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
         
         if (response.ok) {
           const data = await response.json();
           setImages(data.images || {});
+        } else {
+          console.error('Failed to load batch images:', response.status, response.statusText);
         }
       } catch (error) {
         console.error('Error loading batch images:', error);
